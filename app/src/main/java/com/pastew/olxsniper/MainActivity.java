@@ -16,6 +16,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,7 +57,9 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         // specify an adapter (see also next example)
-        String[] myDataset = {"abc", "qwe", "qwe", "qwe", "qwe"};
+        OlxDownloader olxDownloader = new OlxDownloader();
+        String url = "https://www.olx.pl/elektronika/komputery/akcesoria-i-czesci/q-gtx/";
+        List<Offer> myDataset = olxDownloader.downloadOffers(url);
         mAdapter = new MyAdapter(getApplicationContext(), myDataset);
         mRecyclerView.setAdapter(mAdapter);
     }
