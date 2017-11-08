@@ -8,16 +8,11 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-
 public class SoupUnitTest {
-
-    String TAG = "SoupUnitTest";
-
     static final String URL = "https://www.olx.pl/oferty/q-gtx-1060/";
 
     @Test
-    public void addition_isCorrect() throws Exception {
+    public void oneOfferExperiments() {
         Document doc;
         try {
             doc = Jsoup.connect(URL).get();
@@ -27,7 +22,11 @@ public class SoupUnitTest {
         }
         Elements elements = doc.getElementsByClass("offer");
 
-        for (Element element : elements)
-            System.out.println(element);
+        //System.out.println(elements.get(0));
+        Element el = elements.get(0);
+        String priceString = el.getElementsByClass("price").first().getElementsByTag("strong").first().html();
+
+        System.out.println(priceString);
     }
+
 }
