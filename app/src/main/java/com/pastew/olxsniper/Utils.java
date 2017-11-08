@@ -14,6 +14,9 @@ public class Utils {
         if (priceString.equals("Za darmo"))
             return new BigDecimal(0);
 
+        if (priceString.equals("Zamienię"))
+            return new BigDecimal(-1);
+
         //TODO: Maybe change this to regexp
         priceString = priceString.replaceAll("\\s+","");
         priceString = priceString.replaceAll("zł","");

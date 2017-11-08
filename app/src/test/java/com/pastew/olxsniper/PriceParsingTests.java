@@ -28,4 +28,11 @@ public class PriceParsingTests {
         BigDecimal parsed = Utils.parsePrice("Za darmo");
         assertEquals(expected, parsed);
     }
+
+    @Test
+    public void parsePriceExchangeTest() {
+        BigDecimal expected = new BigDecimal("-1");
+        BigDecimal parsed = Utils.parsePrice("Zamienię");
+        assertEquals(expected, parsed);
+    }
 }
