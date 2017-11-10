@@ -1,10 +1,13 @@
 package com.pastew.olxsniper;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class OlxDownloader {
@@ -12,35 +15,33 @@ public class OlxDownloader {
 
     public List<Offer> downloadOffers(String url) {
         List<Offer> result = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-        Date d = null;
-
+        Document doc;
         try {
-            d = sdf.parse("12/02/2017");
-        } catch (ParseException e) {
+            doc = Jsoup.connect(url).get();
+        } catch (IOException e) {
             e.printStackTrace();
+            return result;
         }
 
-        result.add(new Offer(
-                "Kurteczka zimowa",
-                new BigDecimal("12.32"),
-                "https://www.olx.pl/oferta/kurteczka-zimowa-CID88-IDpzhrt.html",
-                "Gdańsk",
-                d
-        ));
+        Elements elements = doc.getElementsByClass("offer");
 
-        result.add(new Offer(
-                "UŻYWANE spodnie Myszka Minnie rozm 110/116",
-                new BigDecimal("10"),
-                "https://www.olx.pl/oferta/uzywane-spodnie-myszka-minnie-rozm-110-116-CID88-IDq0I3T.html#7bf985e501",
-                "Gdańsk",
-                d
-        ));
+        for (Element offerElement : elements) {
+            String priceString = offerElement.getElementsByClass("price").first().getElementsByTag("strong").first().html();
 
+            Element h3 = offerElement.getElementsByTag("h3").first();
+            String title = h3.getElementsByTag("strong").first().html();
 
+            String link = h3.getElementsByTag("a").first().attr("href");
 
-        // TODO: implement this
+            String city = offerElement.getElementsByTag("tr").get(1).getElementsByTag("p").get(0).getElementsByTag("span").first().html();
+
+            String dateString = offerElement.getElementsByTag("tr").get(1).getElementsByTag("p").get(1).html();
+
+            Offer o = new Offer(title, Utils.parsePrice(priceString), link, city, dateString);
+            result.add(o);
+        }
+
         return result;
     }
 }

@@ -37,17 +37,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String html = "<html><head><title>First parse</title></head>"
-                        + "<body><p>Parsed HTML into a doc.</p></body></html>";
 
-                Document doc = Jsoup.parse(html);
-                try {
-                    doc = Jsoup.connect(URL).get();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                Snackbar.make(view, doc.title(), Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Nie wciskaj mnie.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });

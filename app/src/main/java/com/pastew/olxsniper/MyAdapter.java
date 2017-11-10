@@ -54,9 +54,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // - replace the contents of the view with that element
         String title = offerList.get(position).title;
         BigDecimal price = offerList.get(position).price;
-        String link =offerList.get(position).link;
+        String link = offerList.get(position).link;
         String city = offerList.get(position).city;
-        Date addedDate = offerList.get(position).addedDate;
+        String addedDate = offerList.get(position).addedDate;
 
         holder.mTextView.setText(String.format(
                 "Title: %s\nPrice: %s zł\nLink: %s\nCity: %s\nAddedDate: %s",
