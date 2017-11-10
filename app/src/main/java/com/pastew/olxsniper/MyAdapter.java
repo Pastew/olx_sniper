@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
@@ -50,8 +52,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mTextView.setText(offerList.get(position).info);
+        String title = offerList.get(position).title;
+        BigDecimal price = offerList.get(position).price;
+        String link =offerList.get(position).link;
+        String city = offerList.get(position).city;
+        Date addedDate = offerList.get(position).addedDate;
 
+        holder.mTextView.setText(String.format(
+                "Title: %s\nPrice: %s zł\nLink: %s\nCity: %s\nAddedDate: %s",
+                title, price, link, city, addedDate ));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
