@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <!-- A CardView that contains a TextView -->
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,43 +33,43 @@
                 android:id="@+id/linkImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 app:srcCompat="@drawable/ic_launch_black_24dp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintTop_toBottomOf="@+id/priceTextView" />
+                card_view:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
                 android:id="@+id/cityTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
                 android:text="Kraków"
                 android:textSize="12sp"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+                card_view:layout_constraintStart_toEndOf="@+id/priceTextView"
+                card_view:layout_constraintTop_toTopOf="@+id/priceTextView" />
 
             <TextView
                 android:id="@+id/priceTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="790 zł"
                 android:textStyle="bold"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
             <TextView
                 android:id="@+id/dateTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:text="Dzisiaj 20:39"
                 android:textSize="12sp"
                 card_view:layout_constraintBottom_toBottomOf="@+id/cityTextView"
-                card_view:layout_constraintStart_toEndOf="@+id/cityTextView" />
+                card_view:layout_constraintStart_toEndOf="@+id/cityTextView"
+                card_view:layout_constraintTop_toTopOf="@+id/cityTextView"
+                card_view:layout_constraintVertical_bias="1.0" />
         </android.support.constraint.ConstraintLayout>
 
 
