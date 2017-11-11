@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     List<Offer> offerList;
 
     private boolean updaterIsRunning;
-    private int updaterDelayInSeconds = 2;
+    private int updaterDelayInSeconds = 10;
     private Handler updaterHandler = new Handler();
 
     @Override
@@ -108,10 +108,14 @@ public class MainActivity extends AppCompatActivity {
         List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
 
         if(onlyNewOffers.size() > 0) {
-            offerList.addAll(onlyNewOffers);
+            offerList.addAll(0, onlyNewOffers);
             adapter.notifyDataSetChanged();
             notifyAboutNewOffers(onlyNewOffers);
-            Log.i(TAG, String.format("New offers found: %s", onlyNewOffers));
+            Log.i(TAG, String.format("New offers found: %d", onlyNewOffers.size()));
+            for (int i = 0 ; i < onlyNewOffers.size() ; ++i) {
+                Offer o = newOfferList.get(i);
+                Log.i(TAG, String.format("%d. %s, %s %s", i + 1, o.title, o.addedDate, o.link));
+            }
         }
         else {
             Log.i(TAG, String.format("Checked OLX for new offers, but nothing new found, " +
