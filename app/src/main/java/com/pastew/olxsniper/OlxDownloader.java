@@ -1,6 +1,7 @@
 package com.pastew.olxsniper;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -8,12 +9,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OlxDownloader {
-
-
     private static final boolean IGNORE_PROMOTED_OFFERS = true;
     //TODO: move this to user prefs.
 
@@ -23,7 +23,12 @@ public class OlxDownloader {
         Document doc;
         try {
             doc = Jsoup.connect(url).get();
+        } catch (SocketTimeoutException e){
+            e.printStackTrace();
+            Log.e(MainActivity.TAG, "SocketTimeoutException");
+            return result;
         } catch (IOException e) {
+            Log.e(MainActivity.TAG, "IOException");
             e.printStackTrace();
             return result;
         }
