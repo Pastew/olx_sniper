@@ -64,8 +64,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         String addedDate = offerList.get(position).addedDate;
 
         holder.mTextView.setText(String.format(
-                "Title: %s\nPrice: %s zł\nCity: %s\nAddedDate: %s",
-                title, price, city, addedDate ));
+                "Title: %s\nPrice: %s\nCity: %s\nAddedDate: %s",
+                title, Utils.convertPriceToText(price), city, addedDate ));
 
         holder.linkImageView.setTag(link);
         holder.linkImageView.setOnClickListener(new View.OnClickListener() {

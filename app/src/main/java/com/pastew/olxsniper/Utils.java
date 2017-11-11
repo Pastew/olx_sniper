@@ -50,4 +50,15 @@ public class Utils {
         }
         return false;
     }
+
+    public static String convertPriceToText(BigDecimal price) {
+        if (price.intValue() == -1)
+            return "Zamienię";
+
+        if (price.intValue() == 0)
+            return "Za darmo";
+
+        return price.toString() + " zł";
+
+    }
 }
