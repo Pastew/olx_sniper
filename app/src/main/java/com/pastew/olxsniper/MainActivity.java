@@ -114,9 +114,13 @@ public class MainActivity extends AppCompatActivity {
         List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
 
         if(onlyNewOffers.size() > 0) {
+            changeColorsOfOldOffers();
+
             offerList.addAll(0, onlyNewOffers);
             adapter.notifyDataSetChanged();
-            notifyAboutNewOffers(onlyNewOffers);
+
+            notifyUserAboutNewOffers(onlyNewOffers);
+
             Log.i(TAG, String.format("New offers found: %d", onlyNewOffers.size()));
             for (int i = 0 ; i < onlyNewOffers.size() ; ++i) {
                 Offer o = newOfferList.get(i);
@@ -133,9 +137,13 @@ public class MainActivity extends AppCompatActivity {
         updaterHandler.postDelayed(updaterRunnable, updaterDelayInSeconds * 1000);
     }
 
+    private void changeColorsOfOldOffers() {
+        for(Offer o : offerList)
+            o.wasSeenByUser = true;
+    }
 
 
-    private void notifyAboutNewOffers(List<Offer> onlyNewOffers) {
+    private void notifyUserAboutNewOffers(List<Offer> onlyNewOffers) {
         Snackbar snackbar = Snackbar
                 .make(findViewById(R.id.constrainLayout), String.format("%d nowe oferty!", onlyNewOffers.size()), Snackbar.LENGTH_LONG)
                 .setAction("Nie klikaj!", new View.OnClickListener() {

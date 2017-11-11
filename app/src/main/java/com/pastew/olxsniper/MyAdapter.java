@@ -3,6 +3,7 @@ package com.pastew.olxsniper;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-    private View view;
-    private final Context mContent;
+    private final Context context;
     private List<Offer> offerList;
 
     // Provide a reference to the views for each data item
@@ -27,8 +27,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public TextView cityTextView;
         public TextView priceTextView;
         public TextView addedDateTextView;
-
         public ImageView linkImageView;
+        public CardView cardView;
 
         public ViewHolder(View v) {
             super(v);
@@ -37,12 +37,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             cityTextView = v.findViewById(R.id.cityTextView);
             priceTextView = v.findViewById(R.id.priceTextView);
             addedDateTextView = v.findViewById(R.id.dateTextView);
+            cardView = v.findViewById(R.id.cardView);
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public MyAdapter(Context mContext, List<Offer> offerList) {
-        this.mContent = mContext;
+        this.context = mContext;
         this.offerList = offerList;
     }
 
@@ -69,6 +70,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         String link = offerList.get(position).link;
         String city = offerList.get(position).city;
         String addedDate = offerList.get(position).addedDate;
+        boolean wasSeenByUser = offerList.get(position).wasSeenByUser;
 
         holder.titleTextView.setText(title);
         holder.priceTextView.setText(Utils.convertPriceToText(price));
@@ -82,9 +84,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(v.getTag().toString()));
-                mContent.startActivity(i);
+                context.startActivity(i);
             }
         });
+
+        if (wasSeenByUser)
+            holder.cardView.setCardBackgroundColor(
+                    context.getResources().getColor(R.color.offerWasSeenColor));
+        else
+            holder.cardView.setCardBackgroundColor(
+                    context.getResources().getColor(R.color.offerWasNotSeenColor));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -92,4 +101,5 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public int getItemCount() {
         return offerList.size();
     }
+
 }
