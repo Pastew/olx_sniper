@@ -166,6 +166,8 @@ public class MainActivity extends AppCompatActivity {
             else {
                 Log.i(TAG, String.format("Checked OLX for new offers, but nothing new found, " +
                         "I will try afer %d seconds.", updaterDelayInSeconds));
+
+                Toast.makeText(MainActivity.this, "Nie ma nowych ofert", Toast.LENGTH_SHORT).show();
             }
         }
     }
