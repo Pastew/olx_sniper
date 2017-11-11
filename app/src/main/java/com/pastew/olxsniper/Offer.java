@@ -11,6 +11,7 @@ public class Offer{
     public String link;
     public String city;
     public String addedDate;
+    public boolean isPromotedOffer;
 
     public Offer(String title, BigDecimal price, String link, String city, String addedDate) {
         this.title = title;
@@ -18,6 +19,7 @@ public class Offer{
         this.link = link;
         this.city = city;
         this.addedDate = addedDate;
+        this.isPromotedOffer = link.contains("promoted");
     }
 
     public boolean isTheSameOffer(@NonNull Offer o) {
