@@ -1,5 +1,6 @@
 package com.pastew.olxsniper;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private int updaterDelayInSeconds = 10;
     private Handler updaterHandler = new Handler();
 
+    private MediaPlayer notificationMediaPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
         // OLX
         olxDownloader = new OlxDownloader();
+
+        // Sound
+        notificationMediaPlayer = MediaPlayer.create(this, R.raw.notification1);
 
         // Updater runnable
         updaterIsRunning = true;
@@ -140,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 });
         snackbar.show();
 
-        //TODO: Implement sound
+        if(notificationMediaPlayer != null)
+            notificationMediaPlayer.start();
     }
 }
