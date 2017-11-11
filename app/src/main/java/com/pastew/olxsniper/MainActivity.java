@@ -1,30 +1,35 @@
 package com.pastew.olxsniper;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String URL = "https://www.olx.pl/oferty/q-gtx-1060/";
+    public static final String TAG = "OLXSniper";
+    public static final String URL = "https://www.olx.pl/elektronika/telefony-komorkowe/";
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.Adapter adapter;
+
+    private OlxDownloader olxDownloader;
+    List<Offer> offerList;
+
+    private boolean updaterIsRunning;
+    private int updaterDelayInSeconds = 2;
+    private Handler updaterHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,26 +38,29 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        // FAB
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Snackbar.make(view, "Nie wciskaj mnie.", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                // TODO: here should open window with added new OLX Listner
             }
         });
 
-        mRecyclerView = findViewById(R.id.recycler_view);
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        // specify an adapter (see also next example)
-        OlxDownloader olxDownloader = new OlxDownloader();
-        String url = "https://www.olx.pl/elektronika/komputery/akcesoria-i-czesci/q-gtx/";
-        List<Offer> myDataset = olxDownloader.downloadOffers(url);
-        mAdapter = new MyAdapter(getApplicationContext(), myDataset);
-        mRecyclerView.setAdapter(mAdapter);
+        // Recycler view
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        offerList = new ArrayList<>();
+        adapter = new MyAdapter(getApplicationContext(), offerList);
+        recyclerView.setAdapter(adapter);
+
+        // OLX
+        olxDownloader = new OlxDownloader();
+
+        // Updater runnable
+        updaterIsRunning = true;
+        updaterRunnable.run();
     }
 
     @Override
@@ -75,5 +83,59 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private Runnable updaterRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if(updaterIsRunning) {
+                start();
+            }
+        }
+    };
+
+    public void stop() {
+        updaterIsRunning = false;
+        updaterHandler.removeCallbacks(updaterRunnable);
+    }
+
+    public void start() {
+        Log.d(TAG, "Runnable: start()");
+        updaterIsRunning = true;
+
+        List<Offer> newOfferList = olxDownloader.downloadOffers(URL);
+
+        List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
+
+        if(onlyNewOffers.size() > 0) {
+            offerList.addAll(onlyNewOffers);
+            adapter.notifyDataSetChanged();
+            notifyAboutNewOffers(onlyNewOffers);
+            Log.i(TAG, String.format("New offers found: %s", onlyNewOffers));
+        }
+        else {
+            Log.i(TAG, String.format("Checked OLX for new offers, but nothing new found, " +
+                    "I will try afer %d seconds.", updaterDelayInSeconds));
+
+            Toast.makeText(this, "Brak nowych ofert.", Toast.LENGTH_SHORT).show();
+        }
+
+        updaterHandler.postDelayed(updaterRunnable, updaterDelayInSeconds * 1000);
+    }
+
+
+
+    private void notifyAboutNewOffers(List<Offer> onlyNewOffers) {
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.constrainLayout), String.format("%d nowe oferty!", onlyNewOffers.size()), Snackbar.LENGTH_LONG)
+                .setAction("Nie klikaj!", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(MainActivity.this, "Miałeś nie klikać!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        snackbar.show();
+
+        //TODO: Implement sound
     }
 }
