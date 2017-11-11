@@ -1,6 +1,7 @@
 package com.pastew.olxsniper;
 
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
@@ -21,7 +22,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "OLXSniper";
-    public static final String URL = "https://www.olx.pl/elektronika/telefony-komorkowe/";
+    public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/";
 
     private RecyclerView.Adapter adapter;
 
@@ -108,32 +109,7 @@ public class MainActivity extends AppCompatActivity {
     public void start() {
         Log.d(TAG, "Runnable: start()");
         updaterIsRunning = true;
-
-        List<Offer> newOfferList = olxDownloader.downloadOffers(URL);
-
-        List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
-
-        if(onlyNewOffers.size() > 0) {
-            changeColorsOfOldOffers();
-
-            offerList.addAll(0, onlyNewOffers);
-            adapter.notifyDataSetChanged();
-
-            notifyUserAboutNewOffers(onlyNewOffers);
-
-            Log.i(TAG, String.format("New offers found: %d", onlyNewOffers.size()));
-            for (int i = 0 ; i < onlyNewOffers.size() ; ++i) {
-                Offer o = newOfferList.get(i);
-                Log.i(TAG, String.format("%d. %s, %s %s", i + 1, o.title, o.addedDate, o.link));
-            }
-        }
-        else {
-            Log.i(TAG, String.format("Checked OLX for new offers, but nothing new found, " +
-                    "I will try afer %d seconds.", updaterDelayInSeconds));
-
-            Toast.makeText(this, "Brak nowych ofert.", Toast.LENGTH_SHORT).show();
-        }
-
+        new DownloadFilesTask().execute(OLX_URL);
         updaterHandler.postDelayed(updaterRunnable, updaterDelayInSeconds * 1000);
     }
 
@@ -156,5 +132,41 @@ public class MainActivity extends AppCompatActivity {
 
         if(notificationMediaPlayer != null)
             notificationMediaPlayer.start();
+    }
+
+    private class DownloadFilesTask extends AsyncTask<String, Integer, List<Offer>> {
+        protected List<Offer> doInBackground(String... urls) {
+            String url = urls[0];
+
+            //publishProgress(i);
+            List<Offer> newOfferList = olxDownloader.downloadOffers(url);
+            List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
+            return onlyNewOffers;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            //setProgressPercent(progress[0]);
+        }
+
+        protected void onPostExecute(List<Offer> onlyNewOffers) {
+            if(onlyNewOffers.size() > 0) {
+                changeColorsOfOldOffers();
+
+                offerList.addAll(0, onlyNewOffers);
+                adapter.notifyDataSetChanged();
+
+                notifyUserAboutNewOffers(onlyNewOffers);
+
+                Log.i(TAG, String.format("New offers found: %d", onlyNewOffers.size()));
+                for (int i = 0 ; i < onlyNewOffers.size() ; ++i) {
+                    Offer o = onlyNewOffers.get(i);
+                    Log.i(TAG, String.format("%d. %s, %s %s", i + 1, o.title, o.addedDate, o.link));
+                }
+            }
+            else {
+                Log.i(TAG, String.format("Checked OLX for new offers, but nothing new found, " +
+                        "I will try afer %d seconds.", updaterDelayInSeconds));
+            }
+        }
     }
 }
