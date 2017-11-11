@@ -23,13 +23,20 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView mTextView;
+        public TextView titleTextView;
+        public TextView cityTextView;
+        public TextView priceTextView;
+        public TextView addedDateTextView;
+
         public ImageView linkImageView;
 
         public ViewHolder(View v) {
             super(v);
-            mTextView = v.findViewById(R.id.info_text);
+            titleTextView = v.findViewById(R.id.titleTextView);
             linkImageView = v.findViewById(R.id.linkImageView);
+            cityTextView = v.findViewById(R.id.cityTextView);
+            priceTextView = v.findViewById(R.id.priceTextView);
+            addedDateTextView = v.findViewById(R.id.dateTextView);
         }
     }
 
@@ -63,9 +70,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         String city = offerList.get(position).city;
         String addedDate = offerList.get(position).addedDate;
 
-        holder.mTextView.setText(String.format(
-                "Title: %s\nPrice: %s\nCity: %s\nAddedDate: %s",
-                title, Utils.convertPriceToText(price), city, addedDate ));
+        holder.titleTextView.setText(title);
+        holder.priceTextView.setText(Utils.convertPriceToText(price));
+        holder.cityTextView.setText(city);
+        holder.cityTextView.setText(city);
+        holder.addedDateTextView.setText(addedDate);
 
         holder.linkImageView.setTag(link);
         holder.linkImageView.setOnClickListener(new View.OnClickListener() {
