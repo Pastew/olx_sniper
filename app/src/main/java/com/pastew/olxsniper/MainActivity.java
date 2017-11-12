@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     private int updaterDelayInSeconds = 60;
     private Handler updaterHandler = new Handler();
 
-    private MediaPlayer notificationMediaPlayer;
     private OfferDatabase offerDatabase;
 
     @Override
@@ -66,9 +65,6 @@ public class MainActivity extends AppCompatActivity {
         offerList = new ArrayList<>();
         adapter = new MyAdapter(getApplicationContext(), offerList);
         recyclerView.setAdapter(adapter);
-
-        // Sound
-        notificationMediaPlayer = MediaPlayer.create(this, R.raw.notification1);
 
         //Clear, refresh database - TODO: remove this
         findViewById(R.id.clearDatabaseButton).setOnClickListener(new View.OnClickListener() {
@@ -165,9 +161,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         snackbar.show();
-
-        if(notificationMediaPlayer != null)
-            notificationMediaPlayer.start();
     }
 
     private class DownloadOffersFromDatabaseTask extends AsyncTask<String, Integer, List<Offer>> {
