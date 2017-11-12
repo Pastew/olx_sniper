@@ -1,7 +1,10 @@
 package com.pastew.olxsniper;
 
 import android.arch.persistence.room.Room;
-import android.media.MediaPlayer;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,16 +33,34 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "OLXSniper";
     public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/q-iphone";
+    public static final String DATABASE_UPDATE_BROADCAST = "com.pastew.olxsniper.DATABASE_UPDATE";
     //public static final String OLX_URL = "https://www.olx.pl/oferty/q-iphone/"; //TODO: FIx this bug
 
     private RecyclerView.Adapter adapter;
     List<Offer> offerList;
 
-    private boolean updaterIsRunning;
     private int updaterDelayInSeconds = 60;
-    private Handler updaterHandler = new Handler();
 
     private OfferDatabase offerDatabase;
+
+    private IntentFilter filter = new IntentFilter(DATABASE_UPDATE_BROADCAST);
+
+    private DatabaseUpdateBroadcastReceiver databaseUpdateBroadcastReceiver;
+
+    private class DatabaseUpdateBroadcastReceiver extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            updateRecyclerViewFromDatabase();
+            Log.i(MainActivity.TAG, "broadcast received");
+            Toast.makeText(context, "Broadcast received", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateRecyclerViewFromDatabase() {
+        new DownloadOffersFromDatabaseTask().execute();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,14 +100,11 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.refreshDatabaseButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DownloadOffersFromDatabaseTask().execute();
+                updateRecyclerViewFromDatabase();
             }
         });
 
-        // Updater runnable
-        updaterIsRunning = true;
-        updaterRunnable.run();
-
+        // Firebase Job Dispatcher
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
         dispatcher.cancelAll();
         Job myJob = dispatcher.newJobBuilder()
@@ -99,7 +117,30 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         dispatcher.mustSchedule(myJob);
+    }
 
+    @Override
+    protected void onResume() {
+        databaseUpdateBroadcastReceiver = new DatabaseUpdateBroadcastReceiver();
+        registerReceiver(databaseUpdateBroadcastReceiver, filter);
+        updateRecyclerViewFromDatabase();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        try {
+            unregisterReceiver(databaseUpdateBroadcastReceiver);
+        } catch (IllegalArgumentException e) {
+            if (e.getMessage().contains("Receiver not registered")) {
+                // Ignore this exception. This is exactly what is desired
+                Log.w(TAG,"Tried to unregister the reciver when it's not registered");
+            } else {
+                // unexpected, re-throw
+                throw e;
+            }
+        }
+        super.onPause();
     }
 
     @Override
@@ -122,27 +163,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private Runnable updaterRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if(updaterIsRunning) {
-                start();
-            }
-        }
-    };
-
-    public void stop() {
-        updaterIsRunning = false;
-        updaterHandler.removeCallbacks(updaterRunnable);
-    }
-
-    public void start() {
-        Log.d(TAG, "Runnable: start()");
-        updaterIsRunning = true;
-        new DownloadOffersFromDatabaseTask().execute(OLX_URL);
-        updaterHandler.postDelayed(updaterRunnable, updaterDelayInSeconds * 1000);
     }
 
     private void changeColorsOfOldOffers() {
@@ -210,7 +230,6 @@ public class MainActivity extends AppCompatActivity {
             offerDatabase.getOfferDao().deleteAll();
             return null;
         }
-
         protected void onProgressUpdate(Void... voids) {}
         protected void onPostExecute(Integer result) {
         }

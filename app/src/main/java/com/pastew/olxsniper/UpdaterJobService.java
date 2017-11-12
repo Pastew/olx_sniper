@@ -1,6 +1,7 @@
 package com.pastew.olxsniper;
 
 import android.arch.persistence.room.Room;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.widget.Toast;
@@ -26,6 +27,11 @@ public class UpdaterJobService extends JobService {
     public boolean onStartJob(final JobParameters params) {
         Log.i(MainActivity.TAG, "--- Start");
         //Toast.makeText(this, "start job", Toast.LENGTH_SHORT).show();
+
+        Intent i = new Intent(MainActivity.DATABASE_UPDATE_BROADCAST);
+        //i.putExtra("url", "bleble");
+        sendBroadcast(i);
+        Log.i(MainActivity.TAG, "broadcast sent");
 
         new Thread(new Runnable() {
             @Override
