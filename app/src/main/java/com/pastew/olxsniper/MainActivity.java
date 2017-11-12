@@ -16,6 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.Trigger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "OLXSniper";
     public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/";
+    // public static final String OLX_URL = "https://www.olx.pl/oferty/q-iphone/"; //TODO: FIx this bug
 
     private RecyclerView.Adapter adapter;
 
@@ -66,8 +73,22 @@ public class MainActivity extends AppCompatActivity {
         notificationMediaPlayer = MediaPlayer.create(this, R.raw.notification1);
 
         // Updater runnable
-        updaterIsRunning = true;
-        updaterRunnable.run();
+//        updaterIsRunning = true;
+//        updaterRunnable.run();
+
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+        dispatcher.cancelAll();
+        Job myJob = dispatcher.newJobBuilder()
+                .setService(UpdaterJobService.class)
+                .setTag(UpdaterJobService.class.getSimpleName())
+                .setRecurring(true)
+                .setTrigger(Trigger.executionWindow(updaterDelayInSeconds, updaterDelayInSeconds + 1))
+                .setLifetime(Lifetime.FOREVER)
+                .setReplaceCurrent(true)
+                .build();
+
+        dispatcher.mustSchedule(myJob);
+
     }
 
     @Override
