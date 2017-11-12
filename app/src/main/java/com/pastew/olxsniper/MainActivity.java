@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 .setRecurring(true)
                 .setTrigger(Trigger.executionWindow(updaterDelayInSeconds, updaterDelayInSeconds + 1))
                 .setLifetime(Lifetime.FOREVER)
-                .setReplaceCurrent(true)
+                .setReplaceCurrent(false)
                 .build();
 
         dispatcher.mustSchedule(myJob);
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
     public void start() {
         Log.d(TAG, "Runnable: start()");
         updaterIsRunning = true;
-        new DownloadFilesTask().execute(OLX_URL);
+        new DownloadOffersTask().execute(OLX_URL);
         updaterHandler.postDelayed(updaterRunnable, updaterDelayInSeconds * 1000);
     }
 
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
             notificationMediaPlayer.start();
     }
 
-    private class DownloadFilesTask extends AsyncTask<String, Integer, List<Offer>> {
+    private class DownloadOffersTask extends AsyncTask<String, Integer, List<Offer>> {
         protected List<Offer> doInBackground(String... urls) {
             String url = urls[0];
 
