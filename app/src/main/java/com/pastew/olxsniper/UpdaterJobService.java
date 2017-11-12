@@ -1,7 +1,6 @@
 package com.pastew.olxsniper;
 
 import android.arch.persistence.room.Room;
-import android.content.Context;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.widget.Toast;
@@ -26,7 +25,7 @@ public class UpdaterJobService extends JobService {
     @Override
     public boolean onStartJob(final JobParameters params) {
         Log.i(MainActivity.TAG, "--- Start");
-        Toast.makeText(this, "start job", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "start job", Toast.LENGTH_SHORT).show();
 
         new Thread(new Runnable() {
             @Override

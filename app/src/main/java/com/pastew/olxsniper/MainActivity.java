@@ -1,5 +1,6 @@
 package com.pastew.olxsniper;
 
+import android.arch.persistence.room.Room;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,15 +33,14 @@ public class MainActivity extends AppCompatActivity {
     // public static final String OLX_URL = "https://www.olx.pl/oferty/q-iphone/"; //TODO: FIx this bug
 
     private RecyclerView.Adapter adapter;
-
-    private OlxDownloader olxDownloader;
     List<Offer> offerList;
 
     private boolean updaterIsRunning;
-    private int updaterDelayInSeconds = 10;
+    private int updaterDelayInSeconds = 60;
     private Handler updaterHandler = new Handler();
 
     private MediaPlayer notificationMediaPlayer;
+    private OfferDatabase offerDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,19 +62,17 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        offerDatabase = Room.databaseBuilder(this, OfferDatabase.class, OfferDatabase.DATABASE_NAME).build();
         offerList = new ArrayList<>();
         adapter = new MyAdapter(getApplicationContext(), offerList);
         recyclerView.setAdapter(adapter);
-
-        // OLX
-        olxDownloader = new OlxDownloader();
 
         // Sound
         notificationMediaPlayer = MediaPlayer.create(this, R.raw.notification1);
 
         // Updater runnable
-//        updaterIsRunning = true;
-//        updaterRunnable.run();
+        updaterIsRunning = true;
+        updaterRunnable.run();
 
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
         dispatcher.cancelAll();
@@ -130,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
     public void start() {
         Log.d(TAG, "Runnable: start()");
         updaterIsRunning = true;
-        new DownloadOffersTask().execute(OLX_URL);
+        new DownloadOffersFromDatabaseTask().execute(OLX_URL);
         updaterHandler.postDelayed(updaterRunnable, updaterDelayInSeconds * 1000);
     }
 
@@ -155,18 +153,14 @@ public class MainActivity extends AppCompatActivity {
             notificationMediaPlayer.start();
     }
 
-    private class DownloadOffersTask extends AsyncTask<String, Integer, List<Offer>> {
+    private class DownloadOffersFromDatabaseTask extends AsyncTask<String, Integer, List<Offer>> {
         protected List<Offer> doInBackground(String... urls) {
-            String url = urls[0];
-
-            //publishProgress(i);
-            List<Offer> newOfferList = olxDownloader.downloadOffers(url);
+            List<Offer> newOfferList = offerDatabase.getOfferDao().getAll();
             List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
             return onlyNewOffers;
         }
 
         protected void onProgressUpdate(Integer... progress) {
-            //setProgressPercent(progress[0]);
         }
 
         protected void onPostExecute(List<Offer> onlyNewOffers) {
@@ -188,7 +182,15 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, String.format("Checked OLX for new offers, but nothing new found, " +
                         "I will try afer %d seconds.", updaterDelayInSeconds));
 
-                Toast.makeText(MainActivity.this, "Nie ma nowych ofert", Toast.LENGTH_SHORT).show();
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(R.id.constrainLayout), String.format("Sprawdziłem, nie ma nowych ofert"), Snackbar.LENGTH_LONG)
+                        .setAction("Nie klikaj!", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Toast.makeText(MainActivity.this, "Miałeś nie klikać!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                snackbar.show();
             }
         }
     }
