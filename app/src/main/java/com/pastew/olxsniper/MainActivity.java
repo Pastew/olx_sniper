@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "OLXSniper";
     public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/";
-    // public static final String OLX_URL = "https://www.olx.pl/oferty/q-iphone/"; //TODO: FIx this bug
+    //public static final String OLX_URL = "https://www.olx.pl/oferty/q-iphone/"; //TODO: FIx this bug
 
     private RecyclerView.Adapter adapter;
     List<Offer> offerList;
@@ -69,6 +69,23 @@ public class MainActivity extends AppCompatActivity {
 
         // Sound
         notificationMediaPlayer = MediaPlayer.create(this, R.raw.notification1);
+
+        //Clear, refresh database - TODO: remove this
+        findViewById(R.id.clearDatabaseButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DeleteAllOffersFromDatabase().execute();
+                offerList.clear();
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        findViewById(R.id.refreshDatabaseButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DownloadOffersFromDatabaseTask().execute();
+            }
+        });
 
         // Updater runnable
         updaterIsRunning = true;
@@ -183,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                         "I will try afer %d seconds.", updaterDelayInSeconds));
 
                 Snackbar snackbar = Snackbar
-                        .make(findViewById(R.id.constrainLayout), String.format("Sprawdziłem, nie ma nowych ofert"), Snackbar.LENGTH_LONG)
+                        .make(findViewById(R.id.constrainLayout), String.format("Nie ma nowych ofert."), Snackbar.LENGTH_LONG)
                         .setAction("Nie klikaj!", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -192,6 +209,17 @@ public class MainActivity extends AppCompatActivity {
                         });
                 snackbar.show();
             }
+        }
+    }
+
+    private class DeleteAllOffersFromDatabase extends AsyncTask<Void, Void, Integer> {
+        protected Integer doInBackground(Void... voids) {
+            offerDatabase.getOfferDao().deleteAll();
+            return null;
+        }
+
+        protected void onProgressUpdate(Void... voids) {}
+        protected void onPostExecute(Integer result) {
         }
     }
 }

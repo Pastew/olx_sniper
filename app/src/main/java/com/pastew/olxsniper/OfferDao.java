@@ -27,4 +27,7 @@ public interface OfferDao {
 
     @Delete
     void delete(Offer offer);
+
+    @Query("DELETE FROM offer")
+    void deleteAll();
 }
