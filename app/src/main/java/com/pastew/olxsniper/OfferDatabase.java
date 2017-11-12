@@ -1,11 +1,27 @@
 package com.pastew.olxsniper;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import android.arch.persistence.db.SupportSQLiteOpenHelper;
+import android.arch.persistence.room.Database;
+import android.arch.persistence.room.DatabaseConfiguration;
+import android.arch.persistence.room.InvalidationTracker;
+import android.arch.persistence.room.RoomDatabase;
 
-class OfferDatabase {
-    public List<Offer> downloadOffers() {
-        return new ArrayList<>();
+
+@Database(entities = {Offer.class}, version = 1)
+public abstract class OfferDatabase extends RoomDatabase {
+    public abstract OfferDao getOfferDao();
+
+
+    public static final String DATABASE_NAME = OfferDatabase.class.getSimpleName();
+
+    @Override
+    protected SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration config) {
+        return null;
+    }
+
+    @Override
+    protected InvalidationTracker createInvalidationTracker() {
+        return null;
     }
 }

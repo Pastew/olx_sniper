@@ -66,14 +66,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         String title = offerList.get(position).title;
-        BigDecimal price = offerList.get(position).price;
+        String price = offerList.get(position).price;
         String link = offerList.get(position).link;
         String city = offerList.get(position).city;
         String addedDate = offerList.get(position).addedDate;
         boolean wasSeenByUser = offerList.get(position).wasSeenByUser;
 
         holder.titleTextView.setText(title);
-        holder.priceTextView.setText(Utils.convertPriceToText(price));
+        holder.priceTextView.setText(price);
         holder.cityTextView.setText(city);
         holder.cityTextView.setText(city);
         holder.addedDateTextView.setText(addedDate);

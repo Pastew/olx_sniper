@@ -11,18 +11,18 @@ public class Utils {
      * @param priceString - expected format: "9 600 zł"
      * @return
      */
-    public static BigDecimal parsePrice(String priceString) {
-        if (priceString.equals("Za darmo"))
-            return new BigDecimal(0);
+    public static String parsePrice(String priceString) {
+        if (priceString.contains("Za darmo"))
+            return "Za darmo";
 
-        if (priceString.equals("Zamienię"))
-            return new BigDecimal(-1);
+        if (priceString.contains("Zamienię"))
+            return "Zamienię";
 
         //TODO: Maybe change this to regexp
         priceString = priceString.replaceAll("\\s+","");
         priceString = priceString.replaceAll("zł","");
         priceString = priceString.replaceAll(",",".");
-        return new BigDecimal(priceString);
+        return priceString;
     }
 
 
@@ -44,21 +44,10 @@ public class Utils {
     }
 
     private static boolean offerIsAlreadyAdded(Offer newOffer, List<Offer> offerList) {
-        for (Offer oldOffer : offerList){
+        for (Offer oldOffer : offerList) {
             if (newOffer.isTheSameOffer(oldOffer))
                 return true;
         }
         return false;
-    }
-
-    public static String convertPriceToText(BigDecimal price) {
-        if (price.intValue() == -1)
-            return "Zamienię";
-
-        if (price.intValue() == 0)
-            return "Za darmo";
-
-        return price.toString() + " zł";
-
     }
 }

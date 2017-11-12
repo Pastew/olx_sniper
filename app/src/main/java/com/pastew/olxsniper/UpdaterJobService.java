@@ -1,5 +1,7 @@
 package com.pastew.olxsniper;
 
+import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.widget.Toast;
@@ -18,8 +20,7 @@ public class UpdaterJobService extends JobService {
 
     public UpdaterJobService() {
         this.olxDownloader = new OlxDownloader();
-        offerDatabase = new OfferDatabase();
-        offerList = offerDatabase.downloadOffers();
+        offerDatabase = Room.databaseBuilder(this, OfferDatabase.class, OfferDatabase.DATABASE_NAME).build();
     }
 
     @Override
@@ -39,23 +40,31 @@ public class UpdaterJobService extends JobService {
 
     private void downloadNewOffers(String url) {
         List<Offer> newOfferList = olxDownloader.downloadOffers(url);
+        offerList = offerDatabase.getOfferDao().getAll();
+        Log.i(MainActivity.TAG, String.format("Offers from databaase(%d)", offerList.size()));
+        for (int i = 0; i < offerList.size(); ++i) {
+            Offer o = offerList.get(i);
+            Log.i(MainActivity.TAG, String.format("    %d. %s, %s %s", i + 1, o.title, o.addedDate, o.link));
+        }
+
         List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
 
         if (onlyNewOffers.size() > 0) {
-            offerList.addAll(0, onlyNewOffers);
-
-            MediaPlayer notificationMediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.notification1);
-            notificationMediaPlayer.start();
-
-            Log.i(MainActivity.TAG, String.format("New offers found: %d", onlyNewOffers.size()));
+            Log.i(MainActivity.TAG, String.format("New offers found, those will be added to database: %d", onlyNewOffers.size()));
             for (int i = 0; i < onlyNewOffers.size(); ++i) {
                 Offer o = onlyNewOffers.get(i);
                 Log.i(MainActivity.TAG, String.format("%d. %s, %s %s", i + 1, o.title, o.addedDate, o.link));
             }
+
+            offerDatabase.getOfferDao().insertAll(onlyNewOffers);
+            MediaPlayer notificationMediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.notification1);
+            notificationMediaPlayer.start();
+
         } else {
             Log.i(MainActivity.TAG, "Checked OLX for new offers, but nothing new found");
-            Toast.makeText(getApplicationContext(), "Nie ma nowych ofert", Toast.LENGTH_SHORT).show();
         }
+
+        offerDatabase.close();
     }
 
     @Override

@@ -10,29 +10,29 @@ public class PriceParsingTests {
 
     @Test
     public void parsePriceIntegerTest() {
-        BigDecimal expected = new BigDecimal(9000);
-        BigDecimal parsed = Utils.parsePrice("9 000 zł");
+        String expected = "9000";
+        String parsed = Utils.parsePrice("9 000 zł");
         assertEquals(expected, parsed);
     }
 
     @Test
     public void parsePriceFloatTest() {
-        BigDecimal expected = new BigDecimal("9450.20");
-        BigDecimal parsed = Utils.parsePrice("9 450,20 zł");
+        String expected = "9450.20";
+        String parsed = Utils.parsePrice("9 450,20 zł");
         assertEquals(expected, parsed);
     }
 
     @Test
     public void parsePriceZeroTest() {
-        BigDecimal expected = new BigDecimal("0");
-        BigDecimal parsed = Utils.parsePrice("Za darmo");
+        String expected = "Za darmo";
+        String parsed = Utils.parsePrice("Za darmo");
         assertEquals(expected, parsed);
     }
 
     @Test
     public void parsePriceExchangeTest() {
-        BigDecimal expected = new BigDecimal("-1");
-        BigDecimal parsed = Utils.parsePrice("Zamienię");
+        String expected = "Zamienię";
+        String parsed = Utils.parsePrice("Zamienię");
         assertEquals(expected, parsed);
     }
 }

@@ -1,20 +1,27 @@
 package com.pastew.olxsniper;
 
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import java.math.BigDecimal;
 
+@Entity
 public class Offer{
-    public String title;
-    public BigDecimal price;
+
+    @NonNull
+    @PrimaryKey
     public String link;
+
+    public String title;
+    public String price;
     public String city;
     public String addedDate;
     public boolean isPromotedOffer;
     public boolean wasSeenByUser;
 
-    public Offer(String title, BigDecimal price, String link, String city, String addedDate) {
+    public Offer(String title, String price, String link, String city, String addedDate) {
         this.title = title;
         this.price = price;
         this.link = link;

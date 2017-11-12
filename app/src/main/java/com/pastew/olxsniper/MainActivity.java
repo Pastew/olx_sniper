@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 .setRecurring(true)
                 .setTrigger(Trigger.executionWindow(updaterDelayInSeconds, updaterDelayInSeconds + 1))
                 .setLifetime(Lifetime.FOREVER)
-                .setReplaceCurrent(false)
+                .setReplaceCurrent(true)
                 .build();
 
         dispatcher.mustSchedule(myJob);
