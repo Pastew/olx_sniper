@@ -29,7 +29,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "OLXSniper";
-    public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/";
+    public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/q-iphone";
     //public static final String OLX_URL = "https://www.olx.pl/oferty/q-iphone/"; //TODO: FIx this bug
 
     private RecyclerView.Adapter adapter;

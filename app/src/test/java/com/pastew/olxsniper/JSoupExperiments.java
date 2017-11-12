@@ -13,13 +13,13 @@ public class JSoupExperiments {
     static final String URL_PRACA = "https://www.olx.pl/praca/krakow/";
     static final String URL_AUDI = "https://www.olx.pl/motoryzacja/samochody/audi/a3/krakow/?search%5Bfilter_float_enginesize%3Afrom%5D=1500&search%5Bfilter_float_milage%3Ato%5D=200000";
     static final String URL_EXCHANGE = "https://www.olx.pl/zamienie/";
-    static final String URL_TMP = "https://www.olx.pl/zwierzeta/pozostale-zwierzeta/";
+    static final String URL_TMP = "https://www.olx.pl/elektronika/telefony-komorkowe/q-iphone";
 
     @Test
     public void offerExperiments() {
         Document doc;
         try {
-            doc = Jsoup.connect(URL).get();
+            doc = Jsoup.connect(URL_TMP).get();
         } catch (IOException e) {
             e.printStackTrace();
             return;

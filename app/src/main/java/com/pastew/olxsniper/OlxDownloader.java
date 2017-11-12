@@ -34,8 +34,24 @@ public class OlxDownloader {
 
         Elements elements = doc.getElementsByClass("offer");
 
+        if(elements == null){
+            Log.e(MainActivity.TAG, "elemens is null. ");
+            return result;
+        }
+
         for (Element offerElement : elements) {
-            String priceString = offerElement.getElementsByClass("price").first().getElementsByTag("strong").first().html();
+            if(offerElement == null){
+                Log.e(MainActivity.TAG, "offerElement is null. ");
+                continue;
+            }
+
+            Element priceElement = offerElement.getElementsByClass("price").first();
+            if(priceElement == null){
+                Log.e(MainActivity.TAG, "priceElement is null. ");
+                continue;
+            }
+
+            String priceString = priceElement.getElementsByTag("strong").first().html();
 
             Element h3 = offerElement.getElementsByTag("h3").first();
             String title = h3.getElementsByTag("strong").first().html();
