@@ -231,17 +231,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class DownloadNewOffersFromOlxTask extends AsyncTask<String, Integer, Void> {
-
-        protected void onPreExecute() {
-        }
-
         protected Void doInBackground(String... urls) {
             new OlxDownloader().downloadNewOffers(context, MainActivity.OLX_URL);
             return null;
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-
         }
 
         protected void onPostExecute(Void param) {
@@ -255,12 +247,6 @@ public class MainActivity extends AppCompatActivity {
         protected Integer doInBackground(Void... voids) {
             offerDatabaseManager.deleteAllOffers();
             return null;
-        }
-
-        protected void onProgressUpdate(Void... voids) {
-        }
-
-        protected void onPostExecute(Integer result) {
         }
     }
 
