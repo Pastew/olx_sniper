@@ -1,6 +1,5 @@
 package com.pastew.olxsniper;
 
-import android.arch.persistence.room.Room;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +25,7 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
 import com.pastew.olxsniper.db.Offer;
-import com.pastew.olxsniper.db.OfferDatabase;
+import com.pastew.olxsniper.db.OfferDbManager;
 import com.pastew.olxsniper.olx.OlxDownloader;
 
 import java.util.ArrayList;
@@ -37,88 +36,34 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "OLXSniper";
     public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/q-iphone";
     public static final String DATABASE_UPDATE_BROADCAST = "com.pastew.olxsniper.DATABASE_UPDATE";
-
-    private RecyclerView.Adapter adapter;
-    List<Offer> offerList;
-
     private int updaterDelayInSeconds = 600;
 
-    private OfferDatabase offerDatabase;
+    private RecyclerView.Adapter adapter;
+    private List<Offer> offerList;
+
+    private OfferDbManager offerDbManager;
 
     private IntentFilter filter = new IntentFilter(DATABASE_UPDATE_BROADCAST);
-
     private DatabaseUpdateBroadcastReceiver databaseUpdateBroadcastReceiver;
-    private Context context;
 
-    private class DatabaseUpdateBroadcastReceiver extends BroadcastReceiver
-    {
-        @Override
-        public void onReceive(Context context, Intent intent)
-        {
-            new DownloadOffersFromDatabaseTask().execute();
-            Log.i(MainActivity.TAG, "broadcast received");
-            //Toast.makeText(context, "Broadcast received", Toast.LENGTH_SHORT).show();
-        }
-    }
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_layout);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
         context = this;
 
-        // FAB
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: here should open window with added new OLX Listner
-            }
-        });
+        setupStrictMode();
+        setupFab();
+        setupRecyclerView();
+        setupButtons();
+        setupService();
+        setupOfferDbManager();
+    }
 
-        // Recycler view
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        offerDatabase = Room.databaseBuilder(this, OfferDatabase.class, OfferDatabase.DATABASE_NAME).build();
-        offerList = new ArrayList<>();
-        adapter = new MyAdapter(getApplicationContext(), offerList);
-        recyclerView.setAdapter(adapter);
-
-        //Clear, refresh database - TODO: remove this
-        findViewById(R.id.clearDatabaseButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DeleteAllOffersFromDatabase().execute();
-                offerList.clear();
-                adapter.notifyDataSetChanged();
-            }
-        });
-
-        findViewById(R.id.refreshDatabaseButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((Button)v).setText("Sprawdzam...");
-                ((Button)v).setEnabled(false);
-                new DownloadNewOffersFromOlxTask().execute();
-            }
-        });
-
-        // Firebase Job Dispatcher
-        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
-        dispatcher.cancelAll();
-        Job myJob = dispatcher.newJobBuilder()
-                .setService(UpdaterJobService.class)
-                .setTag(UpdaterJobService.class.getSimpleName())
-                .setRecurring(true)
-                .setTrigger(Trigger.executionWindow(updaterDelayInSeconds, updaterDelayInSeconds + 1))
-                .setLifetime(Lifetime.FOREVER)
-                .setReplaceCurrent(true)
-                .build();
-
-        dispatcher.mustSchedule(myJob);
+    private void setupOfferDbManager() {
+        this.offerDbManager = new OfferDbManager(this);
     }
 
     @Override
@@ -136,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IllegalArgumentException e) {
             if (e.getMessage().contains("Receiver not registered")) {
                 // Ignore this exception. This is exactly what is desired
-                Log.w(TAG,"Tried to unregister the reciver when it's not registered");
+                Log.w(TAG, "Tried to unregister the reciver when it's not registered");
             } else {
                 // unexpected, re-throw
                 throw e;
@@ -144,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onPause();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -167,8 +113,68 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void setupService() {
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+        dispatcher.cancelAll();
+        Job myJob = dispatcher.newJobBuilder()
+                .setService(UpdaterJobService.class)
+                .setTag(UpdaterJobService.class.getSimpleName())
+                .setRecurring(true)
+                .setTrigger(Trigger.executionWindow(updaterDelayInSeconds, updaterDelayInSeconds + 1))
+                .setLifetime(Lifetime.FOREVER)
+                .setReplaceCurrent(true)
+                .build();
+
+        dispatcher.mustSchedule(myJob);
+    }
+
+    private void setupStrictMode() {
+        //TODO: Find out why it is needed
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+    }
+
+    private void setupFab() {
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: here should open window with added new OLX Listner
+            }
+        });
+    }
+
+    private void setupRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        offerList = new ArrayList<>();
+        adapter = new MyAdapter(getApplicationContext(), offerList);
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void setupButtons() {
+        findViewById(R.id.clearDatabaseButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DeleteAllOffersFromDatabase().execute();
+                offerList.clear();
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        findViewById(R.id.refreshDatabaseButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((Button) v).setText("Sprawdzam...");
+                ((Button) v).setEnabled(false);
+                new DownloadNewOffersFromOlxTask().execute();
+            }
+        });
+    }
+
     private void changeColorsOfOldOffers() {
-        for(Offer o : offerList)
+        for (Offer o : offerList)
             o.wasSeenByUser = true;
     }
 
@@ -186,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
 
     private class DownloadOffersFromDatabaseTask extends AsyncTask<Void, Integer, List<Offer>> {
         protected List<Offer> doInBackground(Void... params) {
-            List<Offer> newOfferList = offerDatabase.getOfferDao().getAll();
+            List<Offer> newOfferList = offerDbManager.getAllOffers();
             List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
             return onlyNewOffers;
         }
@@ -195,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(List<Offer> onlyNewOffers) {
-            if(onlyNewOffers.size() > 0) {
+            if (onlyNewOffers.size() > 0) {
                 changeColorsOfOldOffers();
 
                 offerList.addAll(0, onlyNewOffers);
@@ -204,12 +210,11 @@ public class MainActivity extends AppCompatActivity {
                 notifyUserAboutNewOffers(onlyNewOffers);
 
                 Log.i(TAG, String.format("New offers found: %d", onlyNewOffers.size()));
-                for (int i = 0 ; i < onlyNewOffers.size() ; ++i) {
+                for (int i = 0; i < onlyNewOffers.size(); ++i) {
                     Offer o = onlyNewOffers.get(i);
                     Log.i(TAG, String.format("%d. %s, %s %s", i + 1, o.title, o.addedDate, o.link));
                 }
-            }
-            else {
+            } else {
                 Log.i(TAG, "Checked OLX for new offers in db, but nothing new found");
 
                 Snackbar snackbar = Snackbar
@@ -227,7 +232,8 @@ public class MainActivity extends AppCompatActivity {
 
     private class DownloadNewOffersFromOlxTask extends AsyncTask<String, Integer, Void> {
 
-        protected void onPreExecute(){}
+        protected void onPreExecute() {
+        }
 
         protected Void doInBackground(String... urls) {
             new OlxDownloader().downloadNewOffers(context, MainActivity.OLX_URL);
@@ -240,19 +246,29 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(Void param) {
             new DownloadOffersFromDatabaseTask().execute();
-            ((Button)findViewById(R.id.refreshDatabaseButton)).setText("Odśwież");
-            ((Button)findViewById(R.id.refreshDatabaseButton)).setEnabled(true);
+            ((Button) findViewById(R.id.refreshDatabaseButton)).setText("Odśwież");
+            ((Button) findViewById(R.id.refreshDatabaseButton)).setEnabled(true);
         }
     }
 
     private class DeleteAllOffersFromDatabase extends AsyncTask<Void, Void, Integer> {
         protected Integer doInBackground(Void... voids) {
-            offerDatabase.getOfferDao().deleteAll();
+            offerDbManager.deleteAllOffers();
             return null;
         }
-        protected void onProgressUpdate(Void... voids) {}
+
+        protected void onProgressUpdate(Void... voids) {
+        }
+
         protected void onPostExecute(Integer result) {
         }
     }
 
+    private class DatabaseUpdateBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            new DownloadOffersFromDatabaseTask().execute();
+            Log.i(MainActivity.TAG, "broadcast received");
+        }
+    }
 }
