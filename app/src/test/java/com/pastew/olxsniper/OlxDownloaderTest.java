@@ -1,6 +1,7 @@
 package com.pastew.olxsniper;
 
 import com.pastew.olxsniper.db.Offer;
+import com.pastew.olxsniper.olx.OfferDownloader;
 import com.pastew.olxsniper.olx.OlxDownloader;
 
 import org.junit.Test;
@@ -18,8 +19,8 @@ public class OlxDownloaderTest {
     @Test
     public void olrDownloaderTest() {
 
-        OlxDownloader olxDownloader = new OlxDownloader();
-        List<Offer> offerList = olxDownloader.downloadOffersFromOlx(URL_TMP);
+        OfferDownloader olxDownloader = new OlxDownloader();
+        List<Offer> offerList = olxDownloader.downloadOffersFromWeb(URL_TMP);
 
         for(Offer o : offerList){
             System.out.println(String.format("%s, %s, %s, %s", o.title, o.price, o.link, o.city));

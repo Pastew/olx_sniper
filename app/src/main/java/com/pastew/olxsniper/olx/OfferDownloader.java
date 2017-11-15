@@ -35,6 +35,6 @@ public abstract class OfferDownloader {
         return onlyNewOffers;
     }
 
-    protected abstract List<Offer> downloadOffersFromWeb(String url);
+    public abstract List<Offer> downloadOffersFromWeb(String url);
 
 }

@@ -1,7 +1,12 @@
 package com.pastew.olxsniper;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.widget.Toast;
@@ -9,6 +14,7 @@ import android.widget.Toast;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 import com.pastew.olxsniper.db.Offer;
+import com.pastew.olxsniper.db.OfferDatabase;
 import com.pastew.olxsniper.olx.OlxDownloader;
 
 import java.util.List;
@@ -39,6 +45,7 @@ public class UpdaterJobService extends JobService {
                     //i.putExtra("url", "bleble");
                     context.sendBroadcast(i);
 
+                    createNotification();
                     MediaPlayer notificationMediaPlayer = MediaPlayer.create(context, R.raw.notification1);
                     notificationMediaPlayer.start();
                 }
@@ -46,6 +53,21 @@ public class UpdaterJobService extends JobService {
         }).start();
 
         return false; // Answers the question: "Is there still work going on?"
+    }
+
+    private void createNotification() {
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        int notifyId = 1;
+        String channelId = "some_channel_id";
+
+        Notification notification = new Notification.Builder(this)
+                .setContentTitle("Some Message")
+                .setContentText("You've received new messages!")
+                .setSmallIcon(R.drawable.ic_launch_black_24dp)
+                .build();
+
+        notificationManager.notify(notifyId, notification);
     }
 
     @Override

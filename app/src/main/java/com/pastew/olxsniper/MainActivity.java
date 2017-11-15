@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "OLXSniper";
     public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/q-iphone";
     public static final String DATABASE_UPDATE_BROADCAST = "com.pastew.olxsniper.DATABASE_UPDATE";
-    private int updaterDelayInSeconds = 60;
+    private int updaterDelayInSeconds = 10;
 
     private RecyclerView.Adapter adapter;
     private List<Offer> offerList;
