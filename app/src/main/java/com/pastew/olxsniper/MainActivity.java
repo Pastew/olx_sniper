@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "OLXSniper";
     public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/q-iphone";
     public static final String DATABASE_UPDATE_BROADCAST = "com.pastew.olxsniper.DATABASE_UPDATE";
-    private int updaterDelayInSeconds = 600;
+    private int updaterDelayInSeconds = 60;
 
     private RecyclerView.Adapter adapter;
     private List<Offer> offerList;
@@ -208,15 +208,7 @@ public class MainActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
 
                 notifyUserAboutNewOffers(onlyNewOffers);
-
-                Log.i(TAG, String.format("New offers found: %d", onlyNewOffers.size()));
-                for (int i = 0; i < onlyNewOffers.size(); ++i) {
-                    Offer o = onlyNewOffers.get(i);
-                    Log.i(TAG, String.format("%d. %s, %s %s", i + 1, o.title, o.addedDate, o.link));
-                }
             } else {
-                Log.i(TAG, "Checked OLX for new offers in db, but nothing new found");
-
                 Snackbar snackbar = Snackbar
                         .make(findViewById(R.id.constrainLayout), String.format("Nie ma nowych ofert."), Snackbar.LENGTH_LONG)
                         .setAction("Nie klikaj!", new View.OnClickListener() {

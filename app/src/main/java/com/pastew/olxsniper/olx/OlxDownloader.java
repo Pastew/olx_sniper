@@ -1,12 +1,9 @@
 package com.pastew.olxsniper.olx;
 
-import android.arch.persistence.room.Room;
-import android.content.Context;
 import android.util.Log;
 
 import com.pastew.olxsniper.MainActivity;
 import com.pastew.olxsniper.db.Offer;
-import com.pastew.olxsniper.db.OfferDatabase;
 import com.pastew.olxsniper.Utils;
 
 import org.jsoup.Jsoup;
