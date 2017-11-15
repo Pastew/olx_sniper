@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
+import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.olx.OlxDownloader;
 
 import java.util.List;

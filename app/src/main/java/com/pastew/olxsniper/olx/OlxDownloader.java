@@ -5,8 +5,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.pastew.olxsniper.MainActivity;
-import com.pastew.olxsniper.Offer;
-import com.pastew.olxsniper.OfferDatabase;
+import com.pastew.olxsniper.db.Offer;
+import com.pastew.olxsniper.db.OfferDatabase;
 import com.pastew.olxsniper.Utils;
 
 import org.jsoup.Jsoup;

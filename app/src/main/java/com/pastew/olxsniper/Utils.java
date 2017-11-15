@@ -1,7 +1,8 @@
 package com.pastew.olxsniper;
 
 
-import java.math.BigDecimal;
+import com.pastew.olxsniper.db.Offer;
+
 import java.util.ArrayList;
 import java.util.List;
 

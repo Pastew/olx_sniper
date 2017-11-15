@@ -1,4 +1,4 @@
-package com.pastew.olxsniper;
+package com.pastew.olxsniper.db;
 
 
 import android.arch.persistence.db.SupportSQLiteOpenHelper;

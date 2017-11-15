@@ -1,5 +1,6 @@
 package com.pastew.olxsniper;
 
+import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.olx.OlxDownloader;
 
 import org.junit.Test;

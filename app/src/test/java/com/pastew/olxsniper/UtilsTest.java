@@ -1,12 +1,11 @@
 package com.pastew.olxsniper;
 
+import com.pastew.olxsniper.db.Offer;
+
 import org.junit.Test;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 

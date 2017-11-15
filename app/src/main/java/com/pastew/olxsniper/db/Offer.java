@@ -1,11 +1,9 @@
-package com.pastew.olxsniper;
+package com.pastew.olxsniper.db;
 
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
-
-import java.math.BigDecimal;
 
 @Entity
 public class Offer{

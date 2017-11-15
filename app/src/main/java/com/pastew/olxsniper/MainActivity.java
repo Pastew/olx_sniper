@@ -25,6 +25,8 @@ import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
+import com.pastew.olxsniper.db.Offer;
+import com.pastew.olxsniper.db.OfferDatabase;
 import com.pastew.olxsniper.olx.OlxDownloader;
 
 import java.util.ArrayList;
