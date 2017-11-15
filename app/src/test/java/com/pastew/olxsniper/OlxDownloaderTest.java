@@ -1,14 +1,7 @@
 package com.pastew.olxsniper;
 
-import android.util.Log;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 public class OlxDownloaderTest {
@@ -23,7 +16,7 @@ public class OlxDownloaderTest {
     public void olrDownloaderTest() {
 
         OlxDownloader olxDownloader = new OlxDownloader();
-        List<Offer> offerList = olxDownloader.downloadOffers(URL_TMP);
+        List<Offer> offerList = olxDownloader.downloadOffersFromOlx(URL_TMP);
 
         for(Offer o : offerList){
             System.out.println(String.format("%s, %s, %s, %s", o.title, o.price, o.link, o.city));

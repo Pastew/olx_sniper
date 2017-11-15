@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "OLXSniper";
     public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/q-iphone";
     public static final String DATABASE_UPDATE_BROADCAST = "com.pastew.olxsniper.DATABASE_UPDATE";
-    //public static final String OLX_URL = "https://www.olx.pl/oferty/q-iphone/"; //TODO: FIx this bug
 
     private RecyclerView.Adapter adapter;
     List<Offer> offerList;
@@ -46,20 +45,17 @@ public class MainActivity extends AppCompatActivity {
     private IntentFilter filter = new IntentFilter(DATABASE_UPDATE_BROADCAST);
 
     private DatabaseUpdateBroadcastReceiver databaseUpdateBroadcastReceiver;
+    private Context context;
 
     private class DatabaseUpdateBroadcastReceiver extends BroadcastReceiver
     {
         @Override
         public void onReceive(Context context, Intent intent)
         {
-            updateRecyclerViewFromDatabase();
+            new DownloadOffersFromDatabaseTask().execute();
             Log.i(MainActivity.TAG, "broadcast received");
-            Toast.makeText(context, "Broadcast received", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Broadcast received", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void updateRecyclerViewFromDatabase() {
-        new DownloadOffersFromDatabaseTask().execute();
     }
 
     @Override
@@ -68,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.list_layout);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+        context = this;
 
         // FAB
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -100,7 +97,9 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.refreshDatabaseButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateRecyclerViewFromDatabase();
+                ((Button)v).setText("Sprawdzam...");
+                ((Button)v).setEnabled(false);
+                new DownloadNewOffersFromOlxTask().execute();
             }
         });
 
@@ -123,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         databaseUpdateBroadcastReceiver = new DatabaseUpdateBroadcastReceiver();
         registerReceiver(databaseUpdateBroadcastReceiver, filter);
-        updateRecyclerViewFromDatabase();
+        new DownloadOffersFromDatabaseTask().execute();
         super.onResume();
     }
 
@@ -170,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
             o.wasSeenByUser = true;
     }
 
-
     private void notifyUserAboutNewOffers(List<Offer> onlyNewOffers) {
         Snackbar snackbar = Snackbar
                 .make(findViewById(R.id.constrainLayout), String.format("%d nowe oferty!", onlyNewOffers.size()), Snackbar.LENGTH_LONG)
@@ -183,8 +181,8 @@ public class MainActivity extends AppCompatActivity {
         snackbar.show();
     }
 
-    private class DownloadOffersFromDatabaseTask extends AsyncTask<String, Integer, List<Offer>> {
-        protected List<Offer> doInBackground(String... urls) {
+    private class DownloadOffersFromDatabaseTask extends AsyncTask<Void, Integer, List<Offer>> {
+        protected List<Offer> doInBackground(Void... params) {
             List<Offer> newOfferList = offerDatabase.getOfferDao().getAll();
             List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
             return onlyNewOffers;
@@ -209,8 +207,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             else {
-                Log.i(TAG, String.format("Checked OLX for new offers, but nothing new found, " +
-                        "I will try afer %d seconds.", updaterDelayInSeconds));
+                Log.i(TAG, "Checked OLX for new offers in db, but nothing new found");
 
                 Snackbar snackbar = Snackbar
                         .make(findViewById(R.id.constrainLayout), String.format("Nie ma nowych ofert."), Snackbar.LENGTH_LONG)
@@ -225,6 +222,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private class DownloadNewOffersFromOlxTask extends AsyncTask<String, Integer, Void> {
+
+        protected void onPreExecute(){}
+
+        protected Void doInBackground(String... urls) {
+            new OlxDownloader().downloadNewOffers(context, MainActivity.OLX_URL);
+            return null;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+
+        }
+
+        protected void onPostExecute(Void param) {
+            new DownloadOffersFromDatabaseTask().execute();
+            ((Button)findViewById(R.id.refreshDatabaseButton)).setText("Odśwież");
+            ((Button)findViewById(R.id.refreshDatabaseButton)).setEnabled(true);
+        }
+    }
+
     private class DeleteAllOffersFromDatabase extends AsyncTask<Void, Void, Integer> {
         protected Integer doInBackground(Void... voids) {
             offerDatabase.getOfferDao().deleteAll();
@@ -234,4 +251,5 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Integer result) {
         }
     }
+
 }
