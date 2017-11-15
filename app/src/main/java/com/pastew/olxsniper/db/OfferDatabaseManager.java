@@ -5,10 +5,10 @@ import android.content.Context;
 
 import java.util.List;
 
-public class OfferDbManager {
+public class OfferDatabaseManager {
     private OfferDatabase offerDatabase;
 
-    public OfferDbManager(Context context) {
+    public OfferDatabaseManager(Context context) {
         offerDatabase = Room.databaseBuilder(context, OfferDatabase.class, OfferDatabase.DATABASE_NAME).build();
 
     }

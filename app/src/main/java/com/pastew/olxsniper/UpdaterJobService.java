@@ -54,4 +54,6 @@ public class UpdaterJobService extends JobService {
         Toast.makeText(this, "stop job", Toast.LENGTH_SHORT).show();
         return true; // Answers the question: "Should this job be retried?"
     }
+
+
 }

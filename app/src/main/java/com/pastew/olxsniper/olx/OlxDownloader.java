@@ -18,34 +18,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OlxDownloader {
+public class OlxDownloader extends OfferDownloader{
     private static final boolean IGNORE_PROMOTED_OFFERS = true;
     //TODO: move this to user prefs.
 
     private static final String TAG = MainActivity.TAG;
 
-
-    public List<Offer> downloadNewOffers(Context context, String url) {
-        OfferDatabase offerDatabase = Room.databaseBuilder(context, OfferDatabase.class, OfferDatabase.DATABASE_NAME).build();
-        List<Offer> newOfferList = new OlxDownloader().downloadOffersFromOlx(url);
-        List<Offer> offerList = offerDatabase.getOfferDao().getAll();
-
-        List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
-
-        if (onlyNewOffers.size() > 0) {
-            offerDatabase.getOfferDao().insertAll(onlyNewOffers);
-
-        } else {
-            Log.i(TAG, "Checked OLX for new offers in OLX, but nothing new found");
-        }
-
-        offerDatabase.close();
-
-        return onlyNewOffers;
-    }
-
-
-    private List<Offer> downloadOffersFromOlx(String url) {
+    @Override
+    public List<Offer> downloadOffersFromWeb(String url) {
         List<Offer> result = new ArrayList<>();
 
         Document doc;

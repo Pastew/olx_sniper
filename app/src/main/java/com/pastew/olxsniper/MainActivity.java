@@ -25,7 +25,7 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
 import com.pastew.olxsniper.db.Offer;
-import com.pastew.olxsniper.db.OfferDbManager;
+import com.pastew.olxsniper.db.OfferDatabaseManager;
 import com.pastew.olxsniper.olx.OlxDownloader;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private List<Offer> offerList;
 
-    private OfferDbManager offerDbManager;
+    private OfferDatabaseManager offerDatabaseManager;
 
     private IntentFilter filter = new IntentFilter(DATABASE_UPDATE_BROADCAST);
     private DatabaseUpdateBroadcastReceiver databaseUpdateBroadcastReceiver;
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupOfferDbManager() {
-        this.offerDbManager = new OfferDbManager(this);
+        this.offerDatabaseManager = new OfferDatabaseManager(this);
     }
 
     @Override
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
 
     private class DownloadOffersFromDatabaseTask extends AsyncTask<Void, Integer, List<Offer>> {
         protected List<Offer> doInBackground(Void... params) {
-            List<Offer> newOfferList = offerDbManager.getAllOffers();
+            List<Offer> newOfferList = offerDatabaseManager.getAllOffers();
             List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
             return onlyNewOffers;
         }
@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
 
     private class DeleteAllOffersFromDatabase extends AsyncTask<Void, Void, Integer> {
         protected Integer doInBackground(Void... voids) {
-            offerDbManager.deleteAllOffers();
+            offerDatabaseManager.deleteAllOffers();
             return null;
         }
 
