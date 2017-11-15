@@ -1,11 +1,16 @@
 package com.pastew.olxsniper;
 
 import android.content.Context;
+import android.content.Intent;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
+import com.pastew.olxsniper.olx.OlxDownloader;
+
+import java.util.List;
 
 
 public class UpdaterJobService extends JobService {
@@ -26,7 +31,16 @@ public class UpdaterJobService extends JobService {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                new OlxDownloader().downloadNewOffers(context, MainActivity.OLX_URL);
+                List<Offer> newOffers = new OlxDownloader().downloadNewOffers(context, MainActivity.OLX_URL);
+
+                if (newOffers.size() > 0) {
+                    Intent i = new Intent(MainActivity.DATABASE_UPDATE_BROADCAST);
+                    //i.putExtra("url", "bleble");
+                    context.sendBroadcast(i);
+
+                    MediaPlayer notificationMediaPlayer = MediaPlayer.create(context, R.raw.notification1);
+                    notificationMediaPlayer.start();
+                }
             }
         }).start();
 

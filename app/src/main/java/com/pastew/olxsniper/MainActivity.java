@@ -25,6 +25,7 @@ import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
+import com.pastew.olxsniper.olx.OlxDownloader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     List<Offer> offerList;
 
-    private int updaterDelayInSeconds = 60;
+    private int updaterDelayInSeconds = 600;
 
     private OfferDatabase offerDatabase;
 

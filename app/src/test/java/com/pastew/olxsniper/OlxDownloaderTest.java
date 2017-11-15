@@ -1,5 +1,7 @@
 package com.pastew.olxsniper;
 
+import com.pastew.olxsniper.olx.OlxDownloader;
+
 import org.junit.Test;
 
 import java.util.List;

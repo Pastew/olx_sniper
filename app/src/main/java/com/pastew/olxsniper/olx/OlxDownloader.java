@@ -1,10 +1,13 @@
-package com.pastew.olxsniper;
+package com.pastew.olxsniper.olx;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
-import android.content.Intent;
-import android.media.MediaPlayer;
 import android.util.Log;
+
+import com.pastew.olxsniper.MainActivity;
+import com.pastew.olxsniper.Offer;
+import com.pastew.olxsniper.OfferDatabase;
+import com.pastew.olxsniper.Utils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,7 +15,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,43 +25,27 @@ public class OlxDownloader {
     private static final String TAG = MainActivity.TAG;
 
 
-    public void downloadNewOffers(Context context, String url) {
+    public List<Offer> downloadNewOffers(Context context, String url) {
         OfferDatabase offerDatabase = Room.databaseBuilder(context, OfferDatabase.class, OfferDatabase.DATABASE_NAME).build();
-
         List<Offer> newOfferList = new OlxDownloader().downloadOffersFromOlx(url);
         List<Offer> offerList = offerDatabase.getOfferDao().getAll();
-        //Log.i(TAG, String.format("Offers from databaase(%d)", offerList.size()));
-        for (int i = 0; i < offerList.size(); ++i) {
-            Offer o = offerList.get(i);
-            //Log.i(TAG, String.format("    %d. %s, %s %s", i + 1, o.title, o.addedDate, o.link));
-        }
 
         List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
 
         if (onlyNewOffers.size() > 0) {
-            //Log.i(TAG, String.format("New offers found, those will be added to database: %d", onlyNewOffers.size()));
-            for (int i = 0; i < onlyNewOffers.size(); ++i) {
-                Offer o = onlyNewOffers.get(i);
-                //Log.i(TAG, String.format("%d. %s, %s %s", i + 1, o.title, o.addedDate, o.link));
-            }
-
             offerDatabase.getOfferDao().insertAll(onlyNewOffers);
-            MediaPlayer notificationMediaPlayer = MediaPlayer.create(context, R.raw.notification1);
-            notificationMediaPlayer.start();
-
-            Intent i = new Intent(MainActivity.DATABASE_UPDATE_BROADCAST);
-            //i.putExtra("url", "bleble");
-            context.sendBroadcast(i);
 
         } else {
             Log.i(TAG, "Checked OLX for new offers in OLX, but nothing new found");
         }
 
         offerDatabase.close();
+
+        return onlyNewOffers;
     }
 
 
-    List<Offer> downloadOffersFromOlx(String url) {
+    private List<Offer> downloadOffersFromOlx(String url) {
         List<Offer> result = new ArrayList<>();
 
         Document doc;
