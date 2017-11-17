@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.pastew.olxsniper.db.Offer;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
@@ -70,7 +72,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         String price = offerList.get(position).price;
         String link = offerList.get(position).link;
         String city = offerList.get(position).city;
-        String addedDate = offerList.get(position).addedDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm");
+        Date resultDate = new Date(offerList.get(position).addedDate);
+        String addedDate = sdf.format(resultDate);
         boolean wasSeenByUser = offerList.get(position).wasSeenByUser;
 
         holder.titleTextView.setText(title);

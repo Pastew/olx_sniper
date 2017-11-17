@@ -15,16 +15,16 @@ public class Offer{
     public String title;
     public String price;
     public String city;
-    public String addedDate;
+    public long addedDate;
     public boolean isPromotedOffer;
     public boolean wasSeenByUser;
 
-    public Offer(String title, String price, String link, String city, String addedDate) {
+    public Offer(String title, String price, String link, String city) {
         this.title = title;
         this.price = price;
         this.link = link;
         this.city = city;
-        this.addedDate = addedDate;
+        this.addedDate = System.currentTimeMillis();
         this.isPromotedOffer = link.contains("promoted");
         this.wasSeenByUser = false;
     }
