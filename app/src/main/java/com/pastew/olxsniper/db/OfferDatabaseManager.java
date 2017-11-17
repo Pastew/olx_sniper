@@ -1,8 +1,6 @@
 package com.pastew.olxsniper.db;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Room;
-import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
 import java.util.List;
@@ -18,7 +16,7 @@ public class OfferDatabaseManager {
 
 
     public List<Offer> getAllOffers() {
-        return offerDatabase.getOfferDao().getAll();
+        return offerDatabase.getOfferDao().getAllByDate();
     }
 
     public void deleteAllOffers() {

@@ -19,7 +19,7 @@ public abstract class OfferDownloader {
     public List<Offer> downloadNewOffers(Context context, String url) {
         OfferDatabase offerDatabase = Room.databaseBuilder(context, OfferDatabase.class, OfferDatabase.DATABASE_NAME).build();
         List<Offer> newOfferList = this.downloadOffersFromWeb(url);
-        List<Offer> offerList = offerDatabase.getOfferDao().getAll();
+        List<Offer> offerList = offerDatabase.getOfferDao().getAllByDate();
 
         List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
 

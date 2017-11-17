@@ -13,8 +13,8 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface OfferDao {
 
-    @Query("SELECT * FROM offer")
-    List<Offer> getAll();
+    @Query("SELECT * FROM offer ORDER BY addedDate DESC")
+    List<Offer> getAllByDate();
 
     @Query("SELECT * FROM offer WHERE link LIKE :link LIMIT 1")
     Offer findByLink(String link);
