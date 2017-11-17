@@ -25,4 +25,11 @@ public class OfferDatabaseManager {
         offer.removed = flagValue;
         offerDatabase.getOfferDao().update(offer);
     }
+
+    public void setRemovedFlag(List<Offer> offers, boolean removed) {
+        for (Offer offer : offers) {
+            offer.removed = removed;
+            offerDatabase.getOfferDao().update(offer);
+        }
+    }
 }

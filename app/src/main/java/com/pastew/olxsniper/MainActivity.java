@@ -180,6 +180,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
                 new DownloadNewOffersFromOlxTask().execute();
             }
         });
+
+        findViewById(R.id.removeAllOffersButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SetRemovedFlagTaskTrueForOffers().execute(offerList);
+            }
+        });
     }
 
     private void notifyUserAboutNewOffers(List<Offer> onlyNewOffers) {
@@ -272,6 +279,24 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         protected Integer doInBackground(Void... voids) {
             offerDatabaseManager.deleteAllOffers();
             return null;
+        }
+    }
+
+    private class SetRemovedFlagTaskTrueForOffers extends AsyncTask<List<Offer>, Void, Void> {
+        protected Void doInBackground(List<Offer>... offers) {
+            offerDatabaseManager.setRemovedFlag(offers[0], true);
+            return null;
+        }
+
+        protected void onPostExecute(Void param) {
+            int size = offerList.size();
+            if (size > 0) {
+                for (int i = 0; i < size; i++) {
+                    offerList.remove(0);
+                }
+
+                adapter.notifyItemRangeRemoved(0, size);
+            }
         }
     }
 

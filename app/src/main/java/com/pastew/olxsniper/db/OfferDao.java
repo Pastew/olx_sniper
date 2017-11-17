@@ -8,7 +8,7 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
-import static android.arch.persistence.room.OnConflictStrategy.ROLLBACK;
+import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 
 @Dao
 public interface OfferDao {
@@ -22,7 +22,7 @@ public interface OfferDao {
     @Query("SELECT * FROM offer WHERE link LIKE :link LIMIT 1")
     Offer findByLink(String link);
 
-    @Insert(onConflict = ROLLBACK)
+    @Insert(onConflict = IGNORE)
     void insertAll(List<Offer> offerList);
 
     @Update
