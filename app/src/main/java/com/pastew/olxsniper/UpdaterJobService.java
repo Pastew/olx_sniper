@@ -46,8 +46,6 @@ public class UpdaterJobService extends JobService {
                     context.sendBroadcast(i);
 
                     createNotification(newOffers);
-                    MediaPlayer notificationMediaPlayer = MediaPlayer.create(context, R.raw.notification1);
-                    notificationMediaPlayer.start();
                 }
             }
         }).start();
@@ -68,7 +66,7 @@ public class UpdaterJobService extends JobService {
                         .setOngoing(true)
                         .setVibrate(new long[]{500, 100, 100, 100, 100, 100})
                         //.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                        .setSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.notification1))
+                        .setSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.notification2))
                         .setColor(Color.BLUE);
 
         // Creates an explicit intent for an Activity in your app
