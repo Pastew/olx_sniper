@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pastew.olxsniper.db.Offer;
 
@@ -25,7 +26,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         // each data item is just a string in this case
         public TextView titleTextView;
         public TextView cityTextView;
@@ -34,7 +35,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public ImageView linkImageView;
         public CardView cardView;
 
-        public ViewHolder(View v) {
+        private Context c;
+
+        public ViewHolder(View v, Context context) {
             super(v);
             titleTextView = v.findViewById(R.id.titleTextView);
             linkImageView = v.findViewById(R.id.linkImageView);
@@ -42,6 +45,26 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             priceTextView = v.findViewById(R.id.priceTextView);
             addedDateTextView = v.findViewById(R.id.dateTextView);
             cardView = v.findViewById(R.id.cardView);
+            this.c = context;
+
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int p=getLayoutPosition();
+                    System.out.println("click: "+p);
+                    Toast.makeText(c, "Click", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            cardView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    int p=getLayoutPosition();
+                    System.out.println("LongClick: "+p);
+                    Toast.makeText(c, "Long Click", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
         }
     }
 
@@ -60,7 +83,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 .inflate(R.layout.offer, parent, false);
         // set the view's size, margins, paddings and layout parameters
         // ...
-        ViewHolder vh = new ViewHolder(v);
+        ViewHolder vh = new ViewHolder(v, context);
         return vh;
     }
 
