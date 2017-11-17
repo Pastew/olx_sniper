@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -230,12 +229,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
     private class DownloadOffersFromDatabaseTask extends AsyncTask<Void, Integer, List<Offer>> {
         protected List<Offer> doInBackground(Void... params) {
-            List<Offer> newOfferList = offerDatabaseManager.getAllOffers();
+            List<Offer> newOfferList = offerDatabaseManager.getAllNotRemovedOffers();
             List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
             return onlyNewOffers;
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
         }
 
         protected void onPostExecute(List<Offer> onlyNewOffers) {

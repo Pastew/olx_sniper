@@ -13,8 +13,8 @@ public class OfferDatabaseManager {
                 OfferDatabase.DATABASE_NAME).fallbackToDestructiveMigration().build();
     }
 
-    public List<Offer> getAllOffers() {
-        return offerDatabase.getOfferDao().getAllByDate();
+    public List<Offer> getAllNotRemovedOffers() {
+        return offerDatabase.getOfferDao().getAllNotRemovedByDate();
     }
 
     public void deleteAllOffers() {

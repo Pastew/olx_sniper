@@ -8,18 +8,21 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
-import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
+import static android.arch.persistence.room.OnConflictStrategy.ROLLBACK;
 
 @Dao
 public interface OfferDao {
 
-    @Query("SELECT * FROM offer ORDER BY addedDate DESC")
-    List<Offer> getAllByDate();
+    @Query("SELECT * FROM offer WHERE removed = 0 ORDER BY addedDate DESC")
+    List<Offer> getAllNotRemovedByDate();
+
+    @Query("SELECT * FROM offer")
+    List<Offer> getAll();
 
     @Query("SELECT * FROM offer WHERE link LIKE :link LIMIT 1")
     Offer findByLink(String link);
 
-    @Insert(onConflict = REPLACE)
+    @Insert(onConflict = ROLLBACK)
     void insertAll(List<Offer> offerList);
 
     @Update
@@ -30,4 +33,5 @@ public interface OfferDao {
 
     @Query("DELETE FROM offer")
     void deleteAll();
+
 }

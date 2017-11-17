@@ -19,13 +19,12 @@ public abstract class OfferDownloader {
     public List<Offer> downloadNewOffers(Context context, String url) {
         OfferDatabase offerDatabase = Room.databaseBuilder(context, OfferDatabase.class, OfferDatabase.DATABASE_NAME).build();
         List<Offer> newOfferList = this.downloadOffersFromWeb(url);
-        List<Offer> offerList = offerDatabase.getOfferDao().getAllByDate();
+        List<Offer> offerList = offerDatabase.getOfferDao().getAll();
 
         List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
 
         if (onlyNewOffers.size() > 0) {
             offerDatabase.getOfferDao().insertAll(onlyNewOffers);
-
         } else {
             Log.i(TAG, "Checked Web for new offers, but nothing new found");
         }
