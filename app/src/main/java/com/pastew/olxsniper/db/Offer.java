@@ -18,6 +18,7 @@ public class Offer{
     public long addedDate;
     public boolean isPromotedOffer;
     public boolean wasSeenByUser;
+    public boolean removed;
 
     public Offer(String title, String price, String link, String city) {
         this.title = title;
@@ -27,6 +28,7 @@ public class Offer{
         this.addedDate = System.currentTimeMillis();
         this.isPromotedOffer = link.contains("promoted");
         this.wasSeenByUser = false;
+        this.removed = false;
     }
 
     public boolean isTheSameOffer(@NonNull Offer o) {

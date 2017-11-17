@@ -221,11 +221,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
                 public void onClick(View view) {
                     // undo is selected, restore the deleted item
                     adapter.restoreItem(deletedItem, deletedIndex);
+                    new SetRemovedFlagTaskFalse().execute(deletedItem);
                 }
             });
 
             snackbar.setActionTextColor(Color.YELLOW);
             snackbar.show();
+
+            // set in database "removed" flag
+            new SetRemovedFlagTaskTrue().execute(deletedItem);
         }
     }
 
@@ -277,6 +281,20 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     private class DeleteAllOffersFromDatabase extends AsyncTask<Void, Void, Integer> {
         protected Integer doInBackground(Void... voids) {
             offerDatabaseManager.deleteAllOffers();
+            return null;
+        }
+    }
+
+    private class SetRemovedFlagTaskTrue extends AsyncTask<Offer, Void, Void> {
+        protected Void doInBackground(Offer... offers) {
+            offerDatabaseManager.setRemovedFlag(offers[0], true);
+            return null;
+        }
+    }
+
+    private class SetRemovedFlagTaskFalse extends AsyncTask<Offer, Void, Void> {
+        protected Void doInBackground(Offer... offers) {
+            offerDatabaseManager.setRemovedFlag(offers[0], false);
             return null;
         }
     }
