@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -12,6 +14,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -31,14 +34,14 @@ import com.pastew.olxsniper.olx.OlxDownloader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     public static final String TAG = "OLXSniper";
     public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/q-iphone";
     public static final String DATABASE_UPDATE_BROADCAST = "com.pastew.olxsniper.DATABASE_UPDATE";
     private int updaterDelayInSeconds = 10;
 
-    private RecyclerView.Adapter adapter;
+    private MyAdapter adapter;
     private List<Offer> offerList;
 
     private OfferDatabaseManager offerDatabaseManager;
@@ -151,6 +154,13 @@ public class MainActivity extends AppCompatActivity {
         offerList = new ArrayList<>();
         adapter = new MyAdapter(getApplicationContext(), offerList);
         recyclerView.setAdapter(adapter);
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback =
+                new RecyclerItemTouchHelper(0,
+                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT,
+                        this);
+
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
     }
 
     private void setupButtons() {
@@ -188,6 +198,35 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         snackbar.show();
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof MyAdapter.ViewHolder) {
+            // get the removed item name to display it in snack bar
+            String name = offerList.get(viewHolder.getAdapterPosition()).title;
+
+            // backup of removed item for undo purpose
+            final Offer deletedItem = offerList.get(viewHolder.getAdapterPosition());
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            adapter.removeItem(viewHolder.getAdapterPosition());
+
+            // showing snack bar with Undo option
+            Snackbar snackbar = Snackbar
+                    .make(findViewById(R.id.constrainLayout), "Usunięto " + name, Snackbar.LENGTH_LONG);
+            snackbar.setAction("COFNIJ", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // undo is selected, restore the deleted item
+                    adapter.restoreItem(deletedItem, deletedIndex);
+                }
+            });
+
+            snackbar.setActionTextColor(Color.YELLOW);
+            snackbar.show();
+        }
     }
 
     private class DownloadOffersFromDatabaseTask extends AsyncTask<Void, Integer, List<Offer>> {
