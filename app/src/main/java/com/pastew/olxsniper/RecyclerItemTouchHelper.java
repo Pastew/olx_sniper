@@ -21,7 +21,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         if (viewHolder != null) {
-            final View foregroundView = ((MyAdapter.ViewHolder) viewHolder).cardView;
+            final View foregroundView = ((OffersAdapter.ViewHolder) viewHolder).cardView;
 
             getDefaultUIUtil().onSelected(foregroundView);
         }
@@ -31,14 +31,14 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     public void onChildDrawOver(Canvas c, RecyclerView recyclerView,
                                 RecyclerView.ViewHolder viewHolder, float dX, float dY,
                                 int actionState, boolean isCurrentlyActive) {
-        final View foregroundView = ((MyAdapter.ViewHolder) viewHolder).cardView;
+        final View foregroundView = ((OffersAdapter.ViewHolder) viewHolder).cardView;
         getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX, dY,
                 actionState, isCurrentlyActive);
     }
 
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        final View foregroundView = ((MyAdapter.ViewHolder) viewHolder).cardView;
+        final View foregroundView = ((OffersAdapter.ViewHolder) viewHolder).cardView;
         getDefaultUIUtil().clearView(foregroundView);
     }
 
@@ -46,7 +46,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     public void onChildDraw(Canvas c, RecyclerView recyclerView,
                             RecyclerView.ViewHolder viewHolder, float dX, float dY,
                             int actionState, boolean isCurrentlyActive) {
-        final View foregroundView = ((MyAdapter.ViewHolder) viewHolder).cardView;
+        final View foregroundView = ((OffersAdapter.ViewHolder) viewHolder).cardView;
 
         getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY,
                 actionState, isCurrentlyActive);

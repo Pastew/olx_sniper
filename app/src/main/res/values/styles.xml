@@ -17,4 +17,22 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="titleSeenByUser">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="titleNotSeenByUser">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="priceSeenByUser">
+        <item name="android:color">@color/green</item>
+    </style>
+
+    <style name="priceNotSeenByUser">
+        <item name="android:color">@color/black</item>
+    </style>
+
+    <color name="black">#000000</color>
+    <color name="green">#4CAF50</color>
 </resources>

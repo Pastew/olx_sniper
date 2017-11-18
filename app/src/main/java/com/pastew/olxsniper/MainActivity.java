@@ -39,9 +39,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/q-iphone";
     public static final String OLX_URL_IPHONE = "https://www.olx.pl/oferty/q-iphone-5s/?search%5Bfilter_float_price%3Afrom%5D=400&search%5Bfilter_float_price%3Ato%5D=500";
     public static final String DATABASE_UPDATE_BROADCAST = "com.pastew.olxsniper.DATABASE_UPDATE";
-    private int updaterDelayInSeconds = 60;
+    private int updaterDelayInSeconds = 10;
 
-    private MyAdapter adapter;
+    private OffersAdapter adapter;
     private List<Offer> offerList;
 
     private OfferDatabaseManager offerDatabaseManager;
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         offerList = new ArrayList<>();
-        adapter = new MyAdapter(getApplicationContext(), offerList);
+        adapter = new OffersAdapter(getApplicationContext(), offerList);
         recyclerView.setAdapter(adapter);
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback =
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        if (viewHolder instanceof MyAdapter.ViewHolder) {
+        if (viewHolder instanceof OffersAdapter.ViewHolder) {
             // get the removed item name to display it in snack bar
             String name = offerList.get(viewHolder.getAdapterPosition()).title;
 
