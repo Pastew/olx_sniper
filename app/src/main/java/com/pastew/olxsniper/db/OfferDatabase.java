@@ -8,7 +8,7 @@ import android.arch.persistence.room.InvalidationTracker;
 import android.arch.persistence.room.RoomDatabase;
 
 
-@Database(entities = {Offer.class}, version = 3)
+@Database(entities = {Offer.class}, version = 4)
 public abstract class OfferDatabase extends RoomDatabase {
     public abstract OfferDao getOfferDao();
 

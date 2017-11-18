@@ -37,8 +37,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
     public static final String TAG = "OLXSniper";
     public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/q-iphone";
+    public static final String OLX_URL_IPHONE = "https://www.olx.pl/oferty/q-iphone-5s/?search%5Bfilter_float_price%3Afrom%5D=400&search%5Bfilter_float_price%3Ato%5D=500";
     public static final String DATABASE_UPDATE_BROADCAST = "com.pastew.olxsniper.DATABASE_UPDATE";
-    private int updaterDelayInSeconds = 10;
+    private int updaterDelayInSeconds = 60;
 
     private MyAdapter adapter;
     private List<Offer> offerList;
@@ -70,14 +71,25 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
     @Override
     protected void onResume() {
-        databaseUpdateBroadcastReceiver = new DatabaseUpdateBroadcastReceiver();
-        registerReceiver(databaseUpdateBroadcastReceiver, filter);
+        registerReceiver();
+        adapter.notifyDataSetChanged();
         new DownloadOffersFromDatabaseTask().execute();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
+        new SharedPrefsManager(context).setLastTimeUserSawOffersToNow();
+        unregisterReceiver();
+        super.onPause();
+    }
+
+    private void registerReceiver() {
+        databaseUpdateBroadcastReceiver = new DatabaseUpdateBroadcastReceiver();
+        registerReceiver(databaseUpdateBroadcastReceiver, filter);
+    }
+
+    private void unregisterReceiver() {
         try {
             unregisterReceiver(databaseUpdateBroadcastReceiver);
         } catch (IllegalArgumentException e) {
@@ -89,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
                 throw e;
             }
         }
-        super.onPause();
     }
 
 
@@ -190,6 +201,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     }
 
     private void notifyUserAboutNewOffers(List<Offer> onlyNewOffers) {
+        int offersNotSeenByUser = 0;
+        for (Offer offer : onlyNewOffers)
+            if (!Utils.checkIfOfferWasSeenByUser(context, offer))
+                ++offersNotSeenByUser;
+
+        if (offersNotSeenByUser == 0)
+            return;
+
         Snackbar snackbar = Snackbar
                 .make(findViewById(R.id.constrainLayout), String.format("%d nowe oferty!", onlyNewOffers.size()), Snackbar.LENGTH_LONG)
                 .setAction("Nie klikaj!", new View.OnClickListener() {
@@ -214,6 +233,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
             // remove the item from recycler view
             adapter.removeItem(viewHolder.getAdapterPosition());
 
+            // set in database "removed" flag
+            new SetRemovedFlagTaskTrue().execute(deletedItem);
+
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
                     .make(findViewById(R.id.constrainLayout), "Usunięto " + name, Snackbar.LENGTH_LONG);
@@ -228,9 +250,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
             snackbar.setActionTextColor(Color.YELLOW);
             snackbar.show();
-
-            // set in database "removed" flag
-            new SetRemovedFlagTaskTrue().execute(deletedItem);
         }
     }
 
@@ -243,9 +262,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
         protected void onPostExecute(List<Offer> onlyNewOffers) {
             if (onlyNewOffers.size() > 0) {
-
                 offerList.addAll(0, onlyNewOffers);
                 adapter.notifyDataSetChanged();
+                //adapter.notifyItemRangeInserted(0, onlyNewOffers.size()); // TODO: check if it works
 
                 notifyUserAboutNewOffers(onlyNewOffers);
             } else {

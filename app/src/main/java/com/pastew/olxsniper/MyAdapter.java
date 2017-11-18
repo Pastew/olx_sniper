@@ -92,22 +92,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        String title = offerList.get(position).title;
-        String price = offerList.get(position).price;
-        String link = offerList.get(position).link;
-        String city = offerList.get(position).city;
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm");
-        Date resultDate = new Date(offerList.get(position).addedDate);
-        String addedDate = sdf.format(resultDate);
-        boolean wasSeenByUser = offerList.get(position).wasSeenByUser;
+        Offer offer = offerList.get(position);
 
-        holder.titleTextView.setText(title);
-        holder.priceTextView.setText(price);
-        holder.cityTextView.setText(city);
-        holder.cityTextView.setText(city);
+        holder.titleTextView.setText(offer.title);
+        holder.priceTextView.setText(offer.price);
+        holder.cityTextView.setText(offer.city);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm");
+        Date resultDate = new Date(offer.date);
+        String addedDate = sdf.format(resultDate);
         holder.addedDateTextView.setText(addedDate);
 
-        holder.linkImageView.setTag(link);
+        holder.linkImageView.setTag(offer.link);
         holder.linkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +113,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             }
         });
 
+        boolean wasSeenByUser = Utils.checkIfOfferWasSeenByUser(context, offer);
         if (wasSeenByUser)
             holder.cardView.setCardBackgroundColor(
                     context.getResources().getColor(R.color.offerWasSeenColor));

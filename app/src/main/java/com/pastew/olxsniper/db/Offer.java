@@ -15,9 +15,8 @@ public class Offer{
     public String title;
     public String price;
     public String city;
-    public long addedDate;
-    public boolean isPromotedOffer;
-    public boolean wasSeenByUser;
+    public long date;
+    public boolean promoted;
     public boolean removed;
 
     public Offer(String title, String price, String link, String city) {
@@ -25,9 +24,8 @@ public class Offer{
         this.price = price;
         this.link = link;
         this.city = city;
-        this.addedDate = System.currentTimeMillis();
-        this.isPromotedOffer = link.contains("promoted");
-        this.wasSeenByUser = false;
+        this.date = System.currentTimeMillis();
+        this.promoted = link.contains("promoted");
         this.removed = false;
     }
 

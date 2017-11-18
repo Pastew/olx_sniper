@@ -65,7 +65,7 @@ public class OlxDownloader extends OfferDownloader{
 
             Offer o = new Offer(title, Utils.parsePrice(priceString), link, city);
 
-            if (o.isPromotedOffer && IGNORE_PROMOTED_OFFERS) {
+            if (o.promoted && IGNORE_PROMOTED_OFFERS) {
                 Log.d(MainActivity.TAG, String.format("Ignored promoted offer: %s", o.link));
             } else {
                 result.add(o);

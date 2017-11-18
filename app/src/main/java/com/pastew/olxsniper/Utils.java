@@ -1,6 +1,8 @@
 package com.pastew.olxsniper;
 
 
+import android.content.Context;
+
 import com.pastew.olxsniper.db.Offer;
 
 import java.util.ArrayList;
@@ -50,5 +52,10 @@ public class Utils {
                 return true;
         }
         return false;
+    }
+
+    public static boolean checkIfOfferWasSeenByUser(Context context, Offer offer) {
+        long lastTimeUserSeasOffers = new SharedPrefsManager(context).getLastTimeUserSawOffers();
+        return offer.date < lastTimeUserSeasOffers;
     }
 }

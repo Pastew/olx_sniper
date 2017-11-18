@@ -13,7 +13,7 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 @Dao
 public interface OfferDao {
 
-    @Query("SELECT * FROM offer WHERE removed = 0 ORDER BY addedDate DESC")
+    @Query("SELECT * FROM offer WHERE removed = 0 ORDER BY date DESC")
     List<Offer> getAllNotRemovedByDate();
 
     @Query("SELECT * FROM offer")
@@ -34,4 +34,6 @@ public interface OfferDao {
     @Query("DELETE FROM offer")
     void deleteAll();
 
+    @Query("SELECT * FROM offer WHERE date > :lastTimeUserSeenOffers ORDER BY date DESC")
+    List<Offer> getOffersNewerThan(long lastTimeUserSeenOffers);
 }

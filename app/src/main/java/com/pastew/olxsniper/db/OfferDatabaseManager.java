@@ -3,12 +3,18 @@ package com.pastew.olxsniper.db;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 
+import com.pastew.olxsniper.SharedPrefsManager;
+
 import java.util.List;
 
 public class OfferDatabaseManager {
+
     private OfferDatabase offerDatabase;
+    private Context context;
 
     public OfferDatabaseManager(Context context) {
+        this.context = context;
+
         offerDatabase = Room.databaseBuilder(context, OfferDatabase.class,
                 OfferDatabase.DATABASE_NAME).fallbackToDestructiveMigration().build();
     }
@@ -31,5 +37,11 @@ public class OfferDatabaseManager {
             offer.removed = removed;
             offerDatabase.getOfferDao().update(offer);
         }
+    }
+
+    public List<Offer> getOffersNotSeenByUser() {
+        long lastTimeUserSeenOffers = new SharedPrefsManager(context).getLastTimeUserSawOffers();
+
+        return offerDatabase.getOfferDao().getOffersNewerThan(lastTimeUserSeenOffers);
     }
 }
