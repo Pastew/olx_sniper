@@ -7,13 +7,15 @@ import android.arch.persistence.room.DatabaseConfiguration;
 import android.arch.persistence.room.InvalidationTracker;
 import android.arch.persistence.room.RoomDatabase;
 
+import java.util.List;
 
-@Database(entities = {Offer.class}, version = 4)
-public abstract class OfferDatabase extends RoomDatabase {
+
+@Database(entities = {Offer.class, Search.class}, version = 5)
+public abstract class SniperDatabase extends RoomDatabase {
+    public static final String DATABASE_NAME = SniperDatabase.class.getSimpleName();
+
     public abstract OfferDao getOfferDao();
-
-
-    public static final String DATABASE_NAME = OfferDatabase.class.getSimpleName();
+    public abstract SearchDao getSearchDao();
 
     @Override
     protected SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration config) {
@@ -24,4 +26,5 @@ public abstract class OfferDatabase extends RoomDatabase {
     protected InvalidationTracker createInvalidationTracker() {
         return null;
     }
+
 }

@@ -14,9 +14,11 @@ import android.widget.Toast;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 import com.pastew.olxsniper.db.Offer;
-import com.pastew.olxsniper.db.OfferDatabaseManager;
+import com.pastew.olxsniper.db.Search;
+import com.pastew.olxsniper.db.SniperDatabaseManager;
 import com.pastew.olxsniper.olx.OlxDownloader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,7 +40,8 @@ public class UpdaterJobService extends JobService {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<Offer> newOffers = new OlxDownloader().downloadNewOffers(context, MainActivity.OLX_URL);
+                OlxDownloader olxDownloader = new OlxDownloader();
+                List<Offer> newOffers = olxDownloader.downloadNewOffers(context);
 
                 if (newOffers.size() > 0) {
                     Intent i = new Intent(MainActivity.DATABASE_UPDATE_BROADCAST);
@@ -47,6 +50,7 @@ public class UpdaterJobService extends JobService {
 
                     createNotification();
                 }
+
             }
         }).start();
 
@@ -56,7 +60,7 @@ public class UpdaterJobService extends JobService {
     private void createNotification() {
         int notificationId = 0;
 
-        List<Offer> offersNotSeenByUser = new OfferDatabaseManager(context).getOffersNotSeenByUser();
+        List<Offer> offersNotSeenByUser = new SniperDatabaseManager(context).getOffersNotSeenByUserAndNotRemoved();
         // The id of the channel.
         String CHANNEL_ID = "my_channel_01";
         NotificationCompat.Builder builder =

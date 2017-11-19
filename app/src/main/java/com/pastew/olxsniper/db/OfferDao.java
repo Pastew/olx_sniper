@@ -34,6 +34,6 @@ public interface OfferDao {
     @Query("DELETE FROM offer")
     void deleteAll();
 
-    @Query("SELECT * FROM offer WHERE date > :lastTimeUserSeenOffers ORDER BY date DESC")
-    List<Offer> getOffersNewerThan(long lastTimeUserSeenOffers);
+    @Query("SELECT * FROM offer WHERE date > :lastTimeUserSeenOffers AND removed != 1 ORDER BY date DESC")
+    List<Offer> getOffersNewerThanAndNotRemoved(long lastTimeUserSeenOffers);
 }

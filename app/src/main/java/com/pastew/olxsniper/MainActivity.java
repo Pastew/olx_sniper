@@ -27,7 +27,8 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
 import com.pastew.olxsniper.db.Offer;
-import com.pastew.olxsniper.db.OfferDatabaseManager;
+import com.pastew.olxsniper.db.Search;
+import com.pastew.olxsniper.db.SniperDatabaseManager;
 import com.pastew.olxsniper.olx.OlxDownloader;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     private OffersAdapter adapter;
     private List<Offer> offerList;
 
-    private OfferDatabaseManager offerDatabaseManager;
+    private SniperDatabaseManager sniperDatabaseManager;
 
     private IntentFilter filter = new IntentFilter(DATABASE_UPDATE_BROADCAST);
     private DatabaseUpdateBroadcastReceiver databaseUpdateBroadcastReceiver;
@@ -63,10 +64,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         setupButtons();
         setupService();
         setupOfferDbManager();
+        new SetSampleSearches().execute(
+                "https://www.olx.pl/elektronika/telefony-komorkowe/iphone/q-iphone-5s/?search%5Bfilter_float_price%3Afrom%5D=400&search%5Bfilter_float_price%3Ato%5D=500",
+                "https://www.olx.pl/elektronika/q-xbox-pad/?search%5Bfilter_float_price%3Ato%5D=120",
+                "https://www.olx.pl/elektronika/q-pilne/?search%5Bfilter_float_price%3Ato%5D=500");
     }
 
     private void setupOfferDbManager() {
-        this.offerDatabaseManager = new OfferDatabaseManager(this);
+        this.sniperDatabaseManager = new SniperDatabaseManager(this);
     }
 
     @Override
@@ -255,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
     private class DownloadOffersFromDatabaseTask extends AsyncTask<Void, Integer, List<Offer>> {
         protected List<Offer> doInBackground(Void... params) {
-            List<Offer> newOfferList = offerDatabaseManager.getAllNotRemovedOffers();
+            List<Offer> newOfferList = sniperDatabaseManager.getAllNotRemovedOffers();
             List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
             return onlyNewOffers;
         }
@@ -281,9 +286,19 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         }
     }
 
+    private class SetSampleSearches extends AsyncTask<String, Integer, Void> {
+        protected Void doInBackground(String... params) {
+            for (String link : params) {
+                Search search = new Search(link);
+                sniperDatabaseManager.addSearch(search);
+            }
+            return null;
+        }
+    }
+
     private class DownloadNewOffersFromOlxTask extends AsyncTask<String, Integer, Void> {
         protected Void doInBackground(String... urls) {
-            new OlxDownloader().downloadNewOffers(context, MainActivity.OLX_URL);
+            new OlxDownloader().downloadNewOffers(context);
             return null;
         }
 
@@ -296,14 +311,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
     private class DeleteAllOffersFromDatabase extends AsyncTask<Void, Void, Integer> {
         protected Integer doInBackground(Void... voids) {
-            offerDatabaseManager.deleteAllOffers();
+            sniperDatabaseManager.deleteAllOffers();
             return null;
         }
     }
 
     private class SetRemovedFlagTaskTrueForOffers extends AsyncTask<List<Offer>, Void, Void> {
         protected Void doInBackground(List<Offer>... offers) {
-            offerDatabaseManager.setRemovedFlag(offers[0], true);
+            sniperDatabaseManager.setRemovedFlag(offers[0], true);
             return null;
         }
 
@@ -321,14 +336,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
     private class SetRemovedFlagTaskTrue extends AsyncTask<Offer, Void, Void> {
         protected Void doInBackground(Offer... offers) {
-            offerDatabaseManager.setRemovedFlag(offers[0], true);
+            sniperDatabaseManager.setRemovedFlag(offers[0], true);
             return null;
         }
     }
 
     private class SetRemovedFlagTaskFalse extends AsyncTask<Offer, Void, Void> {
         protected Void doInBackground(Offer... offers) {
-            offerDatabaseManager.setRemovedFlag(offers[0], false);
+            sniperDatabaseManager.setRemovedFlag(offers[0], false);
             return null;
         }
     }
