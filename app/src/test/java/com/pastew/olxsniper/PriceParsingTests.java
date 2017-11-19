@@ -35,4 +35,12 @@ public class PriceParsingTests {
         String parsed = Utils.parsePrice("Zamienię");
         assertEquals(expected, parsed);
     }
+
+    @Test
+    public void parsePricenbspTest() {
+        String expected = "1000";
+        String parsed = Utils.parsePrice("1&nbsp;000 zł");
+        assertEquals(expected, parsed);
+    }
+
 }

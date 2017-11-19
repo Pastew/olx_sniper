@@ -21,7 +21,7 @@ public class DownloadersTest {
     @Test
     public void olxDownloaderTest() {
 
-        OfferDownloaderManager olxDownloader = new OlxDownloader();
+        OlxDownloader olxDownloader = new OlxDownloader();
         List<Offer> offerList = olxDownloader.downloadOffersFromWeb(URL_TMP);
 
         for(Offer o : offerList){
@@ -31,8 +31,7 @@ public class DownloadersTest {
 
     @Test
     public void gumtreeDownloaderTest() {
-
-        OfferDownloaderManager gumtreeDownloader = new GumtreeDownloader();
+        GumtreeDownloader gumtreeDownloader = new GumtreeDownloader();
         List<Offer> offerList = gumtreeDownloader.downloadOffersFromWeb(URL_GUMTREE_IPHONE);
 
         for(Offer o : offerList){

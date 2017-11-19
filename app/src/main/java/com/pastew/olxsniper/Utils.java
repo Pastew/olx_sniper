@@ -24,6 +24,7 @@ public class Utils {
         //TODO: Maybe change this to regexp
         priceString = priceString.replaceAll("\\s+","");
         priceString = priceString.replaceAll("zł","");
+        priceString = priceString.replaceAll("&nbsp;","");
         priceString = priceString.replaceAll(",",".");
         return priceString;
     }
