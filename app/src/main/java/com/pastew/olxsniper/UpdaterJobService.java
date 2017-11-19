@@ -16,9 +16,9 @@ import com.firebase.jobdispatcher.JobService;
 import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.db.Search;
 import com.pastew.olxsniper.db.SniperDatabaseManager;
+import com.pastew.olxsniper.olx.OfferDownloader;
 import com.pastew.olxsniper.olx.OlxDownloader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,8 +40,8 @@ public class UpdaterJobService extends JobService {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OlxDownloader olxDownloader = new OlxDownloader();
-                List<Offer> newOffers = olxDownloader.downloadNewOffers(context);
+                OfferDownloader offerDownloader = OfferDownloader.getInstance();
+                List<Offer> newOffers = offerDownloader.downloadNewOffers(context);
 
                 if (newOffers.size() > 0) {
                     Intent i = new Intent(MainActivity.DATABASE_UPDATE_BROADCAST);
