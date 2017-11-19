@@ -29,6 +29,7 @@ import com.firebase.jobdispatcher.Trigger;
 import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.db.Search;
 import com.pastew.olxsniper.db.SniperDatabaseManager;
+import com.pastew.olxsniper.olx.OfferDownloaderManager;
 import com.pastew.olxsniper.olx.OlxDownloader;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/q-iphone";
     public static final String OLX_URL_IPHONE = "https://www.olx.pl/oferty/q-iphone-5s/?search%5Bfilter_float_price%3Afrom%5D=400&search%5Bfilter_float_price%3Ato%5D=500";
     public static final String DATABASE_UPDATE_BROADCAST = "com.pastew.olxsniper.DATABASE_UPDATE";
-    private int updaterDelayInSeconds = 60;
+    private int updaterDelayInSeconds = 10;
 
     private OffersAdapter adapter;
     private List<Offer> offerList;
@@ -298,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
     private class DownloadNewOffersFromOlxTask extends AsyncTask<String, Integer, Void> {
         protected Void doInBackground(String... urls) {
-            new OlxDownloader().downloadNewOffers(context);
+            OfferDownloaderManager.getInstance().downloadNewOffers(context);
             return null;
         }
 

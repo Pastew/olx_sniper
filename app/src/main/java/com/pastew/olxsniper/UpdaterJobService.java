@@ -14,10 +14,8 @@ import android.widget.Toast;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 import com.pastew.olxsniper.db.Offer;
-import com.pastew.olxsniper.db.Search;
 import com.pastew.olxsniper.db.SniperDatabaseManager;
-import com.pastew.olxsniper.olx.OfferDownloader;
-import com.pastew.olxsniper.olx.OlxDownloader;
+import com.pastew.olxsniper.olx.OfferDownloaderManager;
 
 import java.util.List;
 
@@ -40,8 +38,8 @@ public class UpdaterJobService extends JobService {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OfferDownloader offerDownloader = OfferDownloader.getInstance();
-                List<Offer> newOffers = offerDownloader.downloadNewOffers(context);
+                OfferDownloaderManager offerDownloaderManager = OfferDownloaderManager.getInstance();
+                List<Offer> newOffers = offerDownloaderManager.downloadNewOffers(context);
 
                 if (newOffers.size() > 0) {
                     Intent i = new Intent(MainActivity.DATABASE_UPDATE_BROADCAST);
@@ -68,7 +66,8 @@ public class UpdaterJobService extends JobService {
                         .setSmallIcon(R.drawable.ic_launch_black_24dp)
                         .setContentTitle("Nowe oferty")
                         .setContentText(String.format("%d", offersNotSeenByUser.size()))
-                        .setOngoing(true)
+                        //.setOngoing(true)
+                        .setAutoCancel(true)
                         .setVibrate(new long[]{500, 100, 100, 100, 100, 100})
                         //.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                         .setSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.notification2))

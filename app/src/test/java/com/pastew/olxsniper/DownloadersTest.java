@@ -2,7 +2,7 @@ package com.pastew.olxsniper;
 
 import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.olx.GumtreeDownloader;
-import com.pastew.olxsniper.olx.OfferDownloader;
+import com.pastew.olxsniper.olx.OfferDownloaderManager;
 import com.pastew.olxsniper.olx.OlxDownloader;
 
 import org.junit.Test;
@@ -21,7 +21,7 @@ public class DownloadersTest {
     @Test
     public void olxDownloaderTest() {
 
-        OfferDownloader olxDownloader = new OlxDownloader();
+        OfferDownloaderManager olxDownloader = new OlxDownloader();
         List<Offer> offerList = olxDownloader.downloadOffersFromWeb(URL_TMP);
 
         for(Offer o : offerList){
@@ -32,7 +32,7 @@ public class DownloadersTest {
     @Test
     public void gumtreeDownloaderTest() {
 
-        OfferDownloader gumtreeDownloader = new GumtreeDownloader();
+        OfferDownloaderManager gumtreeDownloader = new GumtreeDownloader();
         List<Offer> offerList = gumtreeDownloader.downloadOffersFromWeb(URL_GUMTREE_IPHONE);
 
         for(Offer o : offerList){

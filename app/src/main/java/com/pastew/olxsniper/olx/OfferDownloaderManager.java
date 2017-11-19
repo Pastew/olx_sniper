@@ -15,17 +15,23 @@ import com.pastew.olxsniper.db.SniperDatabaseManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class OfferDownloader {
+public class OfferDownloaderManager {
 
     private static final String TAG = MainActivity.TAG;
-    private static OfferDownloader instance = null;
-    SniperDatabase sniperDatabase;
+    private static OfferDownloaderManager instance = null;
+    private SniperDatabase sniperDatabase;
 
-    protected OfferDownloader(){}
+    List<WebDownloader> webDownloaders;
 
-    public static OfferDownloader getInstance(){
+    private OfferDownloaderManager(){
+        webDownloaders = new ArrayList<>();
+        webDownloaders.add(new OlxDownloader());
+        webDownloaders.add(new GumtreeDownloader());
+    }
+
+    public static OfferDownloaderManager getInstance(){
         if (instance == null)
-            instance = new OlxDownloader();
+            instance = new OfferDownloaderManager();
 
         return instance;
     }
@@ -37,11 +43,15 @@ public abstract class OfferDownloader {
             return new ArrayList<>();
         }
 
-
         List<Offer> newOfferList = new ArrayList<>();
         for (Search search : searches) {
             Log.i(TAG, String.format("Downloading from: %s", search.link));
-            newOfferList.addAll(this.downloadOffersFromWeb(search.link));
+
+            for (WebDownloader webDownloader : webDownloaders) {
+                if (webDownloader.canHandleLink(search.link))
+                    newOfferList.addAll(webDownloader.downloadOffersFromWeb(search.link));
+            }
+
         }
         Log.i(TAG, String.format("Downloaded: %d", newOfferList.size()));
 
@@ -64,7 +74,4 @@ public abstract class OfferDownloader {
 
         return onlyNewOffers;
     }
-
-    public abstract List<Offer> downloadOffersFromWeb(String url);
-
 }

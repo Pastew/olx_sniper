@@ -13,16 +13,17 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 
-public class OlxDownloader extends OfferDownloader{
-    private static final boolean IGNORE_PROMOTED_OFFERS = true;
-    //TODO: move this to user prefs.
-
-    private static final String TAG = MainActivity.TAG;
+public class OlxDownloader extends WebDownloader {
 
     @Override
     public List<Offer> downloadOffersFromWeb(String url) {
+        if (!canHandleLink(url)) {
+            throw new InputMismatchException();
+        }
+
         List<Offer> result = new ArrayList<>();
 
         Document doc;
@@ -73,5 +74,10 @@ public class OlxDownloader extends OfferDownloader{
         }
 
         return result;
+    }
+
+    @Override
+    boolean canHandleLink(String url) {
+        return url.contains("www.olx.pl");
     }
 }

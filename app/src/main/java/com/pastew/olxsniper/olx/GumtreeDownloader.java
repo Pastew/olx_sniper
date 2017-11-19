@@ -13,16 +13,16 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 
-public class GumtreeDownloader extends OfferDownloader{
-    private static final boolean IGNORE_PROMOTED_OFFERS = true;
-    //TODO: move this to user prefs.
-
-    private static final String TAG = MainActivity.TAG;
-
+public class GumtreeDownloader extends WebDownloader {
     @Override
     public List<Offer> downloadOffersFromWeb(String url) {
+        if (!canHandleLink(url)) {
+            throw new InputMismatchException();
+        }
+
         List<Offer> result = new ArrayList<>();
 
         Document doc;
@@ -78,5 +78,10 @@ public class GumtreeDownloader extends OfferDownloader{
         }
 
         return result;
+    }
+
+    @Override
+    boolean canHandleLink(String url) {
+        return url.contains("www.gumtree.pl");
     }
 }
