@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ public class JSoupExperiments {
     //static final String URL_TMP = "https://www.olx.pl/elektronika/telefony-komorkowe/q-iphone";
 
     @Test
+    @Ignore
     public void offerExperiments() {
         Document doc;
         try {
