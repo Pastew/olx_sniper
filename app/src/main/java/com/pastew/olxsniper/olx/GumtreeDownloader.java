@@ -3,10 +3,12 @@ package com.pastew.olxsniper.olx;
 import android.util.Log;
 
 import com.pastew.olxsniper.MainActivity;
+import com.pastew.olxsniper.MyLogger;
 import com.pastew.olxsniper.Utils;
 import com.pastew.olxsniper.db.Offer;
 
 import org.jsoup.Jsoup;
+import org.jsoup.UncheckedIOException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -32,6 +34,10 @@ public class GumtreeDownloader extends WebDownloader {
             Log.e(MainActivity.TAG, "IOException, maybe SocketTimeoutException");
             e.printStackTrace();
             return result;
+        } catch (UncheckedIOException e){
+            Log.e(MainActivity.TAG, "UncheckedIOException");
+            e.printStackTrace();
+            return result;
         }
 
         Elements elements = doc.getElementsByClass("result-link");
@@ -54,11 +60,9 @@ public class GumtreeDownloader extends WebDownloader {
             String title = titleAnchorElement.html();
             String link = "https://www.gumtree.pl" + titleAnchorElement.attr("href");
 
-            String priceString;
-            try{
-                priceString = offerElement.getElementsByClass("amount").first().html();
-            } catch(Exception e){
-                priceString = offerElement.getElementsByClass("value").first().html();
+            String priceString = getPriceString(offerElement);
+            if (priceString == null){
+                Log.w(TAG, String.format("Can't get priceString for %s", link));
             }
 
             String city =
@@ -78,6 +82,26 @@ public class GumtreeDownloader extends WebDownloader {
         }
 
         return result;
+    }
+
+    private String getPriceString(Element offerElement) {
+        String priceString;
+        try{
+            priceString = offerElement.getElementsByClass("amount").first().html();
+        } catch(Exception e){
+            priceString = null;
+        }
+
+        if (priceString != null)
+            return priceString;
+
+        try{
+            priceString = offerElement.getElementsByClass("value").first().html();
+        } catch(Exception e){
+            priceString = null;
+        }
+
+        return priceString;
     }
 
     @Override
