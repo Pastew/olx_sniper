@@ -17,6 +17,8 @@ import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.db.SniperDatabaseManager;
 import com.pastew.olxsniper.olx.OfferDownloaderManager;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -25,6 +27,7 @@ public class UpdaterJobService extends JobService {
     private final static String TAG = "OLXSniperService";
 
     private Context context;
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("dd HH:mm:ss");
 
     public UpdaterJobService() {
         context = this;
@@ -33,6 +36,9 @@ public class UpdaterJobService extends JobService {
     @Override
     public boolean onStartJob(final JobParameters params) {
         Log.i(TAG, "onStartJob");
+
+        String logMessage = "onStartJob: " + sdf.format(new Date(System.currentTimeMillis())) + "\n";
+        MyLogger.getInstance().logToFile(context, logMessage);
         //Toast.makeText(this, "start job", Toast.LENGTH_SHORT).show();
 
         new Thread(new Runnable() {

@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/q-iphone";
     public static final String OLX_URL_IPHONE = "https://www.olx.pl/oferty/q-iphone-5s/?search%5Bfilter_float_price%3Afrom%5D=400&search%5Bfilter_float_price%3Ato%5D=500";
     public static final String DATABASE_UPDATE_BROADCAST = "com.pastew.olxsniper.DATABASE_UPDATE";
-    private int updaterDelayInSeconds = 10;
+    private int updaterDelayInSeconds = 60;
 
     private OffersAdapter adapter;
     private List<Offer> offerList;
@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
             @Override
             public void onClick(View view) {
                 // TODO: here should open window with added new OLX Listner
+                MyLogger.getInstance().showLogsInDebugWindow(context);
             }
         });
     }
