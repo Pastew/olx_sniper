@@ -15,6 +15,9 @@ public class Utils {
      * @return
      */
     public static String parsePrice(String priceString) {
+        if (priceString == null)
+            return "?";
+        
         if (priceString.contains("Za darmo"))
             return "Za darmo";
 
