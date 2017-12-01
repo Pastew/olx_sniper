@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 
-public class OlxDownloader extends WebDownloader {
+public class OlxDownloader extends AbstractDownloader {
 
     @Override
     public List<Offer> downloadOffersFromWeb(String url) {

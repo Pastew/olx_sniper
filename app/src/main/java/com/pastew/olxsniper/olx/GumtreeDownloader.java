@@ -3,7 +3,6 @@ package com.pastew.olxsniper.olx;
 import android.util.Log;
 
 import com.pastew.olxsniper.MainActivity;
-import com.pastew.olxsniper.MyLogger;
 import com.pastew.olxsniper.Utils;
 import com.pastew.olxsniper.db.Offer;
 
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 
-public class GumtreeDownloader extends WebDownloader {
+public class GumtreeDownloader extends AbstractDownloader {
     @Override
     public List<Offer> downloadOffersFromWeb(String url) {
         if (!canHandleLink(url)) {

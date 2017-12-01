@@ -44,10 +44,9 @@ public class UpdaterJobService extends JobService {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OfferDownloaderManager offerDownloaderManager = OfferDownloaderManager.getInstance();
-                List<Offer> newOffers = offerDownloaderManager.downloadNewOffers(context);
+                List<Offer> offersFromWeb = OfferDownloaderManager.getInstance(context).downloadNewOffersAndSaveToDatabase();
 
-                if (newOffers.size() > 0) {
+                if (offersFromWeb.size() > 0) {
                     Intent i = new Intent(MainActivity.DATABASE_UPDATE_BROADCAST);
                     //i.putExtra("url", "bleble");
                     context.sendBroadcast(i);

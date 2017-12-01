@@ -30,7 +30,6 @@ import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.db.Search;
 import com.pastew.olxsniper.db.SniperDatabaseManager;
 import com.pastew.olxsniper.olx.OfferDownloaderManager;
-import com.pastew.olxsniper.olx.OlxDownloader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -262,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
     private class DownloadOffersFromDatabaseTask extends AsyncTask<Void, Integer, List<Offer>> {
         protected List<Offer> doInBackground(Void... params) {
-            List<Offer> newOfferList = sniperDatabaseManager.getAllNotRemovedOffers();
+            List<Offer> newOfferList = sniperDatabaseManager.getAllNotRemovedOffersByDate();
             List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
             return onlyNewOffers;
         }
@@ -300,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
     private class DownloadNewOffersFromOlxTask extends AsyncTask<String, Integer, Void> {
         protected Void doInBackground(String... urls) {
-            OfferDownloaderManager.getInstance().downloadNewOffers(context);
+            OfferDownloaderManager.getInstance(context).downloadNewOffersAndSaveToDatabase();
             return null;
         }
 

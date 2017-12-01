@@ -1,7 +1,6 @@
 package com.pastew.olxsniper.olx;
 
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.util.Log;
 
@@ -9,7 +8,6 @@ import com.pastew.olxsniper.MainActivity;
 import com.pastew.olxsniper.Utils;
 import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.db.Search;
-import com.pastew.olxsniper.db.SniperDatabase;
 import com.pastew.olxsniper.db.SniperDatabaseManager;
 
 import java.util.ArrayList;
@@ -19,25 +17,28 @@ public class OfferDownloaderManager {
 
     private static final String TAG = MainActivity.TAG;
     private static OfferDownloaderManager instance = null;
-    private SniperDatabase sniperDatabase;
+    private SniperDatabaseManager sniperDatabaseManager;
 
-    List<WebDownloader> webDownloaders;
+    List<AbstractDownloader> webDownloaders;
 
-    private OfferDownloaderManager(){
+    private OfferDownloaderManager(Context context){
         webDownloaders = new ArrayList<>();
         webDownloaders.add(new OlxDownloader());
         webDownloaders.add(new GumtreeDownloader());
+
+        sniperDatabaseManager = new SniperDatabaseManager(context);
+
     }
 
-    public static OfferDownloaderManager getInstance(){
+    public static OfferDownloaderManager getInstance(Context context){
         if (instance == null)
-            instance = new OfferDownloaderManager();
+            instance = new OfferDownloaderManager(context);
 
         return instance;
     }
 
-    public List<Offer> downloadNewOffers(Context context) {
-        List<Search> searches = new SniperDatabaseManager(context).getAllSearches();
+    public List<Offer> downloadNewOffersAndSaveToDatabase() {
+        List<Search> searches = sniperDatabaseManager.getAllSearches();
         if (searches.size() == 0) {
             Log.i(TAG, "No searches. Nothing to do...");
             return new ArrayList<>();
@@ -47,7 +48,7 @@ public class OfferDownloaderManager {
         for (Search search : searches) {
             Log.i(TAG, String.format("Downloading from: %s", search.link));
 
-            for (WebDownloader webDownloader : webDownloaders) {
+            for (AbstractDownloader webDownloader : webDownloaders) {
                 if (webDownloader.canHandleLink(search.link))
                     newOfferList.addAll(webDownloader.downloadOffersFromWeb(search.link));
             }
@@ -55,22 +56,22 @@ public class OfferDownloaderManager {
         }
         Log.i(TAG, String.format("Downloaded: %d", newOfferList.size()));
 
-        sniperDatabase = Room.databaseBuilder(context, SniperDatabase.class, SniperDatabase.DATABASE_NAME).build();
-        List<Offer> offerList = sniperDatabase.getOfferDao().getAll();
+        List<Offer> offerList = sniperDatabaseManager.getAllOffers();
         Log.i(TAG, String.format("From database: %d", offerList.size()));
         List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
         Log.i(TAG, String.format("Only new: %d", onlyNewOffers.size()));
 
         if (onlyNewOffers.size() > 0) {
             Log.i(TAG, "Only new > 0");
-            sniperDatabase.getOfferDao().insertAll(onlyNewOffers);
+            sniperDatabaseManager.insertOffers(onlyNewOffers);
             Log.i(TAG, "Only new > 0 -> Afer inserting to DB");
         } else {
             Log.i(TAG, "Checked Web for new offers, but nothing new found");
         }
 
         Log.i(TAG, "sniperDatabase.close()");
-        sniperDatabase.close();
+
+        //sniperDatabase.close();
 
         return onlyNewOffers;
     }

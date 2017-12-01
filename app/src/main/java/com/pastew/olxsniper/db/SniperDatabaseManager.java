@@ -16,12 +16,7 @@ public class SniperDatabaseManager {
     public SniperDatabaseManager(Context context) {
         this.context = context;
 
-        sniperDatabase = Room.databaseBuilder(context, SniperDatabase.class,
-                SniperDatabase.DATABASE_NAME).fallbackToDestructiveMigration().build();
-    }
-
-    public List<Offer> getAllNotRemovedOffers() {
-        return sniperDatabase.getOfferDao().getAllNotRemovedByDate();
+        sniperDatabase = SniperDatabase.getInstance(context);
     }
 
     public void deleteAllOffers() {
@@ -46,6 +41,19 @@ public class SniperDatabaseManager {
         return sniperDatabase.getOfferDao().getOffersNewerThanAndNotRemoved(lastTimeUserSeenOffers);
     }
 
+    public List<Offer> getAllOffers() {
+        return sniperDatabase.getOfferDao().getAll();
+    }
+
+    public List<Offer> getAllNotRemovedOffersByDate() {
+        return sniperDatabase.getOfferDao().getAllNotRemovedByDate();
+    }
+
+
+    public void insertOffers(List<Offer> offers) {
+        sniperDatabase.getOfferDao().insertAll(offers);
+    }
+
     // === SEARCHES ===
     public List<Search> getAllSearches() {
         return sniperDatabase.getSearchDao().getAll();
@@ -55,4 +63,5 @@ public class SniperDatabaseManager {
     public void addSearch(Search search) {
         sniperDatabase.getSearchDao().insert(search);
     }
+
 }

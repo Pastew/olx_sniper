@@ -2,6 +2,7 @@ package com.pastew.olxsniper;
 
 
 import android.content.Context;
+import android.util.Log;
 
 import com.pastew.olxsniper.db.Offer;
 
@@ -33,12 +34,8 @@ public class Utils {
     }
 
 
-    /**
-     * @param oldOfferList
-     * @param newOfferList
-     * @return Returns if at least one offer was added
-     */
     public static List<Offer> getOnlyNewOffers(List<Offer> oldOfferList, List<Offer> newOfferList) {
+        long startTime = System.nanoTime();
         List<Offer> onlyNewOffers = new ArrayList<>();
 
         for (Offer newOffer : newOfferList){
@@ -47,6 +44,9 @@ public class Utils {
             }
         }
 
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        Log.e("OlxSniper", String.format("getOnlyNewOffers took %d seconds!", duration/1000000/1000));
         return onlyNewOffers;
     }
 

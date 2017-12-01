@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 
-public class AllegroDownloader extends WebDownloader {
+public class AllegroDownloader extends AbstractDownloader {
     @Override
     public List<Offer> downloadOffersFromWeb(String url) {
         if (!canHandleLink(url)) {
