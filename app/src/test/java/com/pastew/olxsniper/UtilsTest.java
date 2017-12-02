@@ -13,6 +13,7 @@ public class UtilsTest {
 
     @Test
     public void getOnlyNewOffersTest() {
+        //TODO: Check this method for big set of data (>3000 offers)
         Offer o1, o2, o3;
 
         o1 = new Offer("Miód lipowy",
