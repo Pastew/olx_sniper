@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_layout);
+        setContentView(R.layout.activity_main);
         context = this;
 
         setupStrictMode();
