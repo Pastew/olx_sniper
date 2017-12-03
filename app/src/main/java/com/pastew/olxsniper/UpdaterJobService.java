@@ -47,7 +47,7 @@ public class UpdaterJobService extends JobService {
                 List<Offer> offersFromWeb = OfferDownloaderManager.getInstance(context).downloadNewOffersAndSaveToDatabase();
 
                 if (offersFromWeb.size() > 0) {
-                    Intent i = new Intent(MainActivity.DATABASE_UPDATE_BROADCAST);
+                    Intent i = new Intent(Globals.DATABASE_UPDATE_BROADCAST);
                     //i.putExtra("url", "bleble");
                     context.sendBroadcast(i);
 

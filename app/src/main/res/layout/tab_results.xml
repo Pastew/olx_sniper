@@ -1,19 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constrainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <Button
-        android:id="@+id/clearDatabaseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="x"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -24,14 +14,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
-
-    <Button
-        android:id="@+id/refreshDatabaseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="odśwież"
-        app:layout_constraintStart_toEndOf="@+id/clearDatabaseButton"
-        app:layout_constraintTop_toTopOf="@+id/clearDatabaseButton" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -51,5 +33,22 @@
         android:text="Wyczyść"
         app:layout_constraintStart_toEndOf="@+id/refreshDatabaseButton"
         app:layout_constraintTop_toTopOf="@+id/clearDatabaseButton" />
+
+    <Button
+        android:id="@+id/refreshDatabaseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="odśwież"
+        app:layout_constraintStart_toEndOf="@+id/clearDatabaseButton"
+        app:layout_constraintTop_toTopOf="@+id/clearDatabaseButton" />
+
+    <Button
+        android:id="@+id/clearDatabaseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="x"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

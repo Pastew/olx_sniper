@@ -2,7 +2,7 @@ package com.pastew.olxsniper.olx;
 
 import android.util.Log;
 
-import com.pastew.olxsniper.MainActivity;
+import com.pastew.olxsniper.Globals;
 import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.Utils;
 
@@ -18,6 +18,8 @@ import java.util.List;
 
 public class OlxDownloader extends AbstractDownloader {
 
+    final String TAG = Globals.TAG;
+    
     @Override
     public List<Offer> downloadOffersFromWeb(String url) {
         if (!canHandleLink(url)) {
@@ -30,7 +32,7 @@ public class OlxDownloader extends AbstractDownloader {
         try {
             doc = Jsoup.connect(url).get();
         } catch (IOException e) {
-            Log.e(MainActivity.TAG, "IOException, maybe SocketTimeoutException");
+            Log.e(TAG, "IOException, maybe SocketTimeoutException");
             e.printStackTrace();
             return result;
         }
@@ -38,19 +40,19 @@ public class OlxDownloader extends AbstractDownloader {
         Elements elements = doc.getElementsByClass("offer");
 
         if (elements == null) {
-            Log.e(MainActivity.TAG, "elemens is null. ");
+            Log.e(TAG, "elemens is null. ");
             return result;
         }
 
         for (Element offerElement : elements) {
             if (offerElement == null) {
-                Log.e(MainActivity.TAG, "offerElement is null. ");
+                Log.e(TAG, "offerElement is null. ");
                 continue;
             }
 
             Element priceElement = offerElement.getElementsByClass("price").first();
             if (priceElement == null) {
-                Log.e(MainActivity.TAG, "priceElement is null. ");
+                Log.e(TAG, "priceElement is null. ");
                 continue;
             }
 
@@ -67,7 +69,7 @@ public class OlxDownloader extends AbstractDownloader {
             Offer o = new Offer(title, Utils.parsePrice(priceString), link, city);
 
             if (o.promoted && IGNORE_PROMOTED_OFFERS) {
-                Log.d(MainActivity.TAG, String.format("Ignored promoted offer: %s", o.link));
+                Log.d(TAG, String.format("Ignored promoted offer: %s", o.link));
             } else {
                 result.add(o);
             }

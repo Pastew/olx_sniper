@@ -2,7 +2,7 @@ package com.pastew.olxsniper.olx;
 
 import android.util.Log;
 
-import com.pastew.olxsniper.MainActivity;
+import com.pastew.olxsniper.Globals;
 import com.pastew.olxsniper.Utils;
 import com.pastew.olxsniper.db.Offer;
 
@@ -30,11 +30,11 @@ public class GumtreeDownloader extends AbstractDownloader {
         try {
             doc = Jsoup.connect(url).get();
         } catch (IOException e) {
-            Log.e(MainActivity.TAG, "IOException, maybe SocketTimeoutException");
+            Log.e(Globals.TAG, "IOException, maybe SocketTimeoutException");
             e.printStackTrace();
             return result;
         } catch (UncheckedIOException e){
-            Log.e(MainActivity.TAG, "UncheckedIOException");
+            Log.e(Globals.TAG, "UncheckedIOException");
             e.printStackTrace();
             return result;
         }
@@ -42,13 +42,13 @@ public class GumtreeDownloader extends AbstractDownloader {
         Elements elements = doc.getElementsByClass("result-link");
 
         if (elements == null) {
-            Log.e(MainActivity.TAG, "elemens is null. ");
+            Log.e(Globals.TAG, "elemens is null. ");
             return result;
         }
 
         for (Element offerElement : elements) {
             if (offerElement == null) {
-                Log.e(MainActivity.TAG, "offerElement is null. ");
+                Log.e(Globals.TAG, "offerElement is null. ");
                 continue;
             }
             Element titleAnchorElement =
@@ -74,7 +74,7 @@ public class GumtreeDownloader extends AbstractDownloader {
             Offer o = new Offer(title, Utils.parsePrice(priceString), link, city);
 
             if (o.promoted && IGNORE_PROMOTED_OFFERS) {
-                Log.d(MainActivity.TAG, String.format("Ignored promoted offer: %s", o.link));
+                Log.d(Globals.TAG, String.format("Ignored promoted offer: %s", o.link));
             } else {
                 result.add(o);
             }

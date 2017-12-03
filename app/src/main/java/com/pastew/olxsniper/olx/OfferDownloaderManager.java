@@ -4,7 +4,7 @@ package com.pastew.olxsniper.olx;
 import android.content.Context;
 import android.util.Log;
 
-import com.pastew.olxsniper.MainActivity;
+import com.pastew.olxsniper.Globals;
 import com.pastew.olxsniper.Utils;
 import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.db.Search;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class OfferDownloaderManager {
 
-    private static final String TAG = MainActivity.TAG;
+    private static final String TAG = Globals.TAG;
     private static OfferDownloaderManager instance = null;
     private SniperDatabaseManager sniperDatabaseManager;
 
