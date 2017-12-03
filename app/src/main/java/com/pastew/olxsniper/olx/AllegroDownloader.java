@@ -2,7 +2,7 @@ package com.pastew.olxsniper.olx;
 
 import android.util.Log;
 
-import com.pastew.olxsniper.MainActivity;
+import com.pastew.olxsniper.Globals;
 import com.pastew.olxsniper.Utils;
 import com.pastew.olxsniper.db.Offer;
 
@@ -29,7 +29,7 @@ public class AllegroDownloader extends AbstractDownloader {
         try {
             doc = Jsoup.connect(url).get();
         } catch (IOException e) {
-            Log.e(MainActivity.TAG, "IOException, maybe SocketTimeoutException");
+            Log.e(Globals.TAG, "IOException, maybe SocketTimeoutException");
             e.printStackTrace();
             return result;
         }
@@ -37,13 +37,13 @@ public class AllegroDownloader extends AbstractDownloader {
         Elements elements = doc.getElementsByClass("fa72b28");
 
         if (elements == null) {
-            Log.e(MainActivity.TAG, "elemens is null. ");
+            Log.e(Globals.TAG, "elemens is null. ");
             return result;
         }
 
         for (Element offerElement : elements) {
             if (offerElement == null) {
-                Log.e(MainActivity.TAG, "offerElement is null. ");
+                Log.e(Globals.TAG, "offerElement is null. ");
                 continue;
             }
             String title = offerElement.getElementsByTag("a").first().html();
@@ -59,7 +59,7 @@ public class AllegroDownloader extends AbstractDownloader {
             Offer o = new Offer(title, Utils.parsePrice(priceString), link, city);
 
             if (o.promoted && IGNORE_PROMOTED_OFFERS) {
-                Log.d(MainActivity.TAG, String.format("Ignored promoted offer: %s", o.link));
+                Log.d(Globals.TAG, String.format("Ignored promoted offer: %s", o.link));
             } else {
                 result.add(o);
             }

@@ -36,10 +36,8 @@ import java.util.List;
 
 public class TabResults extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
 
-    public static final String TAG = "OLXSniper";
     public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/q-iphone";
     public static final String OLX_URL_IPHONE = "https://www.olx.pl/oferty/q-iphone-5s/?search%5Bfilter_float_price%3Afrom%5D=400&search%5Bfilter_float_price%3Ato%5D=500";
-    public static final String DATABASE_UPDATE_BROADCAST = "com.pastew.olxsniper.DATABASE_UPDATE";
     private int updaterDelayInSeconds = 60;
 
     private OffersAdapter adapter;
@@ -47,7 +45,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
 
     private SniperDatabaseManager sniperDatabaseManager;
 
-    private IntentFilter filter = new IntentFilter(DATABASE_UPDATE_BROADCAST);
+    private IntentFilter filter = new IntentFilter(Globals.DATABASE_UPDATE_BROADCAST);
     private DatabaseUpdateBroadcastReceiver databaseUpdateBroadcastReceiver;
 
     private Context context;
@@ -102,7 +100,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
         } catch (IllegalArgumentException e) {
             if (e.getMessage().contains("Receiver not registered")) {
                 // Ignore this exception. This is exactly what is desired
-                Log.w(TAG, "Tried to unregister the reciver when it's not registered");
+                Log.w(Globals.TAG, "Tried to unregister the reciver when it's not registered");
             } else {
                 // unexpected, re-throw
                 throw e;
@@ -334,7 +332,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
         @Override
         public void onReceive(Context context, Intent intent) {
             new DownloadOffersFromDatabaseTask().execute();
-            Log.i(TAG, "broadcast received");
+            Log.i(Globals.TAG, "broadcast received");
         }
     }
 }
