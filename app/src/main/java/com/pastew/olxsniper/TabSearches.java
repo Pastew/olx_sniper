@@ -6,9 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Created by Pastew on 2017-12-03.
- */
+
 
 public class TabSearches extends Fragment {
 

@@ -7,4 +7,10 @@
     <string name="tab_text_2">Wyszukiwania</string>
     <string name="tab_text_3">Ustawienia</string>
     <string name="section_format">Hello World from section: %1$d</string>
+
+    <string-array name="search_field_states">
+        <item></item>
+        <item>Używane</item>
+        <item>Nowe</item>
+    </string-array>
 </resources>
