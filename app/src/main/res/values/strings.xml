@@ -8,9 +8,26 @@
     <string name="tab_text_3">Ustawienia</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
-    <string-array name="search_field_states">
-        <item></item>
+    <string-array name="states">
         <item>Używane</item>
         <item>Nowe</item>
+    </string-array>
+
+    <string-array name="categories">
+        <item>Dom</item>
+        <item>Elektronika</item>
+        <item>Inna</item>
+    </string-array>
+
+    <string-array name="voivodeships">
+        <item>Małopolskie</item>
+        <item>Lubelskie</item>
+        <item>Inna</item>
+    </string-array>
+
+    <string-array name="private_or_firm">
+        <item>Małopolskie</item>
+        <item>Lubelskie</item>
+        <item>Inna</item>
     </string-array>
 </resources>

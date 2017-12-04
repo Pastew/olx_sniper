@@ -65,7 +65,7 @@
                     android:id="@+id/spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/search_field_states">
+                    android:entries="@array/states">
                 </Spinner>
 
             </TableRow>
@@ -95,11 +95,12 @@
                     android:text="Kategoria"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/search_field_text"
-                    android:text="Elektronika"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                <Spinner
+                    android:id="@+id/spinner2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/categories"/>
+
             </TableRow>
 
             <TableRow
@@ -111,11 +112,12 @@
                     android:text="Województwo"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/search_field_text"
-                    android:text="Małopolskie"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                <Spinner
+                    android:id="@+id/spinner3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/voivodeships"/>
+
             </TableRow>
 
             <TableRow
@@ -143,11 +145,13 @@
                     android:text="Odległość"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/search_field_text"
-                    android:text="2km"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                <EditText
+                    android:id="@+id/editText2"
+                    android:layout_width="68dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number" />
+
             </TableRow>
 
             <TableRow
@@ -159,28 +163,13 @@
                     android:text="Firma/prywatne"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/search_field_text"
-                    android:text="Firma"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
+                <Spinner
+                    android:id="@+id/spinner4"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Firma/prywatne"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/search_field_text"
-                    android:text="Firma"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:entries="@array/private_or_firm"/>
             </TableRow>
+
         </TableLayout>
 
         <View
