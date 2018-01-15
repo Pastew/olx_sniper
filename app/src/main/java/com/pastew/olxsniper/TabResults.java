@@ -40,7 +40,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
     public static final String OLX_URL_IPHONE = "https://www.olx.pl/oferty/q-iphone-5s/?search%5Bfilter_float_price%3Afrom%5D=400&search%5Bfilter_float_price%3Ato%5D=500";
     private int updaterDelayInSeconds = 60;
 
-    private OffersAdapter adapter;
+    private OffersAdapter offersAdapter;
     private List<Offer> offerList;
 
     private SniperDatabaseManager sniperDatabaseManager;
@@ -63,10 +63,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
         setupButtons();
         setupService();
         setupOfferDbManager();
-        new SetSampleSearches().execute(
-                "https://www.olx.pl/elektronika/telefony-komorkowe/iphone/q-iphone-5s/?search%5Bfilter_float_price%3Afrom%5D=400&search%5Bfilter_float_price%3Ato%5D=500",
-                "https://www.olx.pl/elektronika/q-xbox-pad/?search%5Bfilter_float_price%3Ato%5D=120",
-                "https://www.olx.pl/elektronika/q-pilne/?search%5Bfilter_float_price%3Ato%5D=500");
+        new SetSampleSearches().execute();
         return view;
     }
 
@@ -77,7 +74,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
     @Override
     public void onResume() {
         registerReceiver();
-        adapter.notifyDataSetChanged();
+        offersAdapter.notifyDataSetChanged();
         new DownloadOffersFromDatabaseTask().execute();
         super.onResume();
     }
@@ -147,8 +144,8 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
         offerList = new ArrayList<>();
-        adapter = new OffersAdapter(context, offerList);
-        recyclerView.setAdapter(adapter);
+        offersAdapter = new OffersAdapter(context, offerList);
+        recyclerView.setAdapter(offersAdapter);
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback =
                 new RecyclerItemTouchHelper(0,
@@ -164,7 +161,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
             public void onClick(View v) {
                 new DeleteAllOffersFromDatabase().execute();
                 offerList.clear();
-                adapter.notifyDataSetChanged();
+                offersAdapter.notifyDataSetChanged();
             }
         });
 
@@ -216,7 +213,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
             final int deletedIndex = viewHolder.getAdapterPosition();
 
             // remove the item from recycler view
-            adapter.removeItem(viewHolder.getAdapterPosition());
+            offersAdapter.removeItem(viewHolder.getAdapterPosition());
 
             // set in database "removed" flag
             new SetRemovedFlagTaskTrue().execute(deletedItem);
@@ -228,7 +225,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
                 @Override
                 public void onClick(View view) {
                     // undo is selected, restore the deleted item
-                    adapter.restoreItem(deletedItem, deletedIndex);
+                    offersAdapter.restoreItem(deletedItem, deletedIndex);
                     new SetRemovedFlagTaskFalse().execute(deletedItem);
                 }
             });
@@ -248,8 +245,8 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
         protected void onPostExecute(List<Offer> onlyNewOffers) {
             if (onlyNewOffers.size() > 0) {
                 offerList.addAll(0, onlyNewOffers);
-                adapter.notifyDataSetChanged();
-                //adapter.notifyItemRangeInserted(0, onlyNewOffers.size()); // TODO: check if it works
+                offersAdapter.notifyDataSetChanged();
+                //offersAdapter.notifyItemRangeInserted(0, onlyNewOffers.size()); // TODO: check if it works
 
                 notifyUserAboutNewOffers(onlyNewOffers);
             } else {
@@ -266,12 +263,15 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
         }
     }
 
-    private class SetSampleSearches extends AsyncTask<String, Integer, Void> {
-        protected Void doInBackground(String... params) {
-            for (String link : params) {
-                Search search = new Search(link);
-                sniperDatabaseManager.addSearch(search);
-            }
+    private class SetSampleSearches extends AsyncTask<Void, Integer, Void> {
+        protected Void doInBackground(Void... params) {
+            Search search1 = new Search("pilne", 0, 500, 1, "Kraków");
+            Search search2 = new Search("xbox pad", 0, 120, 2, "Kraków");
+            Search search3 = new Search("iphone 5", 350, 500, 3, "Kraków");
+
+            sniperDatabaseManager.addSearch(search1);
+            sniperDatabaseManager.addSearch(search2);
+            sniperDatabaseManager.addSearch(search3);
             return null;
         }
     }
@@ -309,7 +309,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
                     offerList.remove(0);
                 }
 
-                adapter.notifyItemRangeRemoved(0, size);
+                offersAdapter.notifyItemRangeRemoved(0, size);
             }
         }
     }

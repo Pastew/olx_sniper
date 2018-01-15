@@ -16,6 +16,10 @@
     <string-array name="categories">
         <item>Dom</item>
         <item>Elektronika</item>
+        <item>Motoryzacja</item>
+        <item>Moda</item>
+        <item>Nieruchomości</item>
+        <item>Oddam za darmo</item>
         <item>Inna</item>
     </string-array>
 

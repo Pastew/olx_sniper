@@ -26,7 +26,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/editText"
+                    android:id="@+id/searchTextEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -36,19 +36,56 @@
 
             </TableRow>
 
+            <!--<TableRow-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
+
+                <!--<TextView-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Szukaj w opisach"-->
+                    <!--android:textStyle="bold" />-->
+
+                <!--<CheckBox-->
+                    <!--android:id="@+id/checkBox"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
+
+            <!--</TableRow>-->
+
+            <!--<TableRow-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
+
+                <!--<TextView-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Stan"-->
+                    <!--android:textStyle="bold" />-->
+
+                <!--<Spinner-->
+                    <!--android:id="@+id/spinner"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:entries="@array/states">-->
+                <!--</Spinner>-->
+
+            <!--</TableRow>-->
+
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <TextView
                     android:layout_height="wrap_content"
-                    android:text="Szukaj w opisach"
+                    android:text="Cena min"
                     android:textStyle="bold" />
 
-                <CheckBox
-                    android:id="@+id/checkBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <EditText
+                    android:id="@+id/searchPriceMinEditText"
+                    android:layout_width="68dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number" />
+
 
             </TableRow>
 
@@ -58,32 +95,17 @@
 
                 <TextView
                     android:layout_height="wrap_content"
-                    android:text="Stan"
+                    android:text="Cena max"
                     android:textStyle="bold" />
 
-                <Spinner
-                    android:id="@+id/spinner"
-                    android:layout_width="match_parent"
+                <EditText
+                    android:id="@+id/searchPriceMaxEditText"
+                    android:layout_width="68dp"
                     android:layout_height="wrap_content"
-                    android:entries="@array/states">
-                </Spinner>
+                    android:ems="10"
+                    android:inputType="number" />
 
-            </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:text="Cena"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/search_field_text"
-                    android:text="od 100 zł do 200 zł"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
             </TableRow>
 
             <TableRow
@@ -96,29 +118,29 @@
                     android:textStyle="bold" />
 
                 <Spinner
-                    android:id="@+id/spinner2"
+                    android:id="@+id/searchCategorySpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/categories"/>
+                    android:entries="@array/categories" />
 
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <!--<TableRow-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
 
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:text="Województwo"
-                    android:textStyle="bold" />
+                <!--<TextView-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Województwo"-->
+                    <!--android:textStyle="bold" />-->
 
-                <Spinner
-                    android:id="@+id/spinner3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/voivodeships"/>
+                <!--<Spinner-->
+                    <!--android:id="@+id/spinner3"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:entries="@array/voivodeships"/>-->
 
-            </TableRow>
+            <!--</TableRow>-->
 
             <TableRow
                 android:layout_width="match_parent"
@@ -129,46 +151,47 @@
                     android:text="Miasto"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/search_field_text"
-                    android:text="Kraków"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:text="Odległość"
-                    android:textStyle="bold" />
-
                 <EditText
-                    android:id="@+id/editText2"
+                    android:id="@+id/searchCityEditText"
                     android:layout_width="68dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="number" />
-
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <!--<TableRow-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
 
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:text="Firma/prywatne"
-                    android:textStyle="bold" />
+                <!--<TextView-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Odległość"-->
+                    <!--android:textStyle="bold" />-->
 
-                <Spinner
-                    android:id="@+id/spinner4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/private_or_firm"/>
-            </TableRow>
+                <!--<EditText-->
+                    <!--android:id="@+id/distanceEditText"-->
+                    <!--android:layout_width="68dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:ems="10"-->
+                    <!--android:inputType="number" />-->
+
+            <!--</TableRow>-->
+
+            <!--<TableRow-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
+
+                <!--<TextView-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Firma/prywatne"-->
+                    <!--android:textStyle="bold" />-->
+
+                <!--<Spinner-->
+                    <!--android:id="@+id/spinner4"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:entries="@array/private_or_firm"/>-->
+            <!--</TableRow>-->
 
         </TableLayout>
 

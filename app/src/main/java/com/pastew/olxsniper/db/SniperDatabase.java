@@ -10,7 +10,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 
-@Database(entities = {Offer.class, Search.class}, version = 5)
+@Database(entities = {Offer.class, Search.class}, version = 7)
 public abstract class SniperDatabase extends RoomDatabase {
 
     private static SniperDatabase INSTANCE;
@@ -22,7 +22,9 @@ public abstract class SniperDatabase extends RoomDatabase {
 
     public static SniperDatabase getInstance(Context context){
         if (INSTANCE == null) {
-            INSTANCE = Room.databaseBuilder(context, SniperDatabase.class, SniperDatabase.DATABASE_NAME).build();
+            INSTANCE = Room.databaseBuilder(context, SniperDatabase.class, SniperDatabase.DATABASE_NAME)
+                    .fallbackToDestructiveMigration()
+                    .build();
         }
         return INSTANCE;
     }
