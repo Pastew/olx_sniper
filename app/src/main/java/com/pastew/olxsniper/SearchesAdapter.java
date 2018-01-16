@@ -3,11 +3,14 @@ package com.pastew.olxsniper;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pastew.olxsniper.db.Search;
@@ -22,7 +25,7 @@ public class SearchesAdapter extends RecyclerView.Adapter<SearchesAdapter.ViewHo
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder{ // TODO: TO powinno być static!!! Popraw. Ref: https://stackoverflow.com/questions/31302341/what-difference-between-static-and-non-static-viewholder-in-recyclerview-adapter
         // each data item is just a string in this case
         public EditText textEditText;
         public EditText cityEditText;
@@ -36,6 +39,16 @@ public class SearchesAdapter extends RecyclerView.Adapter<SearchesAdapter.ViewHo
         public ViewHolder(View v, Context context) {
             super(v);
             textEditText = v.findViewById(R.id.searchTextEditText);
+            textEditText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event){
+                    if(actionId == EditorInfo.IME_ACTION_DONE){
+                        searchList.get(getAdapterPosition()).text = v.getText().toString();
+                        return true;
+                    }
+                    return false;
+                }
+            });
             cityEditText = v.findViewById(R.id.searchCityEditText);
             priceMinEditText = v.findViewById(R.id.searchPriceMinEditText);
             priceMaxEditText = v.findViewById(R.id.searchPriceMaxEditText);
@@ -56,11 +69,14 @@ public class SearchesAdapter extends RecyclerView.Adapter<SearchesAdapter.ViewHo
                 @Override
                 public boolean onLongClick(View view) {
                     int p=getLayoutPosition();
-                    System.out.println("LongClick: "+p);
-                    Toast.makeText(c, "Long Click", Toast.LENGTH_SHORT).show();
+                    saveSearchToDatabase(p);
                     return true;
                 }
             });
+        }
+
+        private void saveSearchToDatabase(int position) {
+            Toast.makeText(c, "LongClick: " + searchList.get(position).text , Toast.LENGTH_SHORT).show();
         }
     }
 

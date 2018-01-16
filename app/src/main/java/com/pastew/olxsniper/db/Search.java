@@ -28,6 +28,9 @@ public class Search {
         generateLink();
     }
 
+    public Search() {
+    }
+
     private void generateLink() {
         link = BASE_LINK + "q-" + text.replace(" ", "-");
     }

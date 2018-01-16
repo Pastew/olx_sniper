@@ -2,6 +2,7 @@ package com.pastew.olxsniper;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -37,8 +38,41 @@ public class TabSearches extends Fragment {
         context = getContext();
         setupRecyclerView();
         setupSearchDbManager();
+        setupFab();
+        setupButtons();
 
         return view;
+    }
+
+    private void setupButtons() {
+        view.findViewById(R.id.saveAllSearches).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateAllSearchesFromEditTexts();
+                new TabSearches.SaveSearchesToDatabaseTask().execute();
+            }
+        });
+    }
+
+    private void updateAllSearchesFromEditTexts() {
+
+    }
+
+
+    private void setupFab() {
+        FloatingActionButton fab = view.findViewById(R.id.searchesFab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createNewSearchInList();
+            }
+        });
+    }
+
+    private void createNewSearchInList() {
+        Search search = new Search();
+        searchList.add(search);
+        searchesAdapter.notifyItemInserted(searchList.size()-1);
     }
 
     private void setupRecyclerView() {
@@ -94,4 +128,14 @@ public class TabSearches extends Fragment {
         }
     }
 
+    private class SaveSearchesToDatabaseTask extends AsyncTask<Void, Integer, Void> {
+        protected Void doInBackground(Void... params) {
+            sniperDatabaseManager.saveAllSearches(searchList);
+            return null;
+        }
+
+        protected void onPostExecute(Void... params) {
+            Toast.makeText(context, "Zapisałem zmiany", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

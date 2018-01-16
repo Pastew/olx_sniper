@@ -64,4 +64,8 @@ public class SniperDatabaseManager {
         sniperDatabase.getSearchDao().insert(search);
     }
 
+    public void saveAllSearches(List<Search> searchList) {
+        for(Search search : searchList)
+            addSearch(search);
+    }
 }
