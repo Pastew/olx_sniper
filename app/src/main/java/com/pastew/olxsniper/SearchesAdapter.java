@@ -3,6 +3,8 @@ package com.pastew.olxsniper;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,16 +41,22 @@ public class SearchesAdapter extends RecyclerView.Adapter<SearchesAdapter.ViewHo
         public ViewHolder(View v, Context context) {
             super(v);
             textEditText = v.findViewById(R.id.searchTextEditText);
-            textEditText.setOnEditorActionListener(new TextView.OnEditorActionListener(){
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event){
-                    if(actionId == EditorInfo.IME_ACTION_DONE){
-                        searchList.get(getAdapterPosition()).text = v.getText().toString();
-                        return true;
-                    }
-                    return false;
+
+            textEditText.addTextChangedListener(new TextWatcher() {
+
+                // the user's changes are saved here
+                public void onTextChanged(CharSequence c, int start, int before, int count) {
+                }
+
+                public void beforeTextChanged(CharSequence c, int start, int count, int after) {
+                    // this space intentionally left blank
+                }
+
+                public void afterTextChanged(Editable c) {
+                    searchList.get(getAdapterPosition()).text = textEditText.getText().toString();
                 }
             });
+
             cityEditText = v.findViewById(R.id.searchCityEditText);
             priceMinEditText = v.findViewById(R.id.searchPriceMinEditText);
             priceMaxEditText = v.findViewById(R.id.searchPriceMaxEditText);
