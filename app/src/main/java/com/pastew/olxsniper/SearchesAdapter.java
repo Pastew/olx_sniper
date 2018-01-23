@@ -5,14 +5,11 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pastew.olxsniper.db.Search;
@@ -54,13 +51,14 @@ public class SearchesAdapter extends RecyclerView.Adapter<SearchesAdapter.ViewHo
 
                 public void afterTextChanged(Editable c) {
                     searchList.get(getAdapterPosition()).text = textEditText.getText().toString();
+                    searchList.get(getAdapterPosition()).getLink();
                 }
             });
 
-            cityEditText = v.findViewById(R.id.searchCityEditText);
+//            cityEditText = v.findViewById(R.id.searchCityEditText);
             priceMinEditText = v.findViewById(R.id.searchPriceMinEditText);
             priceMaxEditText = v.findViewById(R.id.searchPriceMaxEditText);
-            categorySpinner = v.findViewById(R.id.searchCategorySpinner);
+//            categorySpinner = v.findViewById(R.id.searchCategorySpinner);
             cardView = v.findViewById(R.id.cardView);
             this.c = context;
 
@@ -115,10 +113,10 @@ public class SearchesAdapter extends RecyclerView.Adapter<SearchesAdapter.ViewHo
         Search search = searchList.get(position);
 
         holder.textEditText.setText(search.text);
-        holder.cityEditText.setText(search.city);
+//        holder.cityEditText.setText(search.city);
         holder.priceMinEditText.setText(Integer.toString(search.priceMin));
         holder.priceMaxEditText.setText(Integer.toString(search.priceMax));
-        holder.categorySpinner.setSelection(search.category);
+//        holder.categorySpinner.setSelection(search.category);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -10,7 +10,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 
-@Database(entities = {Offer.class, Search.class}, version = 7)
+@Database(entities = {Offer.class, Search.class}, version = 9)
 public abstract class SniperDatabase extends RoomDatabase {
 
     private static SniperDatabase INSTANCE;

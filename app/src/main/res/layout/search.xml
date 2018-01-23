@@ -108,22 +108,22 @@
 
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <!--<TableRow-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
 
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:text="Kategoria"
-                    android:textStyle="bold" />
+                <!--<TextView-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Kategoria"-->
+                    <!--android:textStyle="bold" />-->
 
-                <Spinner
-                    android:id="@+id/searchCategorySpinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/categories" />
+                <!--<Spinner-->
+                    <!--android:id="@+id/searchCategorySpinner"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:entries="@array/categories" />-->
 
-            </TableRow>
+            <!--</TableRow>-->
 
             <!--<TableRow-->
                 <!--android:layout_width="match_parent"-->
@@ -142,22 +142,22 @@
 
             <!--</TableRow>-->
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <!--<TableRow-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
 
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:text="Miasto"
-                    android:textStyle="bold" />
+                <!--<TextView-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Miasto"-->
+                    <!--android:textStyle="bold" />-->
 
-                <EditText
-                    android:id="@+id/searchCityEditText"
-                    android:layout_width="68dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="number" />
-            </TableRow>
+                <!--<EditText-->
+                    <!--android:id="@+id/searchCityEditText"-->
+                    <!--android:layout_width="68dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:ems="10"-->
+                    <!--android:inputType="number" />-->
+            <!--</TableRow>-->
 
             <!--<TableRow-->
                 <!--android:layout_width="match_parent"-->

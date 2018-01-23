@@ -46,11 +46,11 @@ public class OfferDownloaderManager {
 
         List<Offer> newOfferList = new ArrayList<>();
         for (Search search : searches) {
-            Log.i(TAG, String.format("Downloading from: %s", search.link));
+            Log.i(TAG, String.format("Downloading from: %s", search.getLink()));
 
             for (AbstractDownloader webDownloader : webDownloaders) {
-                if (webDownloader.canHandleLink(search.link))
-                    newOfferList.addAll(webDownloader.downloadOffersFromWeb(search.link));
+                if (webDownloader.canHandleLink(search.getLink()))
+                    newOfferList.addAll(webDownloader.downloadOffersFromWeb(search.getLink()));
             }
 
         }
