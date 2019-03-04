@@ -265,13 +265,9 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
 
     private class SetSampleSearches extends AsyncTask<Void, Integer, Void> {
         protected Void doInBackground(Void... params) {
-            Search search1 = new Search("pilne", 0, 500, 1, "Kraków");
-            Search search2 = new Search("xbox pad", 0, 120, 2, "Kraków");
-            Search search3 = new Search("iphone 5", 350, 500, 3, "Kraków");
+            Search search1 = new Search("pilne", 0, 500, "Kraków");
 
             sniperDatabaseManager.addSearch(search1);
-            sniperDatabaseManager.addSearch(search2);
-            sniperDatabaseManager.addSearch(search3);
             return null;
         }
     }
