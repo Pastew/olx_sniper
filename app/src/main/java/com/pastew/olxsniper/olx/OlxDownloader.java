@@ -22,6 +22,8 @@ public class OlxDownloader extends AbstractDownloader {
     
     @Override
     public List<Offer> downloadOffersFromWeb(String url) {
+        Log.e(TAG, String.format("Processing %s", url));
+
         if (!canHandleLink(url)) {
             throw new InputMismatchException();
         }
@@ -62,9 +64,7 @@ public class OlxDownloader extends AbstractDownloader {
             String title = h3.getElementsByTag("strong").first().html();
 
             String link = h3.getElementsByTag("a").first().attr("href");
-            String city = offerElement.getElementsByTag("tr").get(1).getElementsByTag("p").get(0).getElementsByTag("span").first().html();
-
-            String dateString = offerElement.getElementsByTag("tr").get(1).getElementsByTag("p").get(1).html();
+            String city = offerElement.getElementsByTag("tr").get(1).getElementsByTag("p").get(0).getElementsByTag("span").first().text();
 
             Offer o = new Offer(title, Utils.parsePrice(priceString), link, city);
 

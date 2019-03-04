@@ -5,8 +5,10 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.util.Date;
+
 @Entity
-public class Offer{
+public class Offer {
 
     @NonNull
     @PrimaryKey
@@ -33,5 +35,10 @@ public class Offer{
         String thisItem = new StringBuilder(title).append(price).append(link).append(city).toString();
         String otherItem = new StringBuilder(o.title).append(o.price).append(o.link).append(o.city).toString();
         return thisItem.equals(otherItem);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s, %s, %s, %s, %s", title, price, city, link, new Date(date));
     }
 }

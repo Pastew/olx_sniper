@@ -24,7 +24,7 @@ public class DownloadersTest {
         List<Offer> offerList = olxDownloader.downloadOffersFromWeb(URL_OLX);
 
         for (Offer o : offerList) {
-            System.out.println(String.format("%s, %s, %s, %s", o.title, o.price, o.link, o.city));
+            System.out.println(o);
         }
     }
 
@@ -36,7 +36,7 @@ public class DownloadersTest {
         List<Offer> offerList = gumtreeDownloader.downloadOffersFromWeb(URL_GUMTREE_IPHONE);
 
         for (Offer o : offerList) {
-            System.out.println(String.format("%s, %s, %s, %s", o.title, o.price, o.link, o.city));
+            System.out.println(o);
         }
     }
 
