@@ -105,6 +105,6 @@ public class GumtreeDownloader extends AbstractDownloader {
 
     @Override
     boolean canHandleLink(String url) {
-        return url.contains("www.gumtree.pl");
+        return url.contains("gumtree.pl");
     }
 }

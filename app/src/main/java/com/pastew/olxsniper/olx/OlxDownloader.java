@@ -80,6 +80,6 @@ public class OlxDownloader extends AbstractDownloader {
 
     @Override
     boolean canHandleLink(String url) {
-        return url.contains("www.olx.pl");
+        return url.contains("olx.pl");
     }
 }
