@@ -132,7 +132,7 @@ public class TabSearches extends Fragment {
             return null;
         }
 
-        protected void onPostExecute(Void... params) {
+        protected void onPostExecute(Void result) {
             Toast.makeText(context, "Zapisałem zmiany", Toast.LENGTH_SHORT).show();
         }
     }
