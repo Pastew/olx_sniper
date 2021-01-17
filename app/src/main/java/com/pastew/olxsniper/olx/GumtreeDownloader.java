@@ -39,7 +39,7 @@ public class GumtreeDownloader extends AbstractDownloader {
             return result;
         }
 
-        Elements elements = doc.getElementsByClass("result-link");
+        Elements elements = doc.getElementsByClass("tileV1");
 
         if (elements == null) {
             Log.e(Globals.TAG, "elemens is null. ");
