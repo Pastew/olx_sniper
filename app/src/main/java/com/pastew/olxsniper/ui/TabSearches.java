@@ -96,11 +96,11 @@ public class TabSearches extends Fragment {
     @Override
     public void onResume() {
         searchesAdapter.notifyDataSetChanged();
-        new TabSearches.DownloadSearchesFromDatabaseTask().execute();
+        new DownloadAndShowSearchesFromDatabaseTask().execute();
         super.onResume();
     }
 
-    private class DownloadSearchesFromDatabaseTask extends AsyncTask<Void, Integer, List<Search>> {
+    private class DownloadAndShowSearchesFromDatabaseTask extends AsyncTask<Void, Integer, List<Search>> {
         protected List<Search> doInBackground(Void... params) {
             List<Search> searchesFromDatabase = sniperDatabaseManager.getAllSearches();
             return searchesFromDatabase;
@@ -108,9 +108,9 @@ public class TabSearches extends Fragment {
 
         protected void onPostExecute(List<Search> searches) {
             if (searches.size() > 0) {
+                searchList.clear();
                 searchList.addAll(0, searches);
                 searchesAdapter.notifyDataSetChanged();
-
             } else {
                 Snackbar snackbar = Snackbar
                         .make(getActivity().findViewById(R.id.main_content),
