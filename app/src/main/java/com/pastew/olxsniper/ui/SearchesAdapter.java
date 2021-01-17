@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.pastew.olxsniper.R;
@@ -21,26 +20,21 @@ public class SearchesAdapter extends RecyclerView.Adapter<SearchesAdapter.ViewHo
     private final Context context;
     private List<Search> searchList;
 
-
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public class ViewHolder extends RecyclerView.ViewHolder{ // TODO: TO powinno być static!!! Popraw. Ref: https://stackoverflow.com/questions/31302341/what-difference-between-static-and-non-static-viewholder-in-recyclerview-adapter
+    public class ViewHolder extends RecyclerView.ViewHolder { // TODO: TO powinno być static!!! Popraw. Ref: https://stackoverflow.com/questions/31302341/what-difference-between-static-and-non-static-viewholder-in-recyclerview-adapter
         // each data item is just a string in this case
-        public EditText textEditText;
-        public EditText cityEditText;
-        public EditText priceMinEditText;
-        public EditText priceMaxEditText;
-        public Spinner categorySpinner;
+        public EditText urlEditText;
         public CardView cardView;
 
         private Context c;
 
         public ViewHolder(View v, Context context) {
             super(v);
-            textEditText = v.findViewById(R.id.searchTextEditText);
+            urlEditText = v.findViewById(R.id.searchUrlEditText);
 
-            textEditText.addTextChangedListener(new TextWatcher() {
+            urlEditText.addTextChangedListener(new TextWatcher() {
 
                 // the user's changes are saved here
                 public void onTextChanged(CharSequence c, int start, int before, int count) {
@@ -51,23 +45,19 @@ public class SearchesAdapter extends RecyclerView.Adapter<SearchesAdapter.ViewHo
                 }
 
                 public void afterTextChanged(Editable c) {
-                    searchList.get(getAdapterPosition()).text = textEditText.getText().toString();
-                    searchList.get(getAdapterPosition()).getLink();
+                    searchList.get(getAdapterPosition()).url = urlEditText.getText().toString();
+                    searchList.get(getAdapterPosition()).getUrl();
                 }
             });
 
-//            cityEditText = v.findViewById(R.id.searchCityEditText);
-            priceMinEditText = v.findViewById(R.id.searchPriceMinEditText);
-            priceMaxEditText = v.findViewById(R.id.searchPriceMaxEditText);
-//            categorySpinner = v.findViewById(R.id.searchCategorySpinner);
             cardView = v.findViewById(R.id.cardView);
             this.c = context;
 
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int p=getLayoutPosition();
-                    System.out.println("click: "+p);
+                    int p = getLayoutPosition();
+                    System.out.println("click: " + p);
                     Toast.makeText(c, "Click", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -75,7 +65,7 @@ public class SearchesAdapter extends RecyclerView.Adapter<SearchesAdapter.ViewHo
             cardView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    int p=getLayoutPosition();
+                    int p = getLayoutPosition();
                     saveSearchToDatabase(p);
                     return true;
                 }
@@ -83,7 +73,7 @@ public class SearchesAdapter extends RecyclerView.Adapter<SearchesAdapter.ViewHo
         }
 
         private void saveSearchToDatabase(int position) {
-            Toast.makeText(c, "LongClick: " + searchList.get(position).text , Toast.LENGTH_SHORT).show();
+            Toast.makeText(c, "LongClick: " + searchList.get(position).url, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -113,11 +103,7 @@ public class SearchesAdapter extends RecyclerView.Adapter<SearchesAdapter.ViewHo
         // - replace the contents of the view with that element
         Search search = searchList.get(position);
 
-        holder.textEditText.setText(search.text);
-//        holder.cityEditText.setText(search.city);
-        holder.priceMinEditText.setText(Integer.toString(search.priceMin));
-        holder.priceMaxEditText.setText(Integer.toString(search.priceMax));
-//        holder.categorySpinner.setSelection(search.category);
+        holder.urlEditText.setText(search.url);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -139,5 +125,4 @@ public class SearchesAdapter extends RecyclerView.Adapter<SearchesAdapter.ViewHo
         // notify item added by position
         notifyItemInserted(position);
     }
-
 }

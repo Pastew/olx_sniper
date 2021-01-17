@@ -29,7 +29,6 @@ public class TabSearches extends Fragment {
     private View view;
     private Context context;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

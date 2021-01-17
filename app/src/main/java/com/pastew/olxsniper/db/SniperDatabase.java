@@ -10,7 +10,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 
-@Database(entities = {Offer.class, Search.class}, version = 9)
+@Database(entities = {Offer.class, Search.class}, version = 10)
 public abstract class SniperDatabase extends RoomDatabase {
 
     private static SniperDatabase INSTANCE;
@@ -18,9 +18,10 @@ public abstract class SniperDatabase extends RoomDatabase {
     public static final String DATABASE_NAME = SniperDatabase.class.getSimpleName();
 
     public abstract OfferDao getOfferDao();
+
     public abstract SearchDao getSearchDao();
 
-    public static SniperDatabase getInstance(Context context){
+    public static SniperDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context, SniperDatabase.class, SniperDatabase.DATABASE_NAME)
                     .fallbackToDestructiveMigration()

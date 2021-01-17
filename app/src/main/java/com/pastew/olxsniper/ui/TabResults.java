@@ -69,7 +69,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
         setupButtons();
         setupService();
         setupOfferDbManager();
-//        new SetSampleSearches().execute();
+        new SetSampleSearches().execute();
         return view;
     }
 
@@ -262,9 +262,8 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
 
     private class SetSampleSearches extends AsyncTask<Void, Integer, Void> {
         protected Void doInBackground(Void... params) {
-            Search search1 = new Search("pilne", 0, 500, "Kraków");
-
-            sniperDatabaseManager.addSearch(search1);
+            sniperDatabaseManager.addSearch(new Search("https://www.gumtree.pl/s-elektronika/iphone/v1c9237q0p1"));
+//            sniperDatabaseManager.addSearch(new Search("https://www.gumtree.pl/s-elektronika/iphone/v1c9237q0p1"));
             return null;
         }
     }
