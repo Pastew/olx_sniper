@@ -69,7 +69,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
         setupButtons();
         setupService();
         setupOfferDbManager();
-        new SetSampleSearches().execute();
+//        new SetSampleSearches().execute();
         return view;
     }
 
@@ -263,7 +263,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
     private class SetSampleSearches extends AsyncTask<Void, Integer, Void> {
         protected Void doInBackground(Void... params) {
             sniperDatabaseManager.addSearch(new Search("https://www.gumtree.pl/s-elektronika/iphone/v1c9237q0p1"));
-//            sniperDatabaseManager.addSearch(new Search("https://www.gumtree.pl/s-elektronika/iphone/v1c9237q0p1"));
+            sniperDatabaseManager.addSearch(new Search("https://www.gumtree.pl/s-mieszkania-i-domy-do-wynajecia/krakow/mieszkanie/v1c9008l3200208a1dwp1?pr=,2300&nr=3&pa=grage&pf=1&priceType=FIXED"));
             return null;
         }
     }
