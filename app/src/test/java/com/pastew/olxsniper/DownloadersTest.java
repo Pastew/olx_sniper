@@ -23,6 +23,7 @@ public class DownloadersTest {
         OlxDownloader olxDownloader = new OlxDownloader();
         List<Offer> offerList = olxDownloader.downloadOffersFromWeb(URL_OLX);
 
+        assert !offerList.isEmpty();
         for (Offer o : offerList) {
             System.out.println(o);
         }
@@ -35,6 +36,7 @@ public class DownloadersTest {
         GumtreeDownloader gumtreeDownloader = new GumtreeDownloader();
         List<Offer> offerList = gumtreeDownloader.downloadOffersFromWeb(URL_GUMTREE_IPHONE);
 
+        assert !offerList.isEmpty();
         for (Offer o : offerList) {
             System.out.println(o);
         }
@@ -47,6 +49,7 @@ public class DownloadersTest {
         AllegroDownloader allegroDownloader = new AllegroDownloader();
         List<Offer> offerList = allegroDownloader.downloadOffersFromWeb(URL_ALLEGRO_GTX);
 
+        assert !offerList.isEmpty();
         for (Offer o : offerList) {
             System.out.println(String.format("%s, %s, %s, %s", o.title, o.price, o.link, o.city));
         }
