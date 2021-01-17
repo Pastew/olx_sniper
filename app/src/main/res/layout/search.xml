@@ -27,7 +27,7 @@
                     android:id="@+id/textView"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="URL:"
                     android:textStyle="normal" />
@@ -36,23 +36,12 @@
                     android:id="@+id/searchUrlEditText"
                     android:layout_width="0dp"
                     android:layout_height="80dp"
-                    android:layout_weight="7"
+                    android:layout_weight="9"
                     android:ems="10"
                     android:inputType="textMultiLine"
                     android:singleLine="true"
                     android:text="https://www.gumtree.pl/s-mieszkania-i-domy-do-wynajecia/krakow/mieszkanie/v1c9008l3200208a1dwp1?pr=,2300&amp;nr=3&amp;pa=grage&amp;pf=1&amp;priceType=FIXED"
                     android:textSize="8sp" />
-
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:layout_weight="2"
-                    android:text="X" />
 
             </TableRow>
 

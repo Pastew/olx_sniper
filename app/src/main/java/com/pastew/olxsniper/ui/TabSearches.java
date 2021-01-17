@@ -1,6 +1,7 @@
 package com.pastew.olxsniper.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TabSearches extends Fragment {
+public class TabSearches extends Fragment implements SearchRecyclerItemTouchHelper.SearchRecyclerItemTouchHelperListener {
 
     private SearchesAdapter searchesAdapter;
-    List<Search> searchList;
     private SniperDatabaseManager sniperDatabaseManager;
     private View view;
     private Context context;
+    private List<Search> searchesList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,14 +49,9 @@ public class TabSearches extends Fragment {
         view.findViewById(R.id.saveAllSearches).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateAllSearchesFromEditTexts();
                 new TabSearches.SaveSearchesToDatabaseTask().execute();
             }
         });
-    }
-
-    private void updateAllSearchesFromEditTexts() {
-
     }
 
     private void setupFab() {
@@ -69,24 +66,24 @@ public class TabSearches extends Fragment {
 
     private void createNewSearchInList() {
         Search search = new Search();
-        searchList.add(search);
-        searchesAdapter.notifyItemInserted(searchList.size()-1);
+        searchesList.add(search);
+        searchesAdapter.notifyItemInserted(searchesList.size() - 1);
     }
 
     private void setupRecyclerView() {
         RecyclerView recyclerView = view.findViewById(R.id.searches_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
-        searchList = new ArrayList<>();
-        searchesAdapter = new SearchesAdapter(context, searchList);
+        searchesList = new ArrayList<>();
+        searchesAdapter = new SearchesAdapter(context, searchesList);
         recyclerView.setAdapter(searchesAdapter);
 
-//        ItemTouchHelper.SimpleCallback itemTouchHelperCallback =
-//                new RecyclerItemTouchHelper(0,
-//                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT,
-//                        this);
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback =
+                new SearchRecyclerItemTouchHelper(0,
+                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT,
+                        this);
 
-//        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
     }
 
     private void setupSearchDbManager() {
@@ -100,18 +97,61 @@ public class TabSearches extends Fragment {
         super.onResume();
     }
 
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof SearchesAdapter.ViewHolder) {
+            // get the removed item name to display it in snack bar
+            String name = searchesList.get(viewHolder.getAdapterPosition()).url;
+
+            // backup of removed item for undo purpose
+            final Search deletedItem = searchesList.get(viewHolder.getAdapterPosition());
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            searchesAdapter.removeItem(viewHolder.getAdapterPosition());
+
+            // set in database "removed" flag
+            new DeleteSearchFromDatabase().execute(deletedItem);
+
+            // showing snack bar with Undo option
+            String nameToShow = name.substring(0, Math.min(name.length(), 10));
+            Snackbar snackbar = Snackbar.make(view.findViewById(R.id.tabSearchesLayout), "Usunięto " + nameToShow + "(...)", Snackbar.LENGTH_LONG);
+            snackbar.setAction("COFNIJ", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // undo is selected, restore the deleted item
+                    searchesAdapter.restoreItem(deletedItem, deletedIndex);
+                    new TabSearches.SaveSearchesToDatabaseTask().execute();
+                }
+            });
+
+            snackbar.setActionTextColor(Color.YELLOW);
+            snackbar.show();
+        }
+    }
+
+    private class DeleteSearchFromDatabase extends AsyncTask<Search, Void, Void> {
+        protected Void doInBackground(Search... searches) {
+            sniperDatabaseManager.deleteSearch(searches[0], true);
+            return null;
+        }
+    }
+
     private class DownloadAndShowSearchesFromDatabaseTask extends AsyncTask<Void, Integer, List<Search>> {
         protected List<Search> doInBackground(Void... params) {
             List<Search> searchesFromDatabase = sniperDatabaseManager.getAllSearches();
             return searchesFromDatabase;
         }
 
-        protected void onPostExecute(List<Search> searches) {
-            if (searches.size() > 0) {
-                searchList.clear();
-                searchList.addAll(0, searches);
+        protected void onPostExecute(List<Search> searchesFromDatabase) {
+            if (searchesFromDatabase.size() > 0) {
+                searchesList.clear();
+                searchesList.addAll(0, searchesFromDatabase);
                 searchesAdapter.notifyDataSetChanged();
             } else {
+                searchesList.clear();
+                searchesAdapter.notifyDataSetChanged();
+
                 Snackbar snackbar = Snackbar
                         .make(getActivity().findViewById(R.id.main_content),
                                 String.format("Nie ustawiłeś żadnych wyszukiwań."), Snackbar.LENGTH_LONG)
@@ -128,7 +168,7 @@ public class TabSearches extends Fragment {
 
     private class SaveSearchesToDatabaseTask extends AsyncTask<Void, Integer, Void> {
         protected Void doInBackground(Void... params) {
-            sniperDatabaseManager.saveAllSearches(searchList);
+            sniperDatabaseManager.saveAllSearches(searchesList);
             return null;
         }
 

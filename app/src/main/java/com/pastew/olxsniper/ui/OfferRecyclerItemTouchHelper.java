@@ -5,12 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import com.pastew.olxsniper.ui.OffersAdapter;
+public class OfferRecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
+    private OfferRecyclerItemTouchHelperListener listener;
 
-public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
-    private RecyclerItemTouchHelperListener listener;
-
-    public RecyclerItemTouchHelper(int dragDirs, int swipeDirs, RecyclerItemTouchHelperListener listener) {
+    public OfferRecyclerItemTouchHelper(int dragDirs, int swipeDirs, OfferRecyclerItemTouchHelperListener listener) {
         super(dragDirs, swipeDirs);
         this.listener = listener;
     }
@@ -64,7 +62,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
         return super.convertToAbsoluteDirection(flags, layoutDirection);
     }
 
-    public interface RecyclerItemTouchHelperListener {
+    public interface OfferRecyclerItemTouchHelperListener {
         void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position);
     }
 }

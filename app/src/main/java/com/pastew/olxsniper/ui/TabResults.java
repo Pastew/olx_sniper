@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,7 +26,6 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
 import com.pastew.olxsniper.Globals;
-import com.pastew.olxsniper.MyLogger;
 import com.pastew.olxsniper.R;
 import com.pastew.olxsniper.SharedPrefsManager;
 import com.pastew.olxsniper.UpdaterJobService;
@@ -40,7 +38,7 @@ import com.pastew.olxsniper.olx.OfferDownloaderManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TabResults extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
+public class TabResults extends Fragment implements OfferRecyclerItemTouchHelper.OfferRecyclerItemTouchHelperListener {
 
     public static final String OLX_URL = "https://www.olx.pl/elektronika/telefony-komorkowe/q-iphone";
     public static final String OLX_URL_IPHONE = "https://www.olx.pl/oferty/q-iphone-5s/?search%5Bfilter_float_price%3Afrom%5D=400&search%5Bfilter_float_price%3Ato%5D=500";
@@ -142,7 +140,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
         recyclerView.setAdapter(offersAdapter);
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback =
-                new RecyclerItemTouchHelper(0,
+                new OfferRecyclerItemTouchHelper(0,
                         ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT,
                         this);
 
@@ -205,7 +203,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
-                    .make(view.findViewById(R.id.constrainLayout), "Usunięto " + name, Snackbar.LENGTH_LONG);
+                    .make(view.findViewById(R.id.tabResultsLayout), "Usunięto " + name, Snackbar.LENGTH_LONG);
             snackbar.setAction("COFNIJ", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
