@@ -17,4 +17,7 @@ public interface SearchDao {
 
     @Insert(onConflict = REPLACE)
     void insert(Search search);
+
+    @Query("DELETE FROM search")
+    void deleteAll();
 }

@@ -28,10 +28,17 @@ public class TabSettings extends Fragment {
     }
 
     private void setupButtons() {
-        view.findViewById(R.id.clearDatabaseButton).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.clearOffersButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new TabSettings.DeleteAllOffersFromDatabase().execute();
+            }
+        });
+
+        view.findViewById(R.id.clearSearchesButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new TabSettings.DeleteAllSearchesFromDatabase().execute();
             }
         });
     }
@@ -39,6 +46,13 @@ public class TabSettings extends Fragment {
     private class DeleteAllOffersFromDatabase extends AsyncTask<Void, Void, Integer> {
         protected Integer doInBackground(Void... voids) {
             sniperDatabaseManager.deleteAllOffers();
+            return null;
+        }
+    }
+
+    private class DeleteAllSearchesFromDatabase extends AsyncTask<Void, Void, Integer> {
+        protected Integer doInBackground(Void... voids) {
+            sniperDatabaseManager.deleteAllSearches();
             return null;
         }
     }

@@ -69,7 +69,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
         setupButtons();
         setupService();
         setupOfferDbManager();
-        new SetSampleSearches().execute();
+//        new SetSampleSearches().execute();
         return view;
     }
 

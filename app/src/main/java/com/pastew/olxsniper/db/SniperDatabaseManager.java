@@ -22,6 +22,10 @@ public class SniperDatabaseManager {
         sniperDatabase.getOfferDao().deleteAll();
     }
 
+    public void deleteAllSearches() {
+        sniperDatabase.getSearchDao().deleteAll();
+    }
+
     public void setRemovedFlag(Offer offer, boolean flagValue) {
         offer.removed = flagValue;
         sniperDatabase.getOfferDao().update(offer);
@@ -48,7 +52,6 @@ public class SniperDatabaseManager {
         return sniperDatabase.getOfferDao().getAllNotRemovedByDate();
     }
 
-
     public void insertOffers(List<Offer> offers) {
         sniperDatabase.getOfferDao().insertAll(offers);
     }
@@ -64,7 +67,7 @@ public class SniperDatabaseManager {
     }
 
     public void saveAllSearches(List<Search> searchList) {
-        for(Search search : searchList)
+        for (Search search : searchList)
             addSearch(search);
     }
 }
