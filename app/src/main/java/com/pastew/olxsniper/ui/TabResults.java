@@ -1,4 +1,4 @@
-package com.pastew.olxsniper;
+package com.pastew.olxsniper.ui;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,10 +26,18 @@ import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
+import com.pastew.olxsniper.Globals;
+import com.pastew.olxsniper.MyLogger;
+import com.pastew.olxsniper.R;
+import com.pastew.olxsniper.SharedPrefsManager;
+import com.pastew.olxsniper.UpdaterJobService;
+import com.pastew.olxsniper.Utils;
 import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.db.Search;
 import com.pastew.olxsniper.db.SniperDatabaseManager;
 import com.pastew.olxsniper.olx.OfferDownloaderManager;
+import com.pastew.olxsniper.ui.OffersAdapter;
+import com.pastew.olxsniper.ui.RecyclerItemTouchHelper;
 
 import java.util.ArrayList;
 import java.util.List;

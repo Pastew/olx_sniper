@@ -1,4 +1,4 @@
-package com.pastew.olxsniper;
+package com.pastew.olxsniper.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pastew.olxsniper.R;
+import com.pastew.olxsniper.Utils;
 import com.pastew.olxsniper.db.Offer;
 
 import java.text.SimpleDateFormat;

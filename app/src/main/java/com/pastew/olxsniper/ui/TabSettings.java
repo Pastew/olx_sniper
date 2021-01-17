@@ -1,10 +1,12 @@
-package com.pastew.olxsniper;
+package com.pastew.olxsniper.ui;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.pastew.olxsniper.R;
 
 /**
  * Created by Pastew on 2017-12-03.

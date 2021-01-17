@@ -16,7 +16,7 @@ import com.firebase.jobdispatcher.JobService;
 import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.db.SniperDatabaseManager;
 import com.pastew.olxsniper.olx.OfferDownloaderManager;
-
+import com.pastew.olxsniper.ui.MainActivity;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -111,6 +111,4 @@ public class UpdaterJobService extends JobService {
         Toast.makeText(this, "stop job", Toast.LENGTH_SHORT).show();
         return true; // Answers the question: "Should this job be retried?"
     }
-
-
 }

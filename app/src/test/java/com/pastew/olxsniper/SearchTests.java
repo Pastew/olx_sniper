@@ -12,7 +12,7 @@ public class SearchTests {
     @Test
     public void OnlyTextTest() {
         String expected = "https://www.olx.pl/oferty/q-xbox-pad";
-        Search search = new Search("xbox pad", 0, 0, 0, "");
+        Search search = new Search("xbox pad", 0, 0, "");
         assertEquals(expected, search.getLink());
     }
 

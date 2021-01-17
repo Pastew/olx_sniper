@@ -1,4 +1,4 @@
-package com.pastew.olxsniper;
+package com.pastew.olxsniper.ui;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.pastew.olxsniper.db.Offer;
+import com.pastew.olxsniper.R;
 import com.pastew.olxsniper.db.Search;
 import com.pastew.olxsniper.db.SniperDatabaseManager;
 

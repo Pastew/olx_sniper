@@ -1,4 +1,4 @@
-package com.pastew.olxsniper;
+package com.pastew.olxsniper.ui;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;
@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.pastew.olxsniper.R;
 import com.pastew.olxsniper.db.Search;
 
 import java.util.List;
