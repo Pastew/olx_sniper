@@ -58,7 +58,6 @@ public class TabSearches extends Fragment {
 
     }
 
-
     private void setupFab() {
         FloatingActionButton fab = view.findViewById(R.id.searchesFab);
         fab.setOnClickListener(new View.OnClickListener() {

@@ -15,7 +15,6 @@ public class SniperDatabaseManager {
 
     public SniperDatabaseManager(Context context) {
         this.context = context;
-
         sniperDatabase = SniperDatabase.getInstance(context);
     }
 

@@ -36,8 +36,6 @@ import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.db.Search;
 import com.pastew.olxsniper.db.SniperDatabaseManager;
 import com.pastew.olxsniper.olx.OfferDownloaderManager;
-import com.pastew.olxsniper.ui.OffersAdapter;
-import com.pastew.olxsniper.ui.RecyclerItemTouchHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,15 +162,6 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
     }
 
     private void setupButtons() {
-        view.findViewById(R.id.clearDatabaseButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DeleteAllOffersFromDatabase().execute();
-                offerList.clear();
-                offersAdapter.notifyDataSetChanged();
-            }
-        });
-
         view.findViewById(R.id.refreshDatabaseButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -293,12 +282,7 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
         }
     }
 
-    private class DeleteAllOffersFromDatabase extends AsyncTask<Void, Void, Integer> {
-        protected Integer doInBackground(Void... voids) {
-            sniperDatabaseManager.deleteAllOffers();
-            return null;
-        }
-    }
+
 
     private class SetRemovedFlagTaskTrueForOffers extends AsyncTask<List<Offer>, Void, Void> {
         protected Void doInBackground(List<Offer>... offers) {
