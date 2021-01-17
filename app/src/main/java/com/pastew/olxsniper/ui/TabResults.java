@@ -64,7 +64,6 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
         context = getContext();
 
         setupStrictMode();
-        setupFab();
         setupRecyclerView();
         setupButtons();
         setupService();
@@ -132,17 +131,6 @@ public class TabResults extends Fragment implements RecyclerItemTouchHelper.Recy
         //TODO: Find out why it is needed
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-    }
-
-    private void setupFab() {
-        FloatingActionButton fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: here should open window with added new OLX Listner
-                MyLogger.getInstance().showLogsInDebugWindow(context);
-            }
-        });
     }
 
     private void setupRecyclerView() {
