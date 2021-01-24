@@ -86,7 +86,7 @@ public class GumtreeDownloader extends AbstractDownloader {
     private String getPriceString(Element offerElement) {
         String priceString;
         try{
-            priceString = offerElement.getElementsByClass("amount").first().html();
+            priceString = offerElement.getElementsByClass("ad-price").first().html();
         } catch(Exception e){
             priceString = null;
         }
