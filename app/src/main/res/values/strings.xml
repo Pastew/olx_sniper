@@ -7,6 +7,8 @@
     <string name="tab_text_2">Wyszukiwania</string>
     <string name="tab_text_3">Ustawienia</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="channel_name">sniper_notification_channel</string>
+    <string name="channel_description">Sniper notification channel</string>
 
     <string-array name="states">
         <item>Używane</item>

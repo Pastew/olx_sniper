@@ -28,7 +28,7 @@ import com.firebase.jobdispatcher.Trigger;
 import com.pastew.olxsniper.Globals;
 import com.pastew.olxsniper.R;
 import com.pastew.olxsniper.SharedPrefsManager;
-import com.pastew.olxsniper.UpdaterJobService;
+import com.pastew.olxsniper.OLXSniperJobService;
 import com.pastew.olxsniper.Utils;
 import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.db.Search;
@@ -114,8 +114,8 @@ public class TabResults extends Fragment implements OfferRecyclerItemTouchHelper
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
         dispatcher.cancelAll();
         Job myJob = dispatcher.newJobBuilder()
-                .setService(UpdaterJobService.class)
-                .setTag(UpdaterJobService.class.getSimpleName())
+                .setService(OLXSniperJobService.class)
+                .setTag(OLXSniperJobService.class.getSimpleName())
                 .setRecurring(true)
                 .setTrigger(Trigger.executionWindow(updaterDelayInSeconds, updaterDelayInSeconds + 1))
                 .setLifetime(Lifetime.FOREVER)

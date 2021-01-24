@@ -1,5 +1,6 @@
 package com.pastew.olxsniper;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -7,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -22,14 +24,15 @@ import java.util.Date;
 import java.util.List;
 
 
-public class UpdaterJobService extends JobService {
+public class OLXSniperJobService extends JobService {
 
     private final static String TAG = "OLXSniperService";
+    String CHANNEL_ID = "my_channel_01";
 
     private Context context;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("dd HH:mm:ss");
 
-    public UpdaterJobService() {
+    public OLXSniperJobService() {
         context = this;
     }
 
@@ -51,6 +54,7 @@ public class UpdaterJobService extends JobService {
                     //i.putExtra("url", "bleble");
                     context.sendBroadcast(i);
 
+                    createNotificationChannel();
                     createNotification();
                 }
 
@@ -61,11 +65,12 @@ public class UpdaterJobService extends JobService {
     }
 
     private void createNotification() {
+        Log.i(TAG, "createNotification");
         int notificationId = 0;
 
         List<Offer> offersNotSeenByUser = new SniperDatabaseManager(context).getOffersNotSeenByUserAndNotRemoved();
+        Log.i(TAG, "offersNotSeenByUser count = " + offersNotSeenByUser.size());
         // The id of the channel.
-        String CHANNEL_ID = "my_channel_01";
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this, CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_launch_black_24dp)
@@ -103,6 +108,22 @@ public class UpdaterJobService extends JobService {
         // notification. For example, to cancel the notification, you can pass its ID
         // number to NotificationManager.cancel().
         mNotificationManager.notify(notificationId, builder.build());
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     @Override
