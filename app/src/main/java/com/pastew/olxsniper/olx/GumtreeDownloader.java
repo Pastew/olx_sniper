@@ -69,7 +69,7 @@ public class GumtreeDownloader extends AbstractDownloader {
                     .getElementsByClass("category-location").first()
                     .getElementsByTag("span").first().html();
 
-
+            city = city.replace("&nbsp;"," ");
 
             Offer o = new Offer(title, Utils.parsePrice(priceString), link, city);
 
