@@ -3,6 +3,7 @@ package com.pastew.olxsniper.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -55,6 +56,7 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public OffersAdapter(Context mContext, List<Offer> offerList) {
+        sniperDatabaseManager = new SniperDatabaseManager(mContext);
         this.context = mContext;
         this.offerList = offerList;
     }
@@ -112,9 +114,17 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
                 i.setData(Uri.parse(holder.linkImageView.getTag().toString()));
                 context.startActivity(i);
                 offer.visited = true;
+                new SetVisitedFlagTaskTrue().execute(offer);
                 notifyItemChanged(p);
             }
         });
+    }
+
+    public class SetVisitedFlagTaskTrue extends AsyncTask<Offer, Void, Void> {
+        protected Void doInBackground(Offer... offers) {
+            sniperDatabaseManager.setVisitedFlag(offers[0], true);
+            return null;
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

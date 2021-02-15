@@ -289,13 +289,6 @@ public class TabResults extends Fragment implements OfferRecyclerItemTouchHelper
         }
     }
 
-    public class SetVisitedFlagTaskTrue extends AsyncTask<Offer, Void, Void> {
-        protected Void doInBackground(Offer... offers) {
-            sniperDatabaseManager.setVisitedFlag(offers[0], true);
-            return null;
-        }
-    }
-
     private class DatabaseUpdateBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
