@@ -14,8 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pastew.olxsniper.R;
-import com.pastew.olxsniper.Utils;
 import com.pastew.olxsniper.db.Offer;
+import com.pastew.olxsniper.db.SniperDatabaseManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,6 +24,7 @@ import java.util.List;
 public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder> {
     private final Context context;
     private List<Offer> offerList;
+    private SniperDatabaseManager sniperDatabaseManager;
 
 
     // Provide a reference to the views for each data item
@@ -49,25 +50,6 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
             addedDateTextView = v.findViewById(R.id.dateTextView);
             cardView = v.findViewById(R.id.cardView);
             this.c = context;
-
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int p=getLayoutPosition();
-                    System.out.println("click: "+p);
-                    Toast.makeText(c, "Click", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            cardView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    int p=getLayoutPosition();
-                    System.out.println("LongClick: "+p);
-                    Toast.makeText(c, "Long Click", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-            });
         }
     }
 
@@ -92,10 +74,10 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        Offer offer = offerList.get(position);
+        final Offer offer = offerList.get(position);
 
         holder.titleTextView.setText(offer.title);
         holder.priceTextView.setText(offer.price);
@@ -116,14 +98,23 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
             }
         });
 
-        boolean wasSeenByUser = Utils.checkIfOfferWasSeenByUser(context, offer);
-        if (wasSeenByUser) {
-            //holder.cardView.setCardBackgroundColor(
-            //        context.getResources().getColor(R.color.offerWasSeenColor));
-            TextViewCompat.setTextAppearance(holder.titleTextView, R.style.titleSeenByUser);
+        if (offer.visited) {
+            TextViewCompat.setTextAppearance(holder.titleTextView, R.style.titleVisited);
         } else{
-            TextViewCompat.setTextAppearance(holder.titleTextView, R.style.titleNotSeenByUser);
+            TextViewCompat.setTextAppearance(holder.titleTextView, R.style.titleNotVisited);
         }
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int p=holder.getAdapterPosition();
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(holder.linkImageView.getTag().toString()));
+                context.startActivity(i);
+                offer.visited = true;
+                notifyItemChanged(p);
+            }
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -145,5 +136,4 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
         // notify item added by position
         notifyItemInserted(position);
     }
-
 }

@@ -232,16 +232,6 @@ public class TabResults extends Fragment implements OfferRecyclerItemTouchHelper
                 //offersAdapter.notifyItemRangeInserted(0, onlyNewOffers.size()); // TODO: check if it works
 
                 notifyUserAboutNewOffers(onlyNewOffers);
-            } else {
-                Snackbar snackbar = Snackbar
-                        .make(getActivity().findViewById(R.id.main_content), String.format("Nie ma nowych ofert."), Snackbar.LENGTH_LONG)
-                        .setAction("Nie klikaj!", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Toast.makeText(context, "Miałeś nie klikać!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                snackbar.show();
             }
         }
     }
@@ -266,8 +256,6 @@ public class TabResults extends Fragment implements OfferRecyclerItemTouchHelper
             ((Button) view.findViewById(R.id.refreshDatabaseButton)).setEnabled(true);
         }
     }
-
-
 
     private class SetRemovedFlagTaskTrueForOffers extends AsyncTask<List<Offer>, Void, Void> {
         protected Void doInBackground(List<Offer>... offers) {
@@ -297,6 +285,13 @@ public class TabResults extends Fragment implements OfferRecyclerItemTouchHelper
     private class SetRemovedFlagTaskFalse extends AsyncTask<Offer, Void, Void> {
         protected Void doInBackground(Offer... offers) {
             sniperDatabaseManager.setRemovedFlag(offers[0], false);
+            return null;
+        }
+    }
+
+    public class SetVisitedFlagTaskTrue extends AsyncTask<Offer, Void, Void> {
+        protected Void doInBackground(Offer... offers) {
+            sniperDatabaseManager.setVisitedFlag(offers[0], true);
             return null;
         }
     }

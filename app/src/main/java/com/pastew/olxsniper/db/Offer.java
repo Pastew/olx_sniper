@@ -20,6 +20,7 @@ public class Offer {
     public long date;
     public boolean promoted;
     public boolean removed;
+    public boolean visited;
 
     public Offer(String title, String price, String link, String city) {
         this.title = title;
@@ -29,6 +30,7 @@ public class Offer {
         this.date = System.currentTimeMillis();
         this.promoted = link.contains("promoted");
         this.removed = false;
+        this.visited = false;
     }
 
     public boolean isTheSameOffer(@NonNull Offer o) {
@@ -39,6 +41,7 @@ public class Offer {
 
     @Override
     public String toString() {
-        return String.format("%s, %s, %s, %s, %s", title, price, city, link, new Date(date));
+        String visitedText = this.visited ? "visited" : "not visited";
+        return String.format("%s, %s, %s, %s, %s, (%s)", title, price, city, link, new Date(date), visitedText);
     }
 }

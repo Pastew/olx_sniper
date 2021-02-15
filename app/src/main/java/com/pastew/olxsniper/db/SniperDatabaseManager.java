@@ -1,7 +1,6 @@
 package com.pastew.olxsniper.db;
 
 import android.arch.persistence.room.OnConflictStrategy;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 
 import com.pastew.olxsniper.SharedPrefsManager;
@@ -36,6 +35,11 @@ public class SniperDatabaseManager {
             offer.removed = removed;
             sniperDatabase.getOfferDao().update(offer);
         }
+    }
+
+    public void setVisitedFlag(Offer offer, boolean flagValue) {
+        offer.visited = flagValue;
+        sniperDatabase.getOfferDao().update(offer);
     }
 
     public List<Offer> getOffersNotSeenByUserAndNotRemoved() {
