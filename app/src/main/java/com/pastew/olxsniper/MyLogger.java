@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class MyLogger {
-    private static final MyLogger inst = new MyLogger();
     public static final String LOG_FILENAME = "mylog.txt";
     public static final String LOG = "SniperLog";
     private static FileOutputStream outputStream;
@@ -32,16 +31,20 @@ public class MyLogger {
     }
 
     public static void i(String str){
-        if(context == null)
+        if(context == null) {
             Log.e("MyLogger", "MyLogger: context is null");
+            return;
+        }
 
         Log.i(LOG, str);
         logToFile(context, "I: " + str);
     }
 
     public static void e(String str){
-        if(context == null)
+        if(context == null){
             Log.e(LOG, "MyLogger: context is null");
+            return;
+        }
 
         Log.e("MyLogger", str);
         logToFile(context, "E: " + str);
