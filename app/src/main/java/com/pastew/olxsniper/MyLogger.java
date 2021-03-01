@@ -13,14 +13,15 @@ import java.io.InputStreamReader;
 public class MyLogger {
     private static final MyLogger inst = new MyLogger();
     public static final String LOG_FILENAME = "mylog.txt";
-    public static final String MY_LOG_TAG = "MyLog";
+    public static final String LOG = "SniperLog";
     private static FileOutputStream outputStream;
+    private static Context context;
 
     private MyLogger() {
         super();
     }
 
-    public synchronized void logToFile(Context context, String str) {
+    private static synchronized void logToFile(Context context, String str) {
         try {
             outputStream = context.openFileOutput("mylog.txt", Context.MODE_PRIVATE | Context.MODE_APPEND);
             outputStream.write(str.getBytes());
@@ -30,8 +31,24 @@ public class MyLogger {
         }
     }
 
-    public static MyLogger getInstance() {
-        return inst;
+    public static void i(String str){
+        if(context == null)
+            Log.e("MyLogger", "MyLogger: context is null");
+
+        Log.i(LOG, str);
+        logToFile(context, "I: " + str);
+    }
+
+    public static void e(String str){
+        if(context == null)
+            Log.e(LOG, "MyLogger: context is null");
+
+        Log.e("MyLogger", str);
+        logToFile(context, "E: " + str);
+    }
+
+    public static void initialize(Context applicationContext) {
+        context = applicationContext;
     }
 
     public void showLogsInDebugWindow(Context context) {
@@ -41,7 +58,7 @@ public class MyLogger {
             BufferedReader bufferedReader = new BufferedReader(isr);
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                Log.i(MY_LOG_TAG, line);
+                Log.i(LOG, line);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -49,5 +66,4 @@ public class MyLogger {
             e.printStackTrace();
         }
     }
-
 }

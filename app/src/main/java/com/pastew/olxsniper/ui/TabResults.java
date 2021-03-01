@@ -26,6 +26,7 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
 import com.pastew.olxsniper.Globals;
+import com.pastew.olxsniper.MyLogger;
 import com.pastew.olxsniper.R;
 import com.pastew.olxsniper.SharedPrefsManager;
 import com.pastew.olxsniper.OLXSniperJobService;
@@ -293,7 +294,7 @@ public class TabResults extends Fragment implements OfferRecyclerItemTouchHelper
         @Override
         public void onReceive(Context context, Intent intent) {
             new DownloadOffersFromDatabaseTask().execute();
-            Log.i(Globals.TAG, "broadcast received");
+            MyLogger.i("broadcast received");
         }
     }
 }

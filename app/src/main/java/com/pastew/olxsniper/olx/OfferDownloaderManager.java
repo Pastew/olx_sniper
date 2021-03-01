@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.pastew.olxsniper.Globals;
+import com.pastew.olxsniper.MyLogger;
 import com.pastew.olxsniper.Utils;
 import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.db.Search;
@@ -40,13 +41,13 @@ public class OfferDownloaderManager {
     public List<Offer> downloadNewOffersAndSaveToDatabase() {
         List<Search> searches = sniperDatabaseManager.getAllSearches();
         if (searches.size() == 0) {
-            Log.i(TAG, "No searches. Nothing to do...");
+            MyLogger.i("No searches. Nothing to do...");
             return new ArrayList<>();
         }
 
         List<Offer> newOfferList = new ArrayList<>();
         for (Search search : searches) {
-            Log.i(TAG, String.format("Downloading from: %s", search.getUrl()));
+            MyLogger.i(String.format("Downloading from: %s", search.getUrl()));
 
             for (AbstractDownloader webDownloader : webDownloaders) {
                 if (webDownloader.canHandleLink(search.getUrl()))
@@ -54,22 +55,22 @@ public class OfferDownloaderManager {
             }
 
         }
-        Log.i(TAG, String.format("Downloaded: %d", newOfferList.size()));
+        MyLogger.i(String.format("Downloaded: %d", newOfferList.size()));
 
         List<Offer> offerList = sniperDatabaseManager.getAllOffers();
-        Log.i(TAG, String.format("From database: %d", offerList.size()));
+        MyLogger.i(String.format("From database: %d", offerList.size()));
         List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
-        Log.i(TAG, String.format("Only new: %d", onlyNewOffers.size()));
+        MyLogger.i(String.format("Only new: %d", onlyNewOffers.size()));
 
         if (onlyNewOffers.size() > 0) {
-            Log.i(TAG, "Only new > 0");
+            MyLogger.i("Only new > 0");
             sniperDatabaseManager.insertOffers(onlyNewOffers);
-            Log.i(TAG, "Only new > 0 -> Afer inserting to DB");
+            MyLogger.i("Only new > 0 -> Afer inserting to DB");
         } else {
-            Log.i(TAG, "Checked Web for new offers, but nothing new found");
+            MyLogger.i("Checked Web for new offers, but nothing new found");
         }
 
-        Log.i(TAG, "sniperDatabase.close()");
+        MyLogger.i("sniperDatabase.close()");
 
         //sniperDatabase.close();
 

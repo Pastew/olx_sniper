@@ -38,10 +38,8 @@ public class OLXSniperJobService extends JobService {
 
     @Override
     public boolean onStartJob(final JobParameters params) {
-        Log.i(TAG, "onStartJob");
-
         String logMessage = "onStartJob: " + sdf.format(new Date(System.currentTimeMillis())) + "\n";
-        MyLogger.getInstance().logToFile(context, logMessage);
+        MyLogger.i(logMessage);
         //Toast.makeText(this, "start job", Toast.LENGTH_SHORT).show();
 
         new Thread(new Runnable() {
@@ -65,11 +63,11 @@ public class OLXSniperJobService extends JobService {
     }
 
     private void createNotification() {
-        Log.i(TAG, "createNotification");
+        MyLogger.i("createNotification");
         int notificationId = 0;
 
         List<Offer> offersNotSeenByUser = new SniperDatabaseManager(context).getOffersNotSeenByUserAndNotRemoved();
-        Log.i(TAG, "offersNotSeenByUser count = " + offersNotSeenByUser.size());
+        MyLogger.i("offersNotSeenByUser count = " + offersNotSeenByUser.size());
         // The id of the channel.
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this, CHANNEL_ID)
@@ -128,7 +126,7 @@ public class OLXSniperJobService extends JobService {
 
     @Override
     public boolean onStopJob(JobParameters job) {
-        Log.i(TAG, "onStopJob");
+        MyLogger.i("onStopJob");
         Toast.makeText(this, "stop job", Toast.LENGTH_SHORT).show();
         return true; // Answers the question: "Should this job be retried?"
     }

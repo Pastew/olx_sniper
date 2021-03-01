@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.pastew.olxsniper.MyLogger;
 import com.pastew.olxsniper.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyLogger.initialize(getApplicationContext());
         setContentView(R.layout.activity_main);
 
         // Create the adapter that will return a fragment for each of the three
