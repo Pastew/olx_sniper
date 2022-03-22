@@ -21,6 +21,8 @@ public class MyLogger {
     }
 
     private static synchronized void logToFile(Context context, String str) {
+        str += "\n";
+
         try {
             outputStream = context.openFileOutput("mylog.txt", Context.MODE_PRIVATE | Context.MODE_APPEND);
             outputStream.write(str.getBytes());
@@ -54,19 +56,25 @@ public class MyLogger {
         context = applicationContext;
     }
 
-    public void showLogsInDebugWindow(Context context) {
+    public static String getLogs() {
+
+        StringBuilder sb = new StringBuilder();
+
         try {
             FileInputStream fileInputStream = context.openFileInput(LOG_FILENAME);
             InputStreamReader isr = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(isr);
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                Log.i(LOG, line);
+                sb.append(line);
+                sb.append("\n");
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return sb.toString();
     }
 }

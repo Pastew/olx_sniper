@@ -1,6 +1,7 @@
 package com.pastew.olxsniper.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -39,6 +40,14 @@ public class TabSettings extends Fragment {
             @Override
             public void onClick(View v) {
                 new TabSettings.DeleteAllSearchesFromDatabase().execute();
+            }
+        });
+
+        view.findViewById(R.id.logsButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, LogsActivity.class);
+                startActivity(intent);
             }
         });
     }

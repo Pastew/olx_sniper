@@ -38,7 +38,7 @@ public class OLXSniperJobService extends JobService {
 
     @Override
     public boolean onStartJob(final JobParameters params) {
-        String logMessage = "onStartJob: " + sdf.format(new Date(System.currentTimeMillis())) + "\n";
+        String logMessage = "\n-----\nonStartJob: " + sdf.format(new Date(System.currentTimeMillis()));
         MyLogger.i(logMessage);
         //Toast.makeText(this, "start job", Toast.LENGTH_SHORT).show();
 

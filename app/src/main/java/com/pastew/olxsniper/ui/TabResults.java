@@ -166,26 +166,6 @@ public class TabResults extends Fragment implements OfferRecyclerItemTouchHelper
         });
     }
 
-    private void notifyUserAboutNewOffers(List<Offer> onlyNewOffers) {
-        int offersNotSeenByUser = 0;
-        for (Offer offer : onlyNewOffers)
-            if (!Utils.checkIfOfferWasSeenByUser(context, offer))
-                ++offersNotSeenByUser;
-
-        if (offersNotSeenByUser == 0)
-            return;
-
-        Snackbar snackbar = Snackbar
-                .make(getActivity().findViewById(R.id.main_content), String.format("%d nowe oferty!", onlyNewOffers.size()), Snackbar.LENGTH_LONG)
-                .setAction("Nie klikaj!", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(context, "Miałeś nie klikać!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-        snackbar.show();
-    }
-
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof OffersAdapter.ViewHolder) {
@@ -231,8 +211,6 @@ public class TabResults extends Fragment implements OfferRecyclerItemTouchHelper
                 offerList.addAll(0, onlyNewOffers);
                 offersAdapter.notifyDataSetChanged();
                 //offersAdapter.notifyItemRangeInserted(0, onlyNewOffers.size()); // TODO: check if it works
-
-                notifyUserAboutNewOffers(onlyNewOffers);
             }
         }
     }

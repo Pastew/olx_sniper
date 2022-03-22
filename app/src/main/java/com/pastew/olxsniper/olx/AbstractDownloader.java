@@ -8,7 +8,7 @@ import java.util.List;
 
 abstract class AbstractDownloader {
 
-    static final boolean IGNORE_PROMOTED_OFFERS = true;
+    static final boolean IGNORE_PROMOTED_OFFERS = false;
     //TODO: move this to user prefs.
     static final String TAG = Globals.TAG;
 
