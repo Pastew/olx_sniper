@@ -1,4 +1,4 @@
-package com.pastew.olxsniper.olx;
+package com.pastew.olxsniper.downloaders;
 
 import android.util.Log;
 

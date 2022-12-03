@@ -1,9 +1,8 @@
-package com.pastew.olxsniper.olx;
+package com.pastew.olxsniper.downloaders;
 
 import android.util.Log;
 
 import com.pastew.olxsniper.Globals;
-import com.pastew.olxsniper.MyLogger;
 import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.Utils;
 
@@ -19,12 +18,8 @@ import java.util.List;
 
 public class OlxDownloader extends AbstractDownloader {
 
-    final String TAG = Globals.TAG;
-    
     @Override
     public List<Offer> downloadOffersFromWeb(String url) {
-        MyLogger.e(String.format("Processing %s", url));
-
         if (!canHandleLink(url)) {
             throw new InputMismatchException();
         }

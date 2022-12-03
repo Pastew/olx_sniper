@@ -1,8 +1,7 @@
-package com.pastew.olxsniper.olx;
+package com.pastew.olxsniper.downloaders;
 
 
 import android.content.Context;
-import android.util.Log;
 
 import com.pastew.olxsniper.Globals;
 import com.pastew.olxsniper.MyLogger;
@@ -16,22 +15,22 @@ import java.util.List;
 
 public class OfferDownloaderManager {
 
-    private static final String TAG = Globals.TAG;
     private static OfferDownloaderManager instance = null;
-    private SniperDatabaseManager sniperDatabaseManager;
+    private SniperDatabaseManager sniperDatabaseManager; // TODO: Refactor, move this to outer scope
 
     List<AbstractDownloader> webDownloaders;
 
-    private OfferDownloaderManager(Context context){
-        webDownloaders = new ArrayList<>();
+    private OfferDownloaderManager(Context context) {
+        webDownloaders = new ArrayList<>(); // TODO: Refactor, This is stupid
         webDownloaders.add(new OlxDownloader());
         webDownloaders.add(new GumtreeDownloader());
+        webDownloaders.add(new VintedDownloader());
+        webDownloaders.add(new AllegroDownloader());
 
         sniperDatabaseManager = new SniperDatabaseManager(context);
-
     }
 
-    public static OfferDownloaderManager getInstance(Context context){
+    public static OfferDownloaderManager getInstance(Context context) {
         if (instance == null)
             instance = new OfferDownloaderManager(context);
 
@@ -47,32 +46,33 @@ public class OfferDownloaderManager {
 
         List<Offer> newOfferList = new ArrayList<>();
         for (Search search : searches) {
-            MyLogger.i(String.format("Downloading from: %s", search.getUrl()));
-
+            String url = search.getUrl();
+            MyLogger.i(String.format("Downloading from: %s", url));
             for (AbstractDownloader webDownloader : webDownloaders) {
-                if (webDownloader.canHandleLink(search.getUrl()))
-                    newOfferList.addAll(webDownloader.downloadOffersFromWeb(search.getUrl()));
+                if (webDownloader.canHandleLink(url)) {
+                    newOfferList.addAll(webDownloader.downloadOffersFromWeb(url));
+                }
             }
-
         }
+
         MyLogger.i(String.format("Downloaded: %d", newOfferList.size()));
 
         List<Offer> offerList = sniperDatabaseManager.getAllOffers();
         MyLogger.i(String.format("From database: %d", offerList.size()));
+
         List<Offer> onlyNewOffers = Utils.getOnlyNewOffers(offerList, newOfferList);
         MyLogger.i(String.format("Only new: %d", onlyNewOffers.size()));
 
         if (onlyNewOffers.size() > 0) {
             MyLogger.i("Only new > 0");
             sniperDatabaseManager.insertOffers(onlyNewOffers);
-            MyLogger.i("Only new > 0 -> Afer inserting to DB");
+            MyLogger.i("Only new > 0 -> After inserting to DB");
         } else {
             MyLogger.i("Checked Web for new offers, but nothing new found");
         }
 
-        MyLogger.i("sniperDatabase.close()");
-
-        //sniperDatabase.close();
+        // MyLogger.i("sniperDatabase.close()");
+        // sniperDatabase.close(); // TODO: Should I close it?
 
         return onlyNewOffers;
     }

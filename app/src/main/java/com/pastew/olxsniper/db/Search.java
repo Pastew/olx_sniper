@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 @Entity(primaryKeys = {"url"})
 public class Search {
 
-    private static final String BASE_LINK = "https://www.olx.pl/";
-
     @NonNull
     public String url;
 
