@@ -6,7 +6,6 @@ import com.pastew.olxsniper.Globals;
 import com.pastew.olxsniper.Utils;
 import com.pastew.olxsniper.db.Offer;
 
-import org.jsoup.Jsoup;
 import org.jsoup.UncheckedIOException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -28,7 +27,7 @@ public class GumtreeDownloader extends AbstractDownloader {
 
         Document doc;
         try {
-            doc = Jsoup.connect(url).get();
+            doc = WebDownloader.downloadDocumentJsoup(url);
         } catch (IOException e) {
             Log.e(Globals.TAG, "IOException, maybe SocketTimeoutException");
             e.printStackTrace();

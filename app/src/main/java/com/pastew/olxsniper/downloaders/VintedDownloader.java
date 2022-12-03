@@ -15,10 +15,6 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 public class VintedDownloader extends AbstractDownloader {
 
     @Override
@@ -30,7 +26,7 @@ public class VintedDownloader extends AbstractDownloader {
         List<Offer> result = new ArrayList<>();
         String html;
         try {
-            html = okHttpRequest(url);
+            html = WebDownloader.okHttpRequest(url);
         } catch (IOException e) {
             Log.e(TAG, "Can't download with okHttpRequest");
             e.printStackTrace();
@@ -70,16 +66,7 @@ public class VintedDownloader extends AbstractDownloader {
         return result;
     }
 
-    String okHttpRequest(String url) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
 
-        try (Response response = client.newCall(request).execute()) {
-            return response.body().string();
-        }
-    }
 
     // Example link: "https://vinted.pl/kobiety/akcesoria/inne-akcesoria-i-bizuteria/200444610-warcraft-ostatni-straznik"
     private String convertLinkToTitle(String link) {

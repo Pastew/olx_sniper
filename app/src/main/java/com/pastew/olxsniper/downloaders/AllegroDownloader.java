@@ -24,17 +24,19 @@ public class AllegroDownloader extends AbstractDownloader {
         }
 
         List<Offer> result = new ArrayList<>();
-
-        Document doc;
+        String html;
         try {
-            doc = Jsoup.connect(url).get();
+            html = WebDownloader.okHttpRequest(url);
         } catch (IOException e) {
-            Log.e(Globals.TAG, "IOException, maybe SocketTimeoutException");
+            Log.e(TAG, "Can't download with okHttpRequest");
             e.printStackTrace();
             return result;
         }
 
-        Elements elements = doc.getElementsByClass("fa72b28");
+        Document doc = Jsoup.parse(html);
+
+
+        Elements elements = doc.getElementsByAttribute("article");
 
         if (elements == null) {
             Log.e(Globals.TAG, "elemens is null. ");

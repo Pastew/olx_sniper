@@ -2,11 +2,9 @@ package com.pastew.olxsniper.downloaders;
 
 import android.util.Log;
 
-import com.pastew.olxsniper.Globals;
 import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.Utils;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -28,7 +26,7 @@ public class OlxDownloader extends AbstractDownloader {
 
         Document doc;
         try {
-            doc = Jsoup.connect(url).get();
+            doc = WebDownloader.downloadDocumentJsoup(url);
         } catch (IOException e) {
             Log.e(TAG, "IOException, maybe SocketTimeoutException");
             e.printStackTrace();
