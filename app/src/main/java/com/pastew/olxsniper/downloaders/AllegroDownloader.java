@@ -36,7 +36,7 @@ public class AllegroDownloader extends AbstractDownloader {
         Document doc = Jsoup.parse(html);
 
 
-        Elements elements = doc.getElementsByAttribute("article");
+        Elements elements = doc.getElementsByTag("article");
 
         if (elements == null) {
             Log.e(Globals.TAG, "elemens is null. ");
@@ -48,7 +48,7 @@ public class AllegroDownloader extends AbstractDownloader {
                 Log.e(Globals.TAG, "offerElement is null. ");
                 continue;
             }
-            String title = offerElement.getElementsByTag("a").first().html();
+            String title = offerElement.getElementsByTag("a").first().getElementsByTag("img").attr("alt");
             String link = offerElement.getElementsByTag("a").first().attr("href");
 
             //Element e = offerElement.getElementsByClass("e82f23a").first();
