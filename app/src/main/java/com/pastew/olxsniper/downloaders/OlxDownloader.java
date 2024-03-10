@@ -45,7 +45,7 @@ public class OlxDownloader extends AbstractDownloader {
             Document doc = Jsoup.parse(page.asXml());
 
             // Continue with your existing JSoup-based code
-            Elements elements = doc.getElementsByClass("css-1apmciz");
+            Elements elements = doc.getElementsByAttributeValue("data-cy", "l-card");
 
             if (elements == null) {
                 Log.e(TAG, "elements is null. ");
@@ -66,10 +66,11 @@ public class OlxDownloader extends AbstractDownloader {
 
                 String priceString = priceElement.text();
 
-                String title = h3.getElementsByTag("strong").first().html();
+                String title = offerElement.getElementsByClass("css-16v5mdi").text();
 
-                String link = h3.getElementsByTag("a").first().attr("href");
-                String city = offerElement.getElementsByTag("tr").get(1).getElementsByTag("p").get(0).getElementsByTag("span").first().text();
+                String link = offerElement.getElementsByAttribute("href").first().attr("href");
+                String city = "loll";
+//                String city = offerElement.getElementsByTag("tr").get(1).getElementsByTag("p").get(0).getElementsByTag("span").first().text();
 
                 Offer o = new Offer(title, Utils.parsePrice(priceString), link, city);
 
