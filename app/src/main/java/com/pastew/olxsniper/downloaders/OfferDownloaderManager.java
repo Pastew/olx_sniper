@@ -23,8 +23,6 @@ public class OfferDownloaderManager {
     private OfferDownloaderManager(Context context) {
         webDownloaders = new ArrayList<>(); // TODO: Refactor, This is stupid
         webDownloaders.add(new OlxDownloader());
-        webDownloaders.add(new VintedDownloader());
-        webDownloaders.add(new AllegroDownloader());
 
         sniperDatabaseManager = new SniperDatabaseManager(context);
     }
