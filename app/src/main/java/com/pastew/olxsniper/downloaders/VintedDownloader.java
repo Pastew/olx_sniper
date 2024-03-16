@@ -34,7 +34,7 @@ public class VintedDownloader extends AbstractDownloader {
         try {
             reader = new JSONObject(jsonStr);
             JSONArray byId = reader.getJSONObject("catalogItems").getJSONArray("byId"); // tu sie cos sypie TODO
-            for(int i = 0; i < byId.length(); ++i) {
+            for (int i = 0; i < byId.length(); ++i) {
                 JSONObject offerItem = byId.getJSONObject(i);
 
             }
@@ -76,7 +76,7 @@ public class VintedDownloader extends AbstractDownloader {
     }
 
     @Override
-    boolean canHandleLink(String url) {
-        return url.contains("vinted.pl");
+    String getLink() {
+        return "vinted.pl";
     }
 }

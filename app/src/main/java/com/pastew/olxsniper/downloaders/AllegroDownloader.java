@@ -69,7 +69,7 @@ public class AllegroDownloader extends AbstractDownloader {
     }
 
     @Override
-    boolean canHandleLink(String url) {
-        return url.contains("allegro.pl");
+    String getLink() {
+        return "allegro.pl";
     }
 }

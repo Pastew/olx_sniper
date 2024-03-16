@@ -15,5 +15,9 @@ abstract class AbstractDownloader {
     abstract public List<Offer> getOffersFromUrl(String url);
     abstract public List<Offer> getOffersFromHtml(String html);
 
-    abstract boolean canHandleLink(String url);
+    abstract String getLink();
+
+    boolean canHandleLink(String url) {
+        return url.contains(getLink());
+    }
 }
