@@ -18,24 +18,26 @@ import java.util.List;
 public class OlxDownloader extends AbstractDownloader {
 
     @Override
-    public List<Offer> downloadOffersFromWeb(String url) {
+    public List<Offer> getOffersFromUrl(String url) {
         if (!canHandleLink(url)) {
             throw new InputMismatchException();
         }
 
-        List<Offer> result = new ArrayList<>();
+        String html = WebDownloader.downloadHtml(url);
+        return getOffersFromHtml(html);
+    }
 
-        Document doc;
-        try {
-            String html = WebDownloader.downloadHtml(url);
-            doc = Jsoup.parse(html);
-        } catch (IOException e) {
-            Log.e(TAG, "IOException, maybe SocketTimeoutException");
-            e.printStackTrace();
-            return result;
+    @Override
+    public List<Offer> getOffersFromHtml(String html) {
+        if (html == null || html.isEmpty()){
+            Log.e(TAG, "html is null or empty, can't parse it. Returning empty list");
+            return new ArrayList<>();
         }
 
+        Document doc = Jsoup.parse(html);
         Elements elements = doc.getElementsByAttributeValue("data-cy", "l-card");
+
+        List<Offer> result = new ArrayList<>();
 
         if (elements == null) {
             Log.e(TAG, "elements is null. ");

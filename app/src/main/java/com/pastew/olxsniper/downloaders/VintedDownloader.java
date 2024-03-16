@@ -18,21 +18,15 @@ import java.util.List;
 public class VintedDownloader extends AbstractDownloader {
 
     @Override
-    public List<Offer> downloadOffersFromWeb(String url) {
+    public List<Offer> getOffersFromUrl(String url) {
         if (!canHandleLink(url)) {
             throw new InputMismatchException();
         }
 
         List<Offer> result = new ArrayList<>();
         String html;
-        try {
-            html = WebDownloader.downloadHtml(url);
-        } catch (IOException e) {
-            Log.e(TAG, "Can't download with okHttpRequest");
-            e.printStackTrace();
-            return result;
-        }
-
+        html = WebDownloader.downloadHtml(url);
+        assert html != null;
         Document doc = Jsoup.parse(html);
 
         String jsonStr = doc.getElementsByAttribute("data-js-react-on-rails-store").last().html();
@@ -66,6 +60,10 @@ public class VintedDownloader extends AbstractDownloader {
         return result;
     }
 
+    @Override
+    public List<Offer> getOffersFromHtml(String html) {
+        return null;
+    }
 
 
     // Example link: "https://vinted.pl/kobiety/akcesoria/inne-akcesoria-i-bizuteria/200444610-warcraft-ostatni-straznik"

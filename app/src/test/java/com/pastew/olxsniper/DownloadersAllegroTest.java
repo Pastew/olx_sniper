@@ -14,7 +14,7 @@ public class DownloadersAllegroTest {
         String URL_ALLEGRO_GTX = "https://allegro.pl/kategoria/obraz-i-grafika-karty-graficzne-257236?string=gtx%201060&order=n&stan=używane";
 
         AllegroDownloader allegroDownloader = new AllegroDownloader();
-        List<Offer> offerList = allegroDownloader.downloadOffersFromWeb(URL_ALLEGRO_GTX);
+        List<Offer> offerList = allegroDownloader.getOffersFromUrl(URL_ALLEGRO_GTX);
 
         assert !offerList.isEmpty();
         for (Offer o : offerList) {
