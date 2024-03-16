@@ -5,13 +5,8 @@ import com.pastew.olxsniper.downloaders.OlxDownloader;
 
 import org.junit.Test;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Objects;
 
 public class DownloadersOlxTest {
 
@@ -34,8 +29,8 @@ public class DownloadersOlxTest {
 
     @Test
     public void olxDownloadFromHtmlTest() throws IOException {
-        String filepath = "olxExampleIphone.html";
-        String html = Helpers.readFromFile(getClass(), filepath);
+        String fileName = "olxExampleIphone.html";
+        String html = Helpers.readFromFile(fileName);
 
         OlxDownloader olxDownloader = new OlxDownloader();
         List<Offer> offerList = olxDownloader.getOffersFromHtml(html);

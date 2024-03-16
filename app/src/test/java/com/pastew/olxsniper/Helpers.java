@@ -5,11 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 public class Helpers {
-    public static String readFromFile(Class runtimeClass, String filePath) throws IOException {
-        InputStream inputStream = Objects.requireNonNull(runtimeClass.getClassLoader()).getResourceAsStream(filePath);
+    public static String readFromFile(String fileName) throws IOException {
+        ClassLoader classLoader = Helpers.class.getClassLoader();
+        assert classLoader != null;
+        InputStream inputStream = classLoader.getResourceAsStream(fileName);
         StringBuilder textBuilder = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader
                 (inputStream, StandardCharsets.UTF_8))) {
