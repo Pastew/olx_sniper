@@ -41,7 +41,7 @@ public class Offer {
 
     @Override
     public String toString() {
-        String visitedText = this.visited ? "visited" : "not visited";
-        return String.format("%s, %s, %s, %s, %s, (%s)", title, price, city, link, new Date(date), visitedText);
+        String visitedText = this.visited ? "(visited)" : "(not visited)";
+        return String.format("%s, %s, %s, %s, %s, %s", title, price, city, link, new Date(date), visitedText);
     }
 }

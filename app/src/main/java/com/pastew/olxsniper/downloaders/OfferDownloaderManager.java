@@ -48,7 +48,7 @@ public class OfferDownloaderManager {
             MyLogger.i(String.format("Downloading from: %s", url));
             for (AbstractDownloader webDownloader : webDownloaders) {
                 if (webDownloader.canHandleLink(url)) {
-                    newOfferList.addAll(webDownloader.downloadOffersFromWeb(url));
+                    newOfferList.addAll(webDownloader.getOffersFromUrl(url));
                 }
             }
         }

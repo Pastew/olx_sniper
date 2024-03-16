@@ -18,23 +18,16 @@ import java.util.List;
 
 public class AllegroDownloader extends AbstractDownloader {
     @Override
-    public List<Offer> downloadOffersFromWeb(String url) {
+    public List<Offer> getOffersFromUrl(String url) {
         if (!canHandleLink(url)) {
             throw new InputMismatchException();
         }
 
         List<Offer> result = new ArrayList<>();
         String html;
-        try {
-            html = WebDownloader.downloadHtml(url);
-        } catch (IOException e) {
-            Log.e(TAG, "Can't download with okHttpRequest");
-            e.printStackTrace();
-            return result;
-        }
-
+        html = WebDownloader.downloadHtml(url);
+        assert html != null;
         Document doc = Jsoup.parse(html);
-
 
         Elements elements = doc.getElementsByTag("article");
 
@@ -71,7 +64,12 @@ public class AllegroDownloader extends AbstractDownloader {
     }
 
     @Override
-    boolean canHandleLink(String url) {
-        return url.contains("allegro.pl");
+    public List<Offer> getOffersFromHtml(String html) {
+        return null;
+    }
+
+    @Override
+    String getLink() {
+        return "allegro.pl";
     }
 }

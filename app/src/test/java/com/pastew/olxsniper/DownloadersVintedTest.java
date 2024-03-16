@@ -14,7 +14,7 @@ public class DownloadersVintedTest {
         String URL_VINTED_WARCRAFT = "https://www.vinted.pl/ubrania?search_text=warcraft";
 
         VintedDownloader vintedDownloader = new VintedDownloader();
-        List<Offer> offerList = vintedDownloader.downloadOffersFromWeb(URL_VINTED_WARCRAFT);
+        List<Offer> offerList = vintedDownloader.getOffersFromUrl(URL_VINTED_WARCRAFT);
 
         assert !offerList.isEmpty();
         for (Offer o : offerList) {
