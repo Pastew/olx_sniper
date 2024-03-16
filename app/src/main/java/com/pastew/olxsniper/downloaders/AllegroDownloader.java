@@ -1,4 +1,4 @@
-package com.pastew.olxsniper.olx;
+package com.pastew.olxsniper.downloaders;
 
 import android.util.Log;
 
@@ -24,17 +24,19 @@ public class AllegroDownloader extends AbstractDownloader {
         }
 
         List<Offer> result = new ArrayList<>();
-
-        Document doc;
+        String html;
         try {
-            doc = Jsoup.connect(url).get();
+            html = WebDownloader.downloadHtml(url);
         } catch (IOException e) {
-            Log.e(Globals.TAG, "IOException, maybe SocketTimeoutException");
+            Log.e(TAG, "Can't download with okHttpRequest");
             e.printStackTrace();
             return result;
         }
 
-        Elements elements = doc.getElementsByClass("fa72b28");
+        Document doc = Jsoup.parse(html);
+
+
+        Elements elements = doc.getElementsByTag("article");
 
         if (elements == null) {
             Log.e(Globals.TAG, "elemens is null. ");
@@ -46,7 +48,7 @@ public class AllegroDownloader extends AbstractDownloader {
                 Log.e(Globals.TAG, "offerElement is null. ");
                 continue;
             }
-            String title = offerElement.getElementsByTag("a").first().html();
+            String title = offerElement.getElementsByTag("a").first().getElementsByTag("img").attr("alt");
             String link = offerElement.getElementsByTag("a").first().attr("href");
 
             //Element e = offerElement.getElementsByClass("e82f23a").first();

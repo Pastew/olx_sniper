@@ -1,9 +1,7 @@
-package com.pastew.olxsniper.olx;
+package com.pastew.olxsniper.downloaders;
 
 import android.util.Log;
 
-import com.pastew.olxsniper.Globals;
-import com.pastew.olxsniper.MyLogger;
 import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.Utils;
 
@@ -19,12 +17,8 @@ import java.util.List;
 
 public class OlxDownloader extends AbstractDownloader {
 
-    final String TAG = Globals.TAG;
-    
     @Override
     public List<Offer> downloadOffersFromWeb(String url) {
-        MyLogger.e(String.format("Processing %s", url));
-
         if (!canHandleLink(url)) {
             throw new InputMismatchException();
         }
@@ -33,17 +27,18 @@ public class OlxDownloader extends AbstractDownloader {
 
         Document doc;
         try {
-            doc = Jsoup.connect(url).get();
+            String html = WebDownloader.downloadHtml(url);
+            doc = Jsoup.parse(html);
         } catch (IOException e) {
             Log.e(TAG, "IOException, maybe SocketTimeoutException");
             e.printStackTrace();
             return result;
         }
 
-        Elements elements = doc.getElementsByClass("offer");
+        Elements elements = doc.getElementsByAttributeValue("data-cy", "l-card");
 
         if (elements == null) {
-            Log.e(TAG, "elemens is null. ");
+            Log.e(TAG, "elements is null. ");
             return result;
         }
 
@@ -53,19 +48,19 @@ public class OlxDownloader extends AbstractDownloader {
                 continue;
             }
 
-            Element priceElement = offerElement.getElementsByClass("price").first();
+            Element priceElement = offerElement.getElementsByAttributeValue("data-testid", "ad-price").first();
             if (priceElement == null) {
                 Log.e(TAG, "priceElement is null. ");
                 continue;
             }
 
-            String priceString = priceElement.getElementsByTag("strong").first().html();
+            String priceString = priceElement.text();
 
-            Element h3 = offerElement.getElementsByTag("h3").first();
-            String title = h3.getElementsByTag("strong").first().html();
+            String title = offerElement.getElementsByClass("css-16v5mdi").text();
 
-            String link = h3.getElementsByTag("a").first().attr("href");
-            String city = offerElement.getElementsByTag("tr").get(1).getElementsByTag("p").get(0).getElementsByTag("span").first().text();
+            String link = offerElement.getElementsByAttribute("href").first().attr("href");
+            String city = "loll";
+//                String city = offerElement.getElementsByTag("tr").get(1).getElementsByTag("p").get(0).getElementsByTag("span").first().text();
 
             Offer o = new Offer(title, Utils.parsePrice(priceString), link, city);
 

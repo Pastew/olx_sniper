@@ -10,14 +10,13 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.db.SniperDatabaseManager;
-import com.pastew.olxsniper.olx.OfferDownloaderManager;
+import com.pastew.olxsniper.downloaders.OfferDownloaderManager;
 import com.pastew.olxsniper.ui.MainActivity;
 import java.text.SimpleDateFormat;
 import java.util.Date;

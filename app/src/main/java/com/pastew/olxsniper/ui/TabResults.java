@@ -18,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
@@ -34,7 +33,7 @@ import com.pastew.olxsniper.Utils;
 import com.pastew.olxsniper.db.Offer;
 import com.pastew.olxsniper.db.Search;
 import com.pastew.olxsniper.db.SniperDatabaseManager;
-import com.pastew.olxsniper.olx.OfferDownloaderManager;
+import com.pastew.olxsniper.downloaders.OfferDownloaderManager;
 
 import java.util.ArrayList;
 import java.util.List;
