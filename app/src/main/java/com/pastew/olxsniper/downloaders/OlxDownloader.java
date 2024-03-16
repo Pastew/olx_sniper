@@ -10,7 +10,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -50,19 +49,11 @@ public class OlxDownloader extends AbstractDownloader {
                 continue;
             }
 
-            Element priceElement = offerElement.getElementsByAttributeValue("data-testid", "ad-price").first();
-            if (priceElement == null) {
-                Log.e(TAG, "priceElement is null. ");
-                continue;
-            }
-
-            String priceString = priceElement.text();
-
+            String priceString = offerElement.getElementsByAttributeValue("data-testid", "ad-price").text();
             String title = offerElement.getElementsByClass("css-16v5mdi").text();
-
             String link = offerElement.getElementsByAttribute("href").first().attr("href");
-            String city = "loll";
-//                String city = offerElement.getElementsByTag("tr").get(1).getElementsByTag("p").get(0).getElementsByTag("span").first().text();
+            String locationDate = offerElement.getElementsByAttributeValue("data-testid", "location-date").text(); // Myszków<!-- --> - <!-- -->Odświeżono dnia 13 marca 2024
+            String city = locationDate.split("-")[0].trim();
 
             Offer o = new Offer(title, Utils.parsePrice(priceString), link, city);
 

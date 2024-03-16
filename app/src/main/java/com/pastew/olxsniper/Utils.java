@@ -30,6 +30,7 @@ public class Utils {
         priceString = priceString.replaceAll("zł","");
         priceString = priceString.replaceAll("&nbsp;","");
         priceString = priceString.replaceAll(",",".");
+        priceString = priceString.replaceAll("donegocjacji","");
         return priceString;
     }
 
