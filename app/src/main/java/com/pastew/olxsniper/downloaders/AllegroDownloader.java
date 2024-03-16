@@ -26,7 +26,7 @@ public class AllegroDownloader extends AbstractDownloader {
         List<Offer> result = new ArrayList<>();
         String html;
         try {
-            html = WebDownloader.okHttpRequest(url);
+            html = WebDownloader.downloadHtml(url);
         } catch (IOException e) {
             Log.e(TAG, "Can't download with okHttpRequest");
             e.printStackTrace();

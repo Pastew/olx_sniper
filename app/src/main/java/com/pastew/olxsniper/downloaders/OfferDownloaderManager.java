@@ -3,7 +3,6 @@ package com.pastew.olxsniper.downloaders;
 
 import android.content.Context;
 
-import com.pastew.olxsniper.Globals;
 import com.pastew.olxsniper.MyLogger;
 import com.pastew.olxsniper.Utils;
 import com.pastew.olxsniper.db.Offer;
@@ -23,7 +22,6 @@ public class OfferDownloaderManager {
     private OfferDownloaderManager(Context context) {
         webDownloaders = new ArrayList<>(); // TODO: Refactor, This is stupid
         webDownloaders.add(new OlxDownloader());
-        webDownloaders.add(new GumtreeDownloader());
         webDownloaders.add(new VintedDownloader());
         webDownloaders.add(new AllegroDownloader());
 

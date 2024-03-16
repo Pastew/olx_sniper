@@ -1,10 +1,7 @@
 package com.pastew.olxsniper;
 
 import com.pastew.olxsniper.db.Offer;
-import com.pastew.olxsniper.downloaders.AllegroDownloader;
-import com.pastew.olxsniper.downloaders.GumtreeDownloader;
 import com.pastew.olxsniper.downloaders.OlxDownloader;
-import com.pastew.olxsniper.downloaders.VintedDownloader;
 
 import org.junit.Test;
 
